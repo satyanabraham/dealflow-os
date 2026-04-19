@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealFlow OS — VC & Founder Intelligence Platform</title>
+<meta name="description" content="AI-powered platform for founders raising capital and VCs sourcing deals.">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#080c14;--ink2:#0f172a;--ink3:#111827;
+  --gl:#f0b429;--gb:#fef3c7;--gf:#fffbeb;--gd:#c9950c;
+  --bl:#2563eb;--bf:#dbeafe;--bb:#1e3a8a;
+  --em:#059669;--ef:#d1fae5;--eb:#064e3b;
+  --ro:#e11d48;--rf:#ffe4e6;--rb:#881337;
+  --vi:#7c3aed;--vf:#ede9fe;--vb:#4c1d95;
+  --sl:#64748b;--sf:#f1f5f9;
+  --bd:rgba(255,255,255,.08);--bdd:rgba(8,12,20,.1);
+  --wh:#fff;
+}
+html,body{height:100%;font-family:'Geist',sans-serif;background:var(--ink);color:#fff;overflow:hidden}
+
+/* ═══ SCREENS ═══ */
+.screen{position:fixed;inset:0;display:none;flex-direction:column}
+.screen.show{display:flex}
+#s-land.show{overflow-y:auto}
+
+/* ═══ LANDING ═══ */
+#s-land{background:var(--ink);overflow-y:auto;display:flex;flex-direction:column;justify-content:space-between}
+.land-nav{display:flex;align-items:center;justify-content:space-between;padding:.65rem 2rem;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:30px;height:30px;background:var(--gl);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px}
+.logo-name{font-family:'Instrument Serif',serif;font-size:20px;color:#fff}
+.logo-name em{color:var(--gl);font-style:normal}
+.logo-tag{font-size:9px;padding:2px 8px;border-radius:20px;background:rgba(240,180,41,.15);color:var(--gl);font-family:'Geist Mono',monospace;letter-spacing:.5px;border:1px solid rgba(240,180,41,.2)}
+.nav-btns{display:flex;gap:9px;align-items:center}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);border-radius:8px;padding:8px 18px;font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;transition:all .18s}
+.btn-ghost:hover{border-color:rgba(255,255,255,.35);color:#fff}
+.btn-gold{background:var(--gl);border:none;color:var(--ink);border-radius:8px;padding:8px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:background .18s}
+.btn-gold:hover{background:#f5c435}
+
+.land-hero{padding:1.8rem 2.5rem 1.2rem;max-width:1000px;margin:0 auto;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.2);border-radius:20px;padding:6px 16px;font-size:10px;font-family:'Geist Mono',monospace;color:var(--gl);margin-bottom:1.6rem;letter-spacing:.5px}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--gl);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-h{font-family:'Instrument Serif',serif;font-size:42px;color:#fff;line-height:1.04;margin-bottom:.7rem;letter-spacing:-.5px}
+.hero-h em{color:var(--gl);font-style:italic}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.45);line-height:1.55;max-width:560px;margin:0 auto .8rem}
+
+/* TWO PORTAL CARDS */
+.portals{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:900px;margin:0 auto .9rem;padding:0 2rem}
+.portal{border-radius:14px;padding:1.2rem 1.4rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.portal-f{background:linear-gradient(135deg,#0f172a 0%,#1a2740 100%);border:1px solid rgba(240,180,41,.2)}
+.portal-v{background:linear-gradient(135deg,#0f172a 0%,#1a1f35 100%);border:1px solid rgba(37,99,235,.25)}
+.portal:hover{transform:translateY(-3px)}
+.portal-f:hover{border-color:rgba(240,180,41,.5);box-shadow:0 8px 32px rgba(240,180,41,.12)}
+.portal-v:hover{border-color:rgba(37,99,235,.5);box-shadow:0 8px 32px rgba(37,99,235,.15)}
+.portal-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:.65rem;font-size:18px}
+.pi-f{background:rgba(240,180,41,.15)}
+.pi-v{background:rgba(37,99,235,.15)}
+.portal-label{font-size:9px;font-family:'Geist Mono',monospace;letter-spacing:.8px;text-transform:uppercase;margin-bottom:.3rem}
+.pl-f{color:var(--gl)}
+.pl-v{color:#60a5fa}
+.portal-title{font-family:'Instrument Serif',serif;font-size:21px;color:#fff;margin-bottom:.4rem;line-height:1.1}
+.portal-desc{font-size:11px;color:rgba(255,255,255,.45);line-height:1.5;margin-bottom:.8rem}
+.portal-features{display:flex;flex-direction:column;gap:4px;margin-bottom:.8rem}
+.pf-item{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.6)}
+.pf-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.portal-cta{width:100%;padding:11px;border-radius:9px;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .18s;border:none}
+.pc-f{background:var(--gl);color:var(--ink)}
+.pc-f:hover{background:#f5c435}
+.pc-v{background:rgba(37,99,235,.9);color:#fff}
+.pc-v:hover{background:var(--bl)}
+.portal-glow{position:absolute;width:200px;height:200px;border-radius:50%;filter:blur(60px);pointer-events:none;opacity:.08}
+.pg-f{background:var(--gl);top:-50px;right:-50px}
+.pg-v{background:#3b82f6;top:-50px;right:-50px}
+
+.land-modules{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:1000px;margin:0 auto;padding:0 2rem .6rem}
+.lmod{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.5rem .65rem}
+.lmod-ico{width:24px;height:24px;border-radius:5px;font-size:8px;font-weight:500;font-family:'Geist Mono',monospace;display:flex;align-items:center;justify-content:center;margin-bottom:.5rem}
+.lmod-t{font-size:10px;font-weight:500;color:#fff;margin-bottom:1px}
+.lmod-s{font-size:8.5px;color:rgba(255,255,255,.3);line-height:1.3}
+.land-stats{display:flex;justify-content:center;gap:2.5rem;padding:1rem 2rem 1.2rem;border-top:1px solid rgba(255,255,255,.06);margin-top:.4rem}
+.lstat-n{font-family:'Instrument Serif',serif;font-size:22px;color:var(--gl);text-align:center;margin-bottom:2px}
+.lstat-l{font-size:10px;color:rgba(255,255,255,.28);text-align:center;font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
+
+/* ═══ AUTH SCREEN ═══ */
+#s-auth{background:var(--ink);align-items:center;justify-content:center}
+.auth-wrap{display:grid;grid-template-columns:1fr 1fr;max-width:900px;width:100%;min-height:560px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+.auth-left{padding:3rem;display:flex;flex-direction:column;justify-content:space-between}
+.auth-left-f{background:linear-gradient(160deg,#111827 0%,#1a2740 100%)}
+.auth-left-v{background:linear-gradient(160deg,#111827 0%,#1a1f35 100%)}
+.auth-left-logo{display:flex;align-items:center;gap:9px;margin-bottom:2.5rem}
+.auth-left-h{font-family:'Instrument Serif',serif;font-size:30px;color:#fff;line-height:1.1;margin-bottom:.7rem}
+.auth-left-h em{font-style:italic}
+.auth-left-sub{font-size:12px;color:rgba(255,255,255,.4);line-height:1.65;margin-bottom:2rem}
+.auth-features{display:flex;flex-direction:column;gap:10px}
+.af-item{display:flex;align-items:flex-start;gap:10px}
+.af-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;font-family:'Geist Mono',monospace;flex-shrink:0;margin-top:1px}
+.af-t{font-size:11px;font-weight:500;color:#fff;margin-bottom:1px}
+.af-s{font-size:10px;color:rgba(255,255,255,.35)}
+.auth-back{background:transparent;border:none;color:rgba(255,255,255,.35);font-family:'Geist',sans-serif;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;padding:0;transition:color .15s}
+.auth-back:hover{color:rgba(255,255,255,.7)}
+
+.auth-right{background:#0a0f1e;padding:2.5rem;display:flex;flex-direction:column;justify-content:center}
+.auth-tabs{display:flex;gap:4px;margin-bottom:1.8rem;background:rgba(255,255,255,.05);border-radius:9px;padding:3px}
+.auth-tab{flex:1;padding:8px;border:none;background:transparent;border-radius:7px;font-family:'Geist',sans-serif;font-size:12px;color:rgba(255,255,255,.4);cursor:pointer;transition:all .18s}
+.auth-tab.on{background:rgba(255,255,255,.1);color:#fff}
+.auth-form-title{font-family:'Instrument Serif',serif;font-size:22px;color:#fff;margin-bottom:.35rem}
+.auth-form-sub{font-size:11px;color:rgba(255,255,255,.35);margin-bottom:1.5rem;line-height:1.5}
+.f-label{font-size:10px;color:rgba(255,255,255,.4);font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;margin-top:.85rem}
+.f-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 13px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;outline:none;transition:border-color .15s}
+.f-input:focus{border-color:var(--gl)}
+.f-input::placeholder{color:rgba(255,255,255,.25)}
+.role-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.85rem}
+.role-opt{padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);font-family:'Geist',sans-serif;font-size:11px;cursor:pointer;transition:all .18s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.role-opt:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
+.role-opt.on{border-color:var(--gl);background:rgba(240,180,41,.1);color:var(--gl)}
+.role-opt-icon{font-size:16px}
+.role-opt-label{font-size:10px;font-weight:500}
+.f-err{font-size:10px;color:#e11d48;margin-top:5px;min-height:14px}
+.f-submit{width:100%;border:none;border-radius:8px;padding:12px;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .18s;margin-top:1.2rem}
+.fs-f{background:var(--gl);color:var(--ink)}
+.fs-f:hover{background:#f5c435}
+.fs-v{background:var(--bl);color:#fff}
+.fs-v:hover{background:#1d4ed8}
+.f-alt{text-align:center;margin-top:.9rem;font-size:11px;color:rgba(255,255,255,.3)}
+.f-alt button{background:none;border:none;color:var(--gl);cursor:pointer;font-size:11px;font-family:'Geist',sans-serif}
+.f-divider{display:flex;align-items:center;gap:10px;margin:.9rem 0;font-size:10px;color:rgba(255,255,255,.2)}
+.f-divider::before,.f-divider::after{content:'';flex:1;height:.5px;background:rgba(255,255,255,.1)}
+.oauth-btn{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px;font-family:'Geist',sans-serif;font-size:12px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px}
+.oauth-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* ═══ APP SHELL ═══ */
+#s-app{background:#f8f9fb;color:#0f172a;flex-direction:row;overflow:hidden;height:100vh}
+.sidebar{width:210px;flex-shrink:0;background:var(--ink);display:flex;flex-direction:column;overflow-y:auto;height:100vh}
+.sb-logo{padding:.9rem 1.1rem .85rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-logo-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.sb-logo-mark{width:22px;height:22px;background:var(--gl);border-radius:5px;display:flex;align-items:center;justify-content:center}
+.sb-logo-mark svg{width:12px;height:12px}
+.sb-logo-name{font-family:'Instrument Serif',serif;font-size:15px;color:#fff}
+.sb-logo-name em{color:var(--gl);font-style:normal}
+.sb-live{font-size:8px;color:rgba(255,255,255,.3);font-family:'Geist Mono',monospace;letter-spacing:.5px;display:flex;align-items:center;gap:4px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--em);animation:blink 2s infinite}
+.sb-section{padding:.45rem 0}
+.sb-group{font-size:9px;font-weight:500;color:rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:.8px;padding:.3rem 1.1rem .35rem;font-family:'Geist Mono',monospace}
+.ni{display:flex;align-items:center;gap:9px;padding:.42rem 1.1rem;cursor:pointer;transition:all .15s;border-left:2px solid transparent}
+.ni:hover{background:rgba(255,255,255,.05)}
+.ni.on{background:rgba(201,149,12,.13);border-left-color:var(--gl)}
+.ni-ico{width:15px;height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:8px;font-weight:500;font-family:'Geist Mono',monospace}
+.ni-lbl{font-size:11px;color:rgba(255,255,255,.48)}
+.ni.on .ni-lbl{color:var(--gl)}
+.ni:hover .ni-lbl{color:rgba(255,255,255,.82)}
+.sb-div{height:.5px;background:rgba(255,255,255,.06);margin:.3rem 0}
+.sb-footer{margin-top:auto;padding:.7rem 1.1rem;border-top:1px solid rgba(255,255,255,.06)}
+
+/* KEY STATUS */
+.key-bar{margin-top:6px;padding:7px 9px;border-radius:8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.key-bar:hover{background:rgba(255,255,255,.07)}
+.key-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.key-label{font-size:9px;font-weight:500;font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
+.key-sub{font-size:9px;font-family:'Geist Mono',monospace;margin-top:1px}
+
+/* USER BADGE */
+.user-bar{padding:7px 9px;border-radius:8px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);cursor:pointer;margin-bottom:6px;transition:all .15s}
+.user-bar:hover{background:rgba(255,255,255,.08)}
+.user-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0;font-family:'Geist Mono',monospace}
+.user-name{font-size:10px;font-weight:500;color:rgba(255,255,255,.75);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-role{font-size:9px;color:rgba(255,255,255,.3);font-family:'Geist Mono',monospace}
+
+/* MAIN CONTENT */
+.main{flex:1;min-width:0;overflow-y:auto;height:100vh}
+.page{display:none}
+.page.on{display:flex}
+.hero{background:var(--ink);padding:1.2rem 1.5rem 1.4rem;flex-shrink:0}
+.hero-eye{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:1.2px;color:var(--gl);margin-bottom:.4rem;text-transform:uppercase}
+.hero-h{font-family:'Instrument Serif',serif;font-size:26px;color:#fff;line-height:1.1;margin-bottom:.3rem}
+.hero-h em{color:var(--gl);font-style:italic}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.35);line-height:1.55;max-width:500px}
+.hero-stats{display:flex;gap:1.2rem;margin-top:.75rem;flex-wrap:wrap}
+.hstat{font-size:11px;color:rgba(255,255,255,.4)}
+.hstat strong{color:var(--gl);font-weight:500;font-family:'Geist Mono',monospace}
+.content{padding:1rem 1.5rem;flex:1}
+
+/* CARDS */
+.card{background:#fff;border:.5px solid rgba(8,12,20,.09);border-radius:11px;padding:.9rem 1.1rem;margin-bottom:10px}
+.ct{font-size:9px;font-weight:500;color:var(--sl);text-transform:uppercase;letter-spacing:.7px;margin-bottom:.75rem}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.met{background:var(--sf);border-radius:8px;padding:.65rem .85rem}
+.met-n{font-family:'Instrument Serif',serif;font-size:22px;line-height:1}
+.met-l{font-size:10px;color:var(--sl);margin-top:2px}
+.met-d{font-size:10px;font-family:'Geist Mono',monospace;margin-top:3px}
+.pos{color:#059669}.neg{color:#e11d48}.neu{color:#c9950c}
+
+/* SCORE BARS */
+.br{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.bl{font-size:10px;color:var(--sl);width:95px;flex-shrink:0}
+.bt{flex:1;height:4px;background:var(--sf);border-radius:2px;overflow:hidden}
+.bf{height:100%;border-radius:2px}
+.bfg{background:#059669}.bfy{background:var(--gl)}.bfr{background:var(--ro)}.bfb{background:var(--bl)}
+.bv{font-size:10px;font-family:'Geist Mono',monospace;width:24px;text-align:right;color:#0f172a}
+
+/* INVESTOR CARDS */
+.inv{background:#fff;border:.5px solid rgba(8,12,20,.09);border-radius:11px;padding:.85rem 1rem;margin-bottom:8px;display:flex;gap:11px;cursor:pointer;transition:border-color .15s}
+.inv:hover{border-color:var(--gl)}
+.inv-av{width:42px;height:42px;border-radius:9px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:15px;flex-shrink:0}
+.inv-name{font-size:13px;font-weight:500;color:#0f172a}
+.inv-sub{font-size:11px;color:var(--sl);margin-top:1px}
+.inv-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;display:inline-block}
+.tb{background:var(--bf);color:var(--bb)}.tg{background:var(--ef);color:var(--eb)}
+.to{background:var(--gb);color:#78350f}.tv{background:var(--vf);color:var(--vb)}.ts{background:var(--sf);color:var(--sl)}
+
+/* AI BOX */
+.ai-box{background:var(--ink2);border-radius:10px;padding:.9rem 1.1rem;border:1px solid rgba(201,149,12,.18);margin-bottom:10px}
+.ai-top{display:flex;align-items:center;gap:7px;margin-bottom:.6rem}
+.ai-ic{width:18px;height:18px;background:var(--gl);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-ic svg{width:10px;height:10px}
+.ai-lbl{font-size:9px;font-weight:500;color:var(--gl);text-transform:uppercase;letter-spacing:.6px}
+.ai-mdl{font-size:9px;color:rgba(255,255,255,.28);font-family:'Geist Mono',monospace;margin-left:auto}
+.ai-body{font-size:12px;color:rgba(255,255,255,.84);line-height:1.72}
+.ai-body strong{color:var(--gl);font-weight:500}
+
+/* BUTTONS */
+.btn{border:none;border-radius:7px;padding:7px 14px;font-family:'Geist',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .18s}
+.btn-d{background:var(--ink);color:#fff}.btn-d:hover{background:var(--ink3)}
+.btn-g{background:var(--gl);color:var(--ink)}.btn-g:hover{background:#f5c435}
+.btn-o{background:transparent;border:.5px solid rgba(8,12,20,.16);color:var(--sl)}.btn-o:hover{border-color:var(--gl);color:#0f172a}
+.btn-sm{padding:4px 9px;font-size:10px}
+.brow{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+
+/* KANBAN */
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:10px}
+.kcol{background:var(--sf);border-radius:9px;padding:.7rem}
+.kcol-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.kcol-t{font-size:9px;font-weight:500;color:var(--sl);text-transform:uppercase;letter-spacing:.6px}
+.deal{background:#fff;border:.5px solid rgba(8,12,20,.09);border-radius:7px;padding:.6rem .75rem;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.deal:hover{border-color:var(--gl)}
+.deal-n{font-size:11px;font-weight:500;color:#0f172a}
+.deal-f{font-size:10px;color:var(--sl)}
+.deal-m{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+
+/* CHECKLIST */
+.chk-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:.5px solid rgba(8,12,20,.09);cursor:pointer}
+.chk-row:last-child{border:none}
+.chk-box{width:15px;height:15px;border:.5px solid rgba(8,12,20,.16);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.chk-box.done{background:var(--em);border-color:var(--em)}
+.chk-lbl{font-size:11px;color:#0f172a;flex:1}
+.chk-lbl.done{text-decoration:line-through;color:var(--sl)}
+
+/* PITCH TABS */
+.fmt-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.fmt-tab{background:var(--sf);border:.5px solid rgba(8,12,20,.09);border-radius:6px;padding:5px 11px;font-size:10px;color:var(--sl);cursor:pointer;transition:all .15s;border:none;font-family:'Geist',sans-serif}
+.fmt-tab.on{background:var(--gb);border:.5px solid var(--gl);color:#78350f;font-weight:500}
+.pitch-out{background:var(--ink2);border-radius:10px;padding:1rem 1.2rem;border:1px solid rgba(201,149,12,.18);margin-bottom:10px}
+.pitch-meta{display:flex;gap:6px;margin-bottom:.7rem;flex-wrap:wrap}
+.pitch-body{font-size:12px;color:rgba(255,255,255,.86);line-height:1.75}
+.pitch-body strong{color:var(--gl);font-weight:500}
+
+/* CHAT */
+.chat-wrap{background:#fff;border:.5px solid rgba(8,12,20,.09);border-radius:11px;overflow:hidden;margin-bottom:10px}
+.chat-hdr{background:var(--ink2);padding:.65rem 1rem;display:flex;justify-content:space-between;align-items:center}
+.chat-side{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.5)}
+.chat-av{width:20px;height:20px;border-radius:50%;font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace}
+.chat-body{padding:.9rem 1rem;display:flex;flex-direction:column;gap:9px;min-height:200px;max-height:320px;overflow-y:auto}
+.msg{max-width:80%;padding:.65rem .9rem;border-radius:10px;font-size:12px;line-height:1.52}
+.msg-vc{background:var(--bf);color:var(--bb);align-self:flex-start;border-radius:10px 10px 10px 3px}
+.msg-fd{background:var(--gb);color:#78350f;align-self:flex-end;border-radius:10px 10px 3px 10px}
+.msg-ai{background:var(--ink2);color:rgba(255,255,255,.78);align-self:center;font-size:11px;font-style:italic;border:1px solid rgba(201,149,12,.2);border-radius:10px;text-align:center;max-width:88%;padding:.55rem .85rem}
+.msg-from{font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.mf-vc{color:var(--bb)}.mf-fd{color:#92400e}.mf-ai{color:var(--gl)}
+
+/* PORTFOLIO HEALTH */
+.ph-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:.5px solid rgba(8,12,20,.09)}
+.ph-row:last-child{border:none}
+.ph-av{width:32px;height:32px;border-radius:7px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:12px;flex-shrink:0}
+.ph-bar{width:65px;height:4px;background:var(--sf);border-radius:2px;overflow:hidden}
+.ph-fill{height:100%;border-radius:2px}
+
+/* TERM SHEET */
+.clause{border-radius:7px;padding:.6rem .85rem;margin-bottom:6px;font-size:11px;line-height:1.5}
+.cl-pos{background:var(--ef);color:var(--eb)}
+.cl-warn{background:var(--gb);color:#78350f}
+.cl-neg{background:var(--rf);color:var(--rb)}
+
+/* SCENARIOS */
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}
+.sc{border-radius:9px;padding:.8rem .9rem}
+.sc-lbl{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;font-family:'Geist Mono',monospace}
+.sc-n{font-family:'Instrument Serif',serif;font-size:22px;line-height:1}
+.sc-s{font-size:10px;margin-top:2px}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:24px}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:1px;background:rgba(8,12,20,.09)}
+.tl-item{position:relative;padding:.55rem 0 .55rem 14px;border-bottom:.5px solid rgba(8,12,20,.09)}
+.tl-item:last-child{border:none}
+.tl-dot{position:absolute;left:-16px;top:13px;width:10px;height:10px;border-radius:50%;border:2px solid #fff}
+.tl-time{font-size:9px;font-family:'Geist Mono',monospace;color:var(--gl);margin-bottom:2px}
+.tl-t{font-size:12px;font-weight:500;color:#0f172a;margin-bottom:2px}
+.tl-d{font-size:11px;color:var(--sl);line-height:1.4}
+
+/* MODALS */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(8,12,20,.85);z-index:9999;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.show{display:flex}
+.modal-box{background:#0f172a;border:1px solid rgba(240,180,41,.2);border-radius:16px;padding:2rem;max-width:420px;width:100%}
+
+/* TOAST */
+.toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:12px;padding:9px 18px;border-radius:8px;z-index:99999;border:1px solid rgba(201,149,12,.4);white-space:nowrap}
+.toast.show{display:block}
+
+/* SETTINGS FAB */
+.settings-fab{display:none !important}
+.settings-fab.show{display:flex}
+.settings-fab:hover{background:var(--ink3);border-color:var(--gl)}
+
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:2px}
+
+/* FORCE ALL INPUTS VISIBLE — global override */
+input[type=text],input[type=email],input[type=password],input[type=number],select,textarea{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:relative !important;
+  z-index:1 !important;
+  min-height:38px !important;
+  font-family:'Geist',sans-serif !important;
+}
+/* App page wrapper */
+.app-page{
+  display:none;
+  min-height:100%;
+  padding-bottom:60px;
+}
+/* Content area never clips */
+.content{
+  padding:1rem 1.5rem;
+  overflow:visible !important;
+}
+/* Cards never clip */
+.card{
+  overflow:visible !important;
+}
+/* Negotiation reply - always visible */
+#neg-reply-wrap{
+  position:sticky;
+  bottom:0;
+  background:#fffbeb;
+  border-top:2px solid var(--gl);
+  padding:.85rem 1rem;
+  z-index:100;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SCREEN 1 — LANDING
+════════════════════════════════════ -->
+<div class="screen show" id="s-land">
+  <nav class="land-nav">
+    <div class="logo">
+      <div class="logo-mark"><svg viewBox="0 0 13 13" fill="none"><polygon points="6.5,1 12,4 12,9 6.5,12 1,9 1,4" stroke="#0a0e18" stroke-width="1.5"/><circle cx="6.5" cy="6.5" r="2.2" fill="#0a0e18"/></svg></div>
+      <span class="logo-name">DealFlow <em>OS</em></span>
+      <span class="logo-tag">BETA</span>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-ghost" onclick="openAuth('founder','login')">Sign in</button>
+      <button class="btn-gold" onclick="openAuth('founder','signup')">Get started free →</button>
+    </div>
+  </nav>
+
+  <div class="land-hero">
+    <div class="hero-h">The intelligence platform for<br><em>founders</em> &amp; <em>VCs</em></div>
+    <div class="hero-sub">AI-powered investor matching, pitch coaching, term sheet analysis, negotiation practice and portfolio monitoring — for both sides of every deal.</div>
+  </div>
+
+  <!-- TWO PORTALS -->
+  <div class="portals">
+    <div class="portal portal-f" onclick="openAuth('founder','signup')">
+      <div class="portal-glow pg-f"></div>
+      <div class="portal-icon pi-f">🚀</div>
+      <div class="portal-label pl-f">Founder portal</div>
+      <div class="portal-title">Raise your round<br>with AI on your side</div>
+      <div class="portal-desc">Find the right investors, generate perfect pitches, analyse term sheets, and practice your negotiation — all in one platform.</div>
+      <div class="portal-features">
+        <div class="pf-item"><div class="pf-dot" style="background:var(--gl)"></div>AI investor matching across 8,400+ VCs</div>
+        <div class="pf-item"><div class="pf-dot" style="background:var(--gl)"></div>Pitch studio — 6 formats, delivery coaching</div>
+        <div class="pf-item"><div class="pf-dot" style="background:var(--gl)"></div>Term sheet explainer & negotiation simulator</div>
+        <div class="pf-item"><div class="pf-dot" style="background:var(--gl)"></div>Data room intelligence & closing checklist</div>
+      </div>
+      <button class="portal-cta pc-f">Start as a founder — free →</button>
+    </div>
+
+    <div class="portal portal-v" onclick="openAuth('vc','signup')">
+      <div class="portal-glow pg-v"></div>
+      <div class="portal-icon pi-v">💼</div>
+      <div class="portal-label pl-v">VC / Investor portal</div>
+      <div class="portal-title">Source smarter,<br>close faster</div>
+      <div class="portal-desc">Source deal flow, run AI-powered due diligence, monitor portfolio health, and get LP-ready fund analytics — all in one place.</div>
+      <div class="portal-features">
+        <div class="pf-item"><div class="pf-dot" style="background:#60a5fa"></div>Founder credibility scoring across all platforms</div>
+        <div class="pf-item"><div class="pf-dot" style="background:#60a5fa"></div>Real-time portfolio health monitoring</div>
+        <div class="pf-item"><div class="pf-dot" style="background:#60a5fa"></div>Fund analytics & LP reporting</div>
+        <div class="pf-item"><div class="pf-dot" style="background:#60a5fa"></div>Deal pipeline CRM & closing engine</div>
+      </div>
+      <button class="portal-cta pc-v">Start as a VC / investor →</button>
+    </div>
+  </div>
+
+  <!-- MODULE GRID -->
+  <div class="land-modules">
+    <div class="lmod"><div class="lmod-ico" style="background:#dbeafe;color:#1e3a8a">DI</div><div class="lmod-t">Investor search</div><div class="lmod-s">8,400+ VCs, angels & family offices ranked by AI match</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#d1fae5;color:#064e3b">AI</div><div class="lmod-t">AI match engine</div><div class="lmod-s">12-dimension scoring — sector, stage, thesis, overlap</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#ede9fe;color:#4c1d95">PS</div><div class="lmod-t">Pitch studio</div><div class="lmod-s">50-word hook to 15-min partner delivery script</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#fef3c7;color:#78350f">NS</div><div class="lmod-t">Negotiation sim</div><div class="lmod-s">Claude plays a tough VC — practice before the meeting</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#cffafe;color:#164e63">TS</div><div class="lmod-t">Term sheet AI</div><div class="lmod-s">Every clause explained, red-flagged and benchmarked</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#ffe4e6;color:#881337">PH</div><div class="lmod-t">Portfolio health</div><div class="lmod-s">Real-time signal scoring for every portfolio company</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#d1fae5;color:#064e3b">DD</div><div class="lmod-t">Due intelligence</div><div class="lmod-s">12-dim founder credibility scan across all platforms</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#fef3c7;color:#78350f">DR</div><div class="lmod-t">Data room AI</div><div class="lmod-s">Gap detection & coaching before you share the link</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#dbeafe;color:#1e3a8a">FA</div><div class="lmod-t">Fund analytics</div><div class="lmod-s">IRR, MOIC, deployment pace & LP reporting</div></div>
+    <div class="lmod"><div class="lmod-ico" style="background:#d1fae5;color:#064e3b">DC</div><div class="lmod-t">Deal close</div><div class="lmod-s">Owner-assigned checklist from term sheet to wire</div></div>
+  </div>
+
+  <div class="land-stats">
+    <div><div class="lstat-n">8,412</div><div class="lstat-l">Investors in DB</div></div>
+    <div><div class="lstat-n">Free</div><div class="lstat-l">To get started</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN 2 — AUTH (signup/login)
+════════════════════════════════════ -->
+<div class="screen" id="s-auth">
+  <div class="auth-wrap" id="auth-wrap">
+
+    <!-- LEFT PANEL — changes by role -->
+    <div class="auth-left auth-left-f" id="auth-left">
+      <div>
+        <div class="auth-left-logo">
+          <div style="width:22px;height:22px;background:var(--gl);border-radius:5px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 13 13" fill="none" width="12" height="12"><polygon points="6.5,1 12,4 12,9 6.5,12 1,9 1,4" stroke="#0a0e18" stroke-width="1.5"/><circle cx="6.5" cy="6.5" r="2" fill="#0a0e18"/></svg></div>
+          <span style="font-family:'Instrument Serif',serif;font-size:15px;color:#fff">DealFlow <span style="color:var(--gl)">OS</span></span>
+        </div>
+        <div class="auth-left-h" id="auth-left-h">The founder's<br>fundraising <em>edge</em></div>
+        <div class="auth-left-sub" id="auth-left-sub">Everything you need to raise your round — from finding the right investors to signing the term sheet.</div>
+        <div class="auth-features" id="auth-left-features">
+          <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">AI</div><div><div class="af-t">AI investor matching</div><div class="af-s">12-dimension scoring against 8,400+ VCs</div></div></div>
+          <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">PS</div><div><div class="af-t">Pitch studio</div><div class="af-s">6 formats with live delivery coaching</div></div></div>
+          <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">NS</div><div><div class="af-t">Negotiation simulator</div><div class="af-s">Practice with Claude playing tough VC partner</div></div></div>
+          <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">TS</div><div><div class="af-t">Term sheet AI</div><div class="af-s">Every clause explained before you sign</div></div></div>
+        </div>
+      </div>
+      <button class="auth-back" onclick="goLanding()">← Back to homepage</button>
+    </div>
+
+    <!-- RIGHT PANEL — form -->
+    <div class="auth-right">
+      <div class="auth-tabs">
+        <button class="auth-tab on" id="tab-signup" onclick="switchAuthTab('signup')">Create account</button>
+        <button class="auth-tab" id="tab-login" onclick="switchAuthTab('login')">Sign in</button>
+      </div>
+      <div id="auth-form-content"><!-- filled by JS --></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN 3 — APP
+════════════════════════════════════ -->
+<div class="screen" id="s-app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-row">
+        <div class="sb-logo-mark"><svg viewBox="0 0 12 12" fill="none"><polygon points="6,1 11,3.5 11,8.5 6,11 1,8.5 1,3.5" stroke="#0a0e18" stroke-width="1.4"/><circle cx="6" cy="6" r="2" fill="#0a0e18"/></svg></div>
+        <span class="sb-logo-name">DealFlow <em>OS</em></span>
+      </div>
+      <div class="sb-live"><span class="live-dot"></span>LIVE · BETA</div>
+    </div>
+
+    <div class="sb-section" id="sb-nav"><!-- filled by JS based on role --></div>
+
+    <div class="sb-footer">
+      <div id="sb-footer-content"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="main-area"><!-- pages injected by JS --></div>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="modal-bg" id="key-modal">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:1.3rem">
+      <div style="width:24px;height:24px;background:var(--gl);border-radius:6px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 13 13" fill="none" width="13" height="13"><polygon points="6.5,1 12,4 12,9 6.5,12 1,9 1,4" stroke="#0a0e18" stroke-width="1.5"/><circle cx="6.5" cy="6.5" r="2" fill="#0a0e18"/></svg></div>
+      <span style="font-family:'Instrument Serif',serif;font-size:17px;color:#fff">Anthropic API Key</span>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:1.2rem">All AI features require your Anthropic API key. It's stored only in your browser and sent directly to api.anthropic.com — never to any other server.</div>
+    <div style="font-size:10px;color:rgba(255,255,255,.4);font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">API Key</div>
+    <input id="key-input" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;font-family:'Geist Mono',monospace;font-size:12px;color:#fff;outline:none" onfocus="this.style.borderColor='var(--gl)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'" onkeydown="if(event.key==='Enter')submitKey()"/>
+    <div id="key-err" style="font-size:10px;color:#e11d48;margin-top:5px;min-height:14px"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.1rem">
+      <a href="https://console.anthropic.com/account/keys" target="_blank" style="font-size:11px;color:rgba(240,180,41,.7);text-decoration:none">Get key at console.anthropic.com →</a>
+      <div style="display:flex;gap:7px">
+        <button id="key-clear-btn" onclick="clearKey()" style="display:none;background:transparent;border:1px solid rgba(225,29,72,.3);border-radius:7px;padding:6px 12px;font-family:'Geist',sans-serif;font-size:11px;color:#e11d48;cursor:pointer">Remove</button>
+        <button onclick="hideKeyModal()" style="background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:6px 13px;font-family:'Geist',sans-serif;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer">Cancel</button>
+        <button onclick="submitKey()" style="background:var(--gl);border:none;border-radius:7px;padding:6px 16px;font-family:'Geist',sans-serif;font-size:11px;font-weight:500;color:var(--ink);cursor:pointer">Save →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="settings-fab" id="settings-fab" onclick="showKeyModal()" title="API Key Settings">
+  <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><circle cx="8" cy="8" r="2.5" stroke="var(--gl)" stroke-width="1.2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="var(--gl)" stroke-width="1.2" stroke-linecap="round"/></svg>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let USER = null;
+let API_KEY = localStorage.getItem('dfos_key') || '';
+let STARTUP = JSON.parse(localStorage.getItem('dfos_startup') || JSON.stringify({
+  company: 'NovaMind AI', sector: 'AI / ML', stage: 'Seed',
+  raise: '$1M–$3M', traction: '3 paying customers', team: 'ex-Salesforce + ex-OpenAI'
+}));
+
+function saveProfile() {
+  STARTUP = {
+    company: document.getElementById('sp-company')?.value || STARTUP.company,
+    sector: document.getElementById('sp-sector')?.value || STARTUP.sector,
+    stage: document.getElementById('sp-stage')?.value || STARTUP.stage,
+    raise: document.getElementById('sp-raise')?.value || STARTUP.raise,
+    traction: document.getElementById('sp-traction')?.value || STARTUP.traction,
+    team: document.getElementById('sp-team')?.value || STARTUP.team,
+  };
+  localStorage.setItem('dfos_startup', JSON.stringify(STARTUP));
+  toast('Profile saved — all AI features now use your company data ✓');
+}
+
+function loadProfileInputs() {
+  const fields = ['company','sector','stage','raise','traction','team'];
+  fields.forEach(f => {
+    const el = document.getElementById('sp-' + f);
+    if (el) el.value = STARTUP[f] || '';
+  });
+}
+let authRole = 'founder';
+let authTab = 'signup';
+let negHistory = [];
+let charts = {};
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastT;
+function toast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ═══════════════════════════════════════════
+// SCREENS
+// ═══════════════════════════════════════════
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+
+// ═══════════════════════════════════════════
+// LANDING
+// ═══════════════════════════════════════════
+function goLanding() { show('s-land'); }
+
+// ═══════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════
+function openAuth(role, tab) {
+  authRole = role;
+  authTab = tab;
+  show('s-auth');
+  updateAuthLeft();
+  switchAuthTab(tab);
+}
+
+function updateAuthLeft() {
+  const h = document.getElementById('auth-left-h');
+  const sub = document.getElementById('auth-left-sub');
+  const feats = document.getElementById('auth-left-features');
+  const left = document.getElementById('auth-left');
+
+  if (authRole === 'founder') {
+    left.className = 'auth-left auth-left-f';
+    h.innerHTML = "The founder's<br>fundraising <em>edge</em>";
+    sub.textContent = "Everything you need to raise your round — from finding the right investors to signing the term sheet.";
+    feats.innerHTML = `
+      <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">AI</div><div><div class="af-t">AI investor matching</div><div class="af-s">12-dimension scoring against 8,400+ VCs</div></div></div>
+      <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">PS</div><div><div class="af-t">Pitch studio</div><div class="af-s">6 formats with live delivery coaching</div></div></div>
+      <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">NS</div><div><div class="af-t">Negotiation simulator</div><div class="af-s">Practice with Claude playing tough VC partner</div></div></div>
+      <div class="af-item"><div class="af-ic" style="background:rgba(240,180,41,.15);color:var(--gl)">TS</div><div><div class="af-t">Term sheet AI</div><div class="af-s">Every clause explained before you sign</div></div></div>`;
+  } else {
+    left.className = 'auth-left auth-left-v';
+    h.innerHTML = "Source smarter.<br><em>Close faster.</em>";
+    sub.textContent = "AI-powered deal sourcing, founder due intelligence, portfolio monitoring, and fund analytics — all in one place.";
+    feats.innerHTML = `
+      <div class="af-item"><div class="af-ic" style="background:rgba(37,99,235,.15);color:#60a5fa">DD</div><div><div class="af-t">Founder due intelligence</div><div class="af-s">12-dim credibility scan across all platforms</div></div></div>
+      <div class="af-item"><div class="af-ic" style="background:rgba(37,99,235,.15);color:#60a5fa">PH</div><div><div class="af-t">Portfolio health monitor</div><div class="af-s">Real-time signal scoring & AI alerts</div></div></div>
+      <div class="af-item"><div class="af-ic" style="background:rgba(37,99,235,.15);color:#60a5fa">FA</div><div><div class="af-t">Fund analytics</div><div class="af-s">IRR, MOIC & LP reporting dashboard</div></div></div>
+      <div class="af-item"><div class="af-ic" style="background:rgba(37,99,235,.15);color:#60a5fa">CR</div><div><div class="af-t">CRM pipeline</div><div class="af-s">Kanban from identified to term sheet</div></div></div>`;
+  }
+}
+
+function switchAuthTab(tab) {
+  authTab = tab;
+  document.getElementById('tab-signup').classList.toggle('on', tab === 'signup');
+  document.getElementById('tab-login').classList.toggle('on', tab === 'login');
+  const isF = authRole === 'founder';
+  const submitClass = isF ? 'fs-f' : 'fs-v';
+
+  const oauthBtns = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.9rem">
+      <button onclick="oauthGoogle()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google
+      </button>
+      <button onclick="oauthLinkedIn()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </button>
+      <button onclick="oauthMicrosoft()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>
+        Microsoft
+      </button>
+      <button onclick="oauthApple()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701z"/></svg>
+        Apple
+      </button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:.85rem">
+      <div style="flex:1;height:.5px;background:rgba(255,255,255,.1)"></div>
+      <span style="font-size:11px;color:rgba(255,255,255,.3)">or with email</span>
+      <div style="flex:1;height:.5px;background:rgba(255,255,255,.1)"></div>
+    </div>`;
+
+  if (tab === 'signup') {
+    document.getElementById('auth-form-content').innerHTML = `
+      <div class="auth-form-title">Create your account</div>
+      <div class="auth-form-sub">Free to start · No credit card required</div>
+      <div class="role-row" style="margin-bottom:.9rem">
+        <div class="role-opt ${authRole==='founder'?'on':''}" onclick="setRole('founder')"><div class="role-opt-icon">🚀</div><div class="role-opt-label">Founder</div></div>
+        <div class="role-opt ${authRole==='vc'?'on':''}" onclick="setRole('vc')"><div class="role-opt-icon">💼</div><div class="role-opt-label">VC / Investor</div></div>
+      </div>
+      ${oauthBtns}
+      <label class="f-label">Full name</label>
+      <input class="f-input" id="reg-name" type="text" placeholder="Alex Chen" autocomplete="name"/>
+      <label class="f-label">Email</label>
+      <input class="f-input" id="reg-email" type="email" placeholder="you@example.com" autocomplete="email"/>
+      <label class="f-label">Password</label>
+      <input class="f-input" id="reg-pass" type="password" placeholder="8+ characters" onkeydown="if(event.key==='Enter')doSignup()"/>
+      <div class="f-err" id="reg-err"></div>
+      <button class="f-submit ${submitClass}" onclick="doSignup()">Create account →</button>
+      <div class="f-alt">Already have an account? <button onclick="switchAuthTab('login')">Sign in</button></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.2);text-align:center;margin-top:.6rem;line-height:1.5">By continuing you agree to our terms of service.</div>`;
+  } else {
+    document.getElementById('auth-form-content').innerHTML = `
+      <div class="auth-form-title">Welcome back</div>
+      <div class="auth-form-sub">Sign in to your DealFlow OS account</div>
+      ${oauthBtns}
+      <label class="f-label">Email</label>
+      <input class="f-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email"/>
+      <label class="f-label">Password</label>
+      <input class="f-input" id="login-pass" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <div class="f-err" id="login-err"></div>
+      <button class="f-submit ${submitClass}" onclick="doLogin()">Sign in →</button>
+      <div class="f-alt">No account yet? <button onclick="switchAuthTab('signup')">Sign up free</button></div>`;
+  }
+}
+
+
+function setRole(role) {
+  authRole = role;
+  updateAuthLeft();
+  switchAuthTab(authTab);
+}
+
+function oauthGoogle() {
+  showOAuthModal('Google', 'google', '#4285F4',
+    '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>');
+}
+function oauthLinkedIn() {
+  showOAuthModal('LinkedIn', 'linkedin', '#0A66C2',
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>');
+}
+function oauthMicrosoft() {
+  showOAuthModal('Microsoft', 'microsoft', '#00A4EF',
+    '<svg width="24" height="24" viewBox="0 0 24 24"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>');
+}
+function oauthApple() {
+  showOAuthModal('Apple', 'apple', '#000',
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701z"/></svg>');
+}
+function oauthDemo() { oauthGoogle(); }
+
+function showOAuthModal(provider, key, color, iconSvg) {
+  // Create a modal overlay for OAuth name entry
+  const existing = document.getElementById('oauth-modal');
+  if (existing) existing.remove();
+  
+  const modal = document.createElement('div');
+  modal.id = 'oauth-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(8,12,20,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML = `
+    <div style="background:#0f172a;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:2rem;max-width:380px;width:100%;font-family:'Geist',sans-serif">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center">${iconSvg}</div>
+        <div>
+          <div style="font-family:'Instrument Serif',serif;font-size:18px;color:#fff">Continue with ${provider}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px">DealFlow OS · ${authRole === 'vc' ? 'VC / Investor' : 'Founder'} account</div>
+        </div>
+      </div>
+      <div style="background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.2);border-radius:8px;padding:.7rem .9rem;font-size:11px;color:rgba(240,180,41,.9);margin-bottom:1.2rem;line-height:1.55">
+        <strong>Demo mode:</strong> Real ${provider} OAuth requires a backend server. Enter your name and email below to continue with a demo account that works identically.
+      </div>
+      <div style="margin-bottom:.75rem">
+        <label style="font-size:10px;color:rgba(255,255,255,.4);font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Your name</label>
+        <input id="oauth-name" type="text" placeholder="Alex Chen" style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;font-family:'Geist',sans-serif;font-size:13px;color:#fff;outline:none" onfocus="this.style.borderColor='#f0b429'" onblur="this.style.borderColor='rgba(255,255,255,.12)'"/>
+      </div>
+      <div style="margin-bottom:1.2rem">
+        <label style="font-size:10px;color:rgba(255,255,255,.4);font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Email address</label>
+        <input id="oauth-email" type="email" placeholder="you@example.com" style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;font-family:'Geist',sans-serif;font-size:13px;color:#fff;outline:none" onfocus="this.style.borderColor='#f0b429'" onblur="this.style.borderColor='rgba(255,255,255,.12)'" onkeydown="if(event.key==='Enter')completeOAuth('${provider}')"/>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="document.getElementById('oauth-modal').remove()" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:11px;font-family:'Geist',sans-serif;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer">Cancel</button>
+        <button onclick="completeOAuth('${provider}')" style="flex:2;background:#f0b429;border:none;border-radius:8px;padding:11px;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:#080c14;cursor:pointer">Continue with ${provider} →</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  setTimeout(() => document.getElementById('oauth-name')?.focus(), 100);
+}
+
+function completeOAuth(provider) {
+  const name = document.getElementById('oauth-name')?.value?.trim();
+  const email = document.getElementById('oauth-email')?.value?.trim();
+  if (!name) { toast('Please enter your name'); return; }
+  if (!email || !email.includes('@')) { toast('Please enter a valid email'); return; }
+  document.getElementById('oauth-modal')?.remove();
+  const users = JSON.parse(localStorage.getItem('dfos_users') || '[]');
+  if (!users.find(u => u.email === email)) {
+    users.push({ name, email, pw: btoa('oauth_' + provider), role: authRole, provider });
+    localStorage.setItem('dfos_users', JSON.stringify(users));
+  }
+  USER = { name, email, role: authRole, provider };
+  localStorage.setItem('dfos_session', JSON.stringify(USER));
+  toast('Welcome, ' + name.split(' ')[0] + '! Signed in with ' + provider);
+  launchApp();
+}
+
+function doDemo() {
+  USER = { name: 'Demo User', email: 'demo@dealflowos.com', role: authRole };
+  launchApp();
+}
+
+function doSignup() {
+  const name = (document.getElementById('reg-name')?.value || '').trim();
+  const email = (document.getElementById('reg-email')?.value || '').trim();
+  const pass = document.getElementById('reg-pass')?.value || '';
+  const err = document.getElementById('reg-err');
+  if (!name) { err.textContent = 'Please enter your name'; return; }
+  if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email'; return; }
+  if (pass.length < 8) { err.textContent = 'Password must be at least 8 characters'; return; }
+  const users = JSON.parse(localStorage.getItem('dfos_users') || '[]');
+  if (users.find(u => u.email === email)) { err.textContent = 'Account already exists — sign in instead'; return; }
+  users.push({ name, email, pw: btoa(pass), role: authRole });
+  localStorage.setItem('dfos_users', JSON.stringify(users));
+  USER = { name, email, role: authRole };
+  localStorage.setItem('dfos_session', JSON.stringify(USER));
+  toast('Welcome to DealFlow OS, ' + name.split(' ')[0] + '!');
+  launchApp();
+  if (!API_KEY) setTimeout(showKeyModal, 1200);
+}
+
+function doLogin() {
+  const email = (document.getElementById('login-email')?.value || '').trim();
+  const pass = document.getElementById('login-pass')?.value || '';
+  const err = document.getElementById('login-err');
+  if (!email || !pass) { err.textContent = 'Please enter email and password'; return; }
+  const users = JSON.parse(localStorage.getItem('dfos_users') || '[]');
+  const u = users.find(u => u.email === email && u.pw === btoa(pass));
+  if (!u) { err.textContent = 'Incorrect email or password'; return; }
+  USER = { name: u.name, email: u.email, role: u.role || authRole };
+  localStorage.setItem('dfos_session', JSON.stringify(USER));
+  toast('Welcome back, ' + u.name.split(' ')[0] + '!');
+  launchApp();
+}
+
+function signOut() {
+  if (!confirm('Sign out of DealFlow OS?')) return;
+  USER = null;
+  localStorage.removeItem('dfos_session');
+  show('s-land');
+  toast('Signed out');
+}
+
+// ═══════════════════════════════════════════
+// LAUNCH APP
+// ═══════════════════════════════════════════
+function launchApp() {
+  show('s-app');
+  buildSidebar();
+  buildPages();
+  document.getElementById('settings-fab').classList.add('show');
+  updateKeyStatus();
+  setTimeout(loadProfileInputs, 400);
+}
+
+function buildSidebar() {
+  const isVC = USER?.role === 'vc';
+  const nav = document.getElementById('sb-nav');
+
+  let founderNav = `
+    <div class="sb-section">
+      <div class="sb-group">Founder tools</div>
+      <div class="ni on" onclick="navTo('search',this)"><div class="ni-ico" style="background:#dbeafe;color:#1e3a8a">DI</div><span class="ni-lbl">Investor search</span></div>
+      <div class="ni" onclick="navTo('match',this)"><div class="ni-ico" style="background:#d1fae5;color:#064e3b">AI</div><span class="ni-lbl">AI match engine</span></div>
+      <div class="ni" onclick="navTo('fit',this)"><div class="ni-ico" style="background:#fef3c7;color:#78350f">FM</div><span class="ni-lbl">Fit matrix</span></div>
+      <div class="ni" onclick="navTo('pitch',this)"><div class="ni-ico" style="background:#ede9fe;color:#4c1d95">PS</div><span class="ni-lbl">Pitch studio</span></div>
+      <div class="ni" onclick="navTo('market',this)"><div class="ni-ico" style="background:#cffafe;color:#164e63">MI</div><span class="ni-lbl">Market intel</span></div>
+    </div>`;
+
+  let vcNav = `
+    <div class="sb-section">
+      <div class="sb-group">VC tools</div>
+      <div class="ni ${isVC?'on':''}" onclick="navTo('crm',this)"><div class="ni-ico" style="background:#fef3c7;color:#78350f">CR</div><span class="ni-lbl">CRM pipeline</span></div>
+      <div class="ni" onclick="navTo('dd',this)"><div class="ni-ico" style="background:#ede9fe;color:#4c1d95">DD</div><span class="ni-lbl">Due intelligence</span></div>
+      <div class="ni" onclick="navTo('portfolio',this)"><div class="ni-ico" style="background:#d1fae5;color:#064e3b">PH</div><span class="ni-lbl">Portfolio health</span></div>
+      <div class="ni" onclick="navTo('analytics',this)"><div class="ni-ico" style="background:#dbeafe;color:#1e3a8a">FA</div><span class="ni-lbl">Fund analytics</span></div>
+    </div>`;
+
+  let dealNav = `
+    <div class="sb-div"></div>
+    <div class="sb-section">
+      <div class="sb-group">Deal tools</div>
+      <div class="ni" onclick="navTo('termsheet',this)"><div class="ni-ico" style="background:#d1fae5;color:#064e3b">TS</div><span class="ni-lbl">Term sheet AI</span></div>
+      <div class="ni" onclick="navTo('model',this)"><div class="ni-ico" style="background:#fef3c7;color:#78350f">MO</div><span class="ni-lbl">Financial model</span></div>
+      <div class="ni" onclick="navTo('dataroom',this)"><div class="ni-ico" style="background:#ede9fe;color:#4c1d95">DR</div><span class="ni-lbl">Data room</span></div>
+      <div class="ni" onclick="navTo('neg',this)"><div class="ni-ico" style="background:#ffe4e6;color:#881337">NS</div><span class="ni-lbl">Negotiation sim</span></div>
+      <div class="ni" onclick="navTo('close',this)"><div class="ni-ico" style="background:#dbeafe;color:#1e3a8a">DC</div><span class="ni-lbl">Deal close</span></div>
+    </div>`;
+
+  nav.innerHTML = (isVC ? vcNav + '<div class="sb-div"></div>' + founderNav : founderNav + '<div class="sb-div"></div>' + vcNav) + dealNav;
+
+  // Footer
+  const initials = (USER?.name || 'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const roleColor = USER?.role === 'vc' ? '#2563eb' : '#c9950c';
+  document.getElementById('sb-footer-content').innerHTML = `
+    <div class="user-bar" onclick="signOut()">
+      <div class="user-av" style="background:${roleColor}">${initials}</div>
+      <div style="flex:1;min-width:0">
+        <div class="user-name">${USER?.name || 'User'}</div>
+        <div class="user-role">${USER?.role === 'vc' ? 'VC / Investor' : 'Founder'} · Sign out</div>
+      </div>
+    </div>
+    <div class="key-bar" id="key-bar">
+      <div class="key-dot" id="key-dot" style="background:#64748b"></div>
+      <div style="flex:1;min-width:0">
+        <div class="key-label" id="key-label" style="color:rgba(255,255,255,.35)">AI features</div>
+        <div class="key-sub" id="key-sub" style="color:rgba(255,255,255,.2)">Add key to activate</div>
+      </div>
+      <svg viewBox="0 0 12 12" fill="none" width="10" height="10" style="opacity:.2"><path d="M4.5 3L7.5 6L4.5 9" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+    </div>
+`;
+  updateKeyStatus();
+}
+
+function navTo(id, el) {
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+  document.querySelectorAll('.app-page').forEach(p => { p.style.display = 'none'; });
+  if (el) el.classList.add('on');
+  const pg = document.getElementById('pg-' + id);
+  if (pg) { pg.style.display = 'block'; pg.style.minHeight = '100%'; pg.style.paddingBottom = '40px'; };
+  if (id === 'fit') initFitChart();
+  if (id === 'market') initMktChart();
+  if (id === 'analytics') initAnalyticsCharts();
+  if (id === 'model') initModelChart();
+  if (id === 'search') setTimeout(loadProfileInputs, 50);
+}
+
+// ═══════════════════════════════════════════
+// API KEY
+// ═══════════════════════════════════════════
+function showKeyModal() {
+  document.getElementById('key-modal').classList.add('show');
+  document.getElementById('key-input').value = API_KEY;
+  document.getElementById('key-err').textContent = '';
+  document.getElementById('key-clear-btn').style.display = API_KEY ? 'block' : 'none';
+}
+function hideKeyModal() { document.getElementById('key-modal').classList.remove('show'); }
+function submitKey() {
+  const v = document.getElementById('key-input').value.trim();
+  if (!v.startsWith('sk-ant-')) { document.getElementById('key-err').textContent = 'Key must start with sk-ant-'; return; }
+  API_KEY = v; localStorage.setItem('dfos_key', v);
+  hideKeyModal(); updateKeyStatus(); toast('API key saved — AI features live');
+}
+function clearKey() {
+  API_KEY = ''; localStorage.removeItem('dfos_key');
+  hideKeyModal(); updateKeyStatus(); toast('API key removed');
+}
+function updateKeyStatus() {
+  const dot = document.getElementById('key-dot');
+  const lbl = document.getElementById('key-label');
+  const sub = document.getElementById('key-sub');
+  const bar = document.getElementById('key-bar');
+  if (!dot) return;
+  // Server proxy handles AI — always show as ready
+  dot.style.background = '#059669'; dot.style.boxShadow = '0 0 6px rgba(5,150,105,.5)';
+  lbl.textContent = 'AI ready'; lbl.style.color = 'rgba(240,180,41,.85)';
+  sub.textContent = 'Server-powered · Live'; sub.style.color = 'rgba(255,255,255,.3)';
+  if (bar) { bar.style.borderColor = 'rgba(5,150,105,.25)'; bar.style.background = 'rgba(5,150,105,.07)'; }
+}
+
+// ═══════════════════════════════════════════
+// CLAUDE API — calls server proxy
+// Users never need an API key
+// Your key lives securely in Vercel env vars
+// ═══════════════════════════════════════════
+async function claude(prompt, sys, maxT) {
+  try {
+    // Call our server-side proxy at /api/chat
+    // Falls back to direct call if proxy not available (local testing)
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (isLocal && API_KEY) {
+      // Local development fallback — uses browser key
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: maxT || 600, system: sys || 'You are a senior VC and startup advisor. Be direct and specific. Use **bold** for key terms.', messages: [{ role: 'user', content: prompt }] })
+      });
+      const d = await r.json();
+      if (d.error) { toast('AI error — ' + d.error.message); return null; }
+      return d.content.map(b => b.text || '').join('').trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    }
+
+    // Production: call the server proxy
+    const r = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, system: sys, maxTokens: maxT || 600 })
+    });
+    
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      if (r.status === 429) { toast('AI is busy — please try again in a moment'); return null; }
+      if (r.status === 500) { toast('Server error — please try again'); return null; }
+      toast('AI unavailable — ' + (err.error || 'please try again'));
+      return null;
+    }
+    
+    const d = await r.json();
+    if (d.error) { toast('AI error — ' + d.error); return null; }
+    return d.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+  } catch(e) {
+    toast('Connection error — check your internet connection');
+    return null;
+  }
+}
+function aiLoad(id) { const el = document.getElementById(id); if (el) el.innerHTML = '<em style="color:rgba(255,255,255,.35)">Claude is thinking...</em>'; }
+function aiSet(id, txt) { const el = document.getElementById(id); if (el && txt) el.innerHTML = txt; }
+
+// ═══════════════════════════════════════════
+// BUILD ALL PAGES
+// ═══════════════════════════════════════════
+function buildPages() {
+  const main = document.getElementById('main-area');
+  main.innerHTML = PAGE_SEARCH + PAGE_MATCH + PAGE_FIT + PAGE_PITCH + PAGE_MARKET +
+    PAGE_CRM + PAGE_DD + PAGE_PORTFOLIO + PAGE_ANALYTICS +
+    PAGE_TERMSHEET + PAGE_MODEL + PAGE_DATAROOM + PAGE_NEG + PAGE_CLOSE;
+
+  // Show first page based on role
+  const isVC = USER?.role === 'vc';
+  const firstPage = isVC ? 'pg-crm' : 'pg-search';
+  document.querySelectorAll('.app-page').forEach(p => p.style.display = 'none');
+  const fp = document.getElementById(firstPage);
+  if (fp) { fp.style.display = 'block'; fp.style.minHeight = '100%'; fp.style.paddingBottom = '40px'; }
+}
+
+// ═══════════════════════════════════════════
+// PAGE TEMPLATES
+// ═══════════════════════════════════════════
+const PAGE_SEARCH = `
+<div class="app-page" id="pg-search" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Investor discovery</div>
+    <div class="hero-h">Find the <em>right investors</em></div>
+    <div class="hero-sub">8,400+ verified VCs, angels & family offices — scored and ranked against your startup profile.</div>
+    <div class="hero-stats"><span class="hstat"><strong>8,412</strong> investors</span><span class="hstat"><strong>342</strong> SV-based</span><span class="hstat"><strong>94%</strong> response rate</span></div>
+  </div>
+  <div class="content">
+    <div style="background:#fef3c7;border:1.5px solid #f0b429;border-radius:11px;padding:.9rem 1.1rem;margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem">
+        <div style="font-size:11px;font-weight:600;color:#78350f">✏️ Your startup profile — edit to personalise all AI features</div>
+        <button onclick="saveProfile()" style="background:#f0b429;border:none;border-radius:6px;padding:5px 14px;font-family:'Geist',sans-serif;font-size:11px;font-weight:600;color:#080c14;cursor:pointer">Save →</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <div><div style="font-size:9px;color:#92400e;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Company name</div>
+          <input id="sp-company" type="text" style="width:100%;border:1px solid rgba(201,149,12,.35);border-radius:6px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:12px;color:#0f172a;background:#fff;outline:none;display:block"/></div>
+        <div><div style="font-size:9px;color:#92400e;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Sector</div>
+          <input id="sp-sector" type="text" style="width:100%;border:1px solid rgba(201,149,12,.35);border-radius:6px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:12px;color:#0f172a;background:#fff;outline:none;display:block"/></div>
+        <div><div style="font-size:9px;color:#92400e;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Stage</div>
+          <select id="sp-stage" style="width:100%;border:1px solid rgba(201,149,12,.35);border-radius:6px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:12px;color:#0f172a;background:#fff;outline:none;display:block">
+            <option>Pre-Seed</option><option>Seed</option><option>Series A</option><option>Series B</option><option>Growth</option>
+          </select></div>
+        <div><div style="font-size:9px;color:#92400e;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Raise amount</div>
+          <input id="sp-raise" type="text" style="width:100%;border:1px solid rgba(201,149,12,.35);border-radius:6px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:12px;color:#0f172a;background:#fff;outline:none;display:block"/></div>
+        <div><div style="font-size:9px;color:#92400e;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Traction</div>
+          <input id="sp-traction" type="text" style="width:100%;border:1px solid rgba(201,149,12,.35);border-radius:6px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:12px;color:#0f172a;background:#fff;outline:none;display:block"/></div>
+        <div><div style="font-size:9px;color:#92400e;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Team background</div>
+          <input id="sp-team" type="text" style="width:100%;border:1px solid rgba(201,149,12,.35);border-radius:6px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:12px;color:#0f172a;background:#fff;outline:none;display:block"/></div>
+      </div>
+    </div>
+    <div class="g4" style="margin-bottom:10px">
+      <div class="met"><div class="met-n pos">98%</div><div class="met-l">Top match score</div><div class="met-d pos">a16z</div></div>
+      <div class="met"><div class="met-n neu">5</div><div class="met-l">Tier-1 matches</div><div class="met-d neu">AI-scored</div></div>
+      <div class="met"><div class="met-n pos">14</div><div class="met-l">Warm connections</div><div class="met-d pos">mutual paths</div></div>
+      <div class="met"><div class="met-n neu">3</div><div class="met-l">Active raises</div><div class="met-d neu">in sector</div></div>
+    </div>
+    ${[
+      {init:'MA',col:'#f0b429',name:'Marc Andreessen',sub:'GP & Co-founder · Andreessen Horowitz (a16z)',match:98,tags:['AI/ML','Series A','$5M–$100M','Silicon Valley']},
+      {init:'SC',col:'#2563eb',name:'Sequoia Capital',sub:'Global VC · Menlo Park, CA',match:95,tags:['AI/ML','Seed–Growth','$100K–$250M']},
+      {init:'VK',col:'#7c3aed',name:'Vinod Khosla',sub:'Founder & MP · Khosla Ventures',match:92,tags:['Deep Tech','AI/ML','Seed–B']},
+      {init:'EG',col:'#059669',name:'Elad Gil',sub:'Angel Investor · San Francisco',match:89,tags:['AI/ML','Seed','$250K–$2M']},
+      {init:'FR',col:'#0891b2',name:'First Round Capital',sub:'Seed VC · San Francisco',match:87,tags:['B2B SaaS','Pre-Seed','$500K–$5M']},
+    ].map(inv => `
+    <div class="inv">
+      <div class="inv-av" style="color:${inv.col}">${inv.init}</div>
+      <div style="flex:1;min-width:0">
+        <div class="inv-name">${inv.name}</div>
+        <div class="inv-sub">${inv.sub}</div>
+        <div class="inv-tags">${inv.tags.map(t=>`<span class="tag tb">${t}</span>`).join('')}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1;color:${inv.col}">${inv.match}</div>
+        <div style="font-size:9px;color:var(--sl)">% match</div>
+        <div style="display:flex;gap:4px;margin-top:6px">
+          <button style="background:#f0b429;border:none;border-radius:6px;padding:4px 10px;font-family:'Geist',sans-serif;font-size:10px;font-weight:500;color:#080c14;cursor:pointer" onclick="toast('Intro request sent to ${inv.name}')">Intro</button>
+          <button style="background:transparent;border:1px solid rgba(8,12,20,.2);border-radius:6px;padding:4px 8px;font-family:'Geist',sans-serif;font-size:10px;color:#64748b;cursor:pointer" onclick="toast('Added to CRM')">+CRM</button>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+</div>`;
+
+const PAGE_MATCH = `
+<div class="app-page" id="pg-match" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">AI matching engine</div>
+    <div class="hero-h"><em>12-dimension</em> investor scoring</div>
+    <div class="hero-sub">Claude analyses every investor across sector fit, stage, check size, thesis alignment, portfolio overlap, and 7 more signals in real time.</div>
+  </div>
+  <div class="content">
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="ct">Your startup profile</div>
+        ${[['Company','NovaMind AI'],['Sector','AI / ML'],['Stage','Seed'],['Raise','$1M–$3M'],['Traction','3 paying customers'],['Team','ex-Salesforce + ex-OpenAI']].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid rgba(8,12,20,.08);font-size:11px"><span style="color:var(--sl)">${l}</span><span style="font-weight:500">${v}</span></div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="ct">Dimension scores — Marc Andreessen / a16z</div>
+        ${[['Sector fit',96,'bfg'],['Stage align',92,'bfg'],['Check size',88,'bfg'],['Geography',100,'bfg'],['Thesis fit',94,'bfg'],['Activity signal',82,'bfy'],['Portfolio overlap',78,'bfy'],['Founder fit',90,'bfg']].map(([l,v,c])=>`<div class="br"><span class="bl">${l}</span><div class="bt"><div class="bf ${c}" style="width:${v}%"></div></div><span class="bv">${v}</span></div>`).join('')}
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">Claude analysis</span><span class="ai-mdl">live</span></div>
+      <div class="ai-body" id="match-ai"><strong>Marc Andreessen at a16z is your highest-probability match at 96/100.</strong> His thesis explicitly covers enterprise AI automation — last 3 investments include AI infrastructure plays. a16z sees 1,000+ pitches/month — you need one more enterprise logo to clear their bar. <strong>Recommended action:</strong> Request warm intro through YC network — 3 mutual connections identified.</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding:1rem;background:#fef3c7;border-radius:10px;border:1.5px solid #f0b429">
+      <div style="width:100%;font-size:11px;color:#78350f;font-weight:600;margin-bottom:4px">🤖 RUN LIVE AI ANALYSIS</div>
+      <button onclick="runMatchAI()" style="background:#f0b429;border:none;border-radius:8px;padding:11px 22px;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:#080c14;cursor:pointer">Run live Claude analysis →</button>
+      <button onclick="toast('Exported to CRM')" style="background:transparent;border:1.5px solid rgba(8,12,20,.2);border-radius:8px;padding:11px 14px;font-family:'Geist',sans-serif;font-size:12px;color:#64748b;cursor:pointer">Export to CRM</button>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_FIT = `
+<div class="app-page" id="pg-fit" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Product-market fit matrix</div>
+    <div class="hero-h">Your <em>10-dimension</em> PMF score</div>
+    <div class="hero-sub">Self-assess across the dimensions VCs weight most. Generates your investor-readiness score and flags gaps before you pitch.</div>
+  </div>
+  <div class="content">
+    <div class="g4" style="margin-bottom:10px">
+      <div class="met"><div class="met-n pos">82</div><div class="met-l">Overall fit</div><div class="met-d pos">Top quartile</div></div>
+      <div class="met"><div class="met-n pos">91</div><div class="met-l">Market thesis</div><div class="met-d pos">Excellent timing</div></div>
+      <div class="met"><div class="met-n neu">74</div><div class="met-l">Execution proof</div><div class="met-d neu">Traction gap</div></div>
+      <div class="met"><div class="met-n pos">78</div><div class="met-l">Team credibility</div><div class="met-d pos">Strong domain</div></div>
+    </div>
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="ct">Dimension scores</div>
+        ${[['Problem severity',9,'bfg'],['Solution uniqueness',8,'bfg'],['Market size',7,'bfy'],['Market timing',9,'bfg'],['Early traction',5,'bfr'],['Team strength',8,'bfg'],['Defensibility',7,'bfy'],['Business model',6,'bfy'],['Competitive pos.',6,'bfy'],['Founder vision',8,'bfg']].map(([l,v,c])=>`<div class="br"><span class="bl">${l}</span><div class="bt"><div class="bf ${c}" style="width:${v*10}%"></div></div><span class="bv">${v}/10</span></div>`).join('')}
+      </div>
+      <div>
+        <div style="height:200px;position:relative;margin-bottom:10px"><canvas id="fitChart" role="img" aria-label="PMF radar chart"></canvas></div>
+        <div class="ai-box">
+          <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">Gap analysis</span></div>
+          <div class="ai-body" id="fit-ai"><strong>Critical gap: Traction (5/10)</strong> is the most VC-weighted dimension at Seed stage. One more paying enterprise customer with a quantified outcome before approaching top-tier funds. Business model (6/10) needs clearer unit economics.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" onclick="runFitAI()">Run live AI analysis →</button></div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const PITCHES = {
+  '50':{'badge':'50-word hook','ctx':'Tweet / intro','body':'NovaMind AI replaces entire enterprise SDR teams with a single AI agent — trained on a proprietary 2.3M-interaction dataset. Three paying customers. Sales cycles cut 60%. Built by ex-Salesforce VP and ex-OpenAI researcher. Raising $2M seed. <strong>The window to own agentic sales automation is now.</strong>','coach':'<strong>Timing:</strong> 18 seconds exactly. Pause 2 full seconds after "now" — let the investor feel the urgency before you continue.'},
+  '100':{'badge':'100-word pitch','ctx':'Cold email / DM','body':'Most enterprise sales teams waste 40% of their time on tasks an AI can do better, faster, and cheaper. NovaMind AI is the first fully autonomous agent that replaces — not assists — the entire SDR workflow.<br><br>In 6 months: 3 paying enterprise customers, 60% sales cycle reduction, 8 active pilots. Built by ex-Salesforce VP and ex-OpenAI researcher.<br><br>We\'re raising $2M seed. Happy to share the data.','coach':'<strong>Subject line matters most:</strong> "AI that replaced our SDR team (3 customers, 60% cycle reduction)". Never attach a deck to a cold email.'},
+  '250':{'badge':'250-word intro','ctx':'Warm investor email','body':'NovaMind AI is building what enterprise sales will look like in five years — and deploying it today.<br><br><strong>The problem:</strong> Enterprise sales teams waste 40% of their time on tasks AI should own. Average SDR costs $120K/year and closes 18% of pipeline.<br><br><strong>Our solution:</strong> A fully autonomous AI agent trained on 2.3M proprietary enterprise sales interactions. Every customer adds data. The moat compounds.<br><br><strong>Traction:</strong> 3 paying customers at $40K ACV, 8 active pilots, 60% sales cycle reduction in production.<br><br>We\'re raising $2M seed. Given your conviction in enterprise AI, we believe this is the right conversation to have now.','coach':'<strong>This gets forwarded.</strong> Every GP who reads it should pitch it in 90 seconds. Lead with traction, not product. Bold headers let partners skim in 30 seconds.'},
+  '500':{'badge':'500-word one-pager','ctx':'Investor memo','body':'<strong>The opportunity</strong><br>$47B TAM, 38% CAGR. Enterprise buyers are actively cutting headcount and piloting AI. Incumbents constrained by legacy architecture. 18-month window to own this category.<br><br><strong>The problem</strong><br>Enterprise SDRs waste 64% of their time on non-selling tasks — $112B/year in wasted payroll. Every tool today assists this work. Nobody eliminates it.<br><br><strong>Our solution</strong><br>NovaMind AI is the first fully autonomous agent trained on 2.3M proprietary enterprise sales interactions. Researches leads, writes outreach, handles objections, updates CRM, books meetings — without a human. Moat compounds with every customer.<br><br><strong>Why we win</strong><br>Outreach ($489M) sequences emails — not workflows. Gong ($584M) analyses — not acts. Clay enriches — not decides. No competitor combines LLM-native architecture with proprietary training data at enterprise grade.<br><br><strong>Traction</strong><br>3 paying customers at $40K ACV. 8 pilots at 75% conversion. 60% reduction in sales cycle length in production.<br><br><strong>Team</strong><br>Alex Chen (ex-Salesforce VP, 200K reps) + Sarah Raj (ex-OpenAI) + Marcus Kim (ex-Palantir GTM). Prior exit $12M.<br><br><strong>The ask</strong><br>$2M seed. Close in 6 weeks.','coach':'<strong>The "Why we win" section</strong> is what gets shared at partner meetings. Be specific about competitor weaknesses — not just your strengths.'},
+  '5min':{'badge':'5-min script','ctx':'Partner call','body':'<strong style="color:var(--gl)">[0:00–0:30] Hook</strong><br>Every year, enterprise companies pay $120,000 for a human SDR who closes 18% of pipeline. We built an AI that closes more for $15,000 a year. That\'s not an improvement. That\'s the end of a job category.<br><br><strong style="color:var(--gl)">[0:30–1:30] Problem</strong><br>Enterprise sales teams spend less than 36% of their time selling. The other 64% — research, CRM, follow-ups — is $112B/year wasted. Every tool helps manage that 64%. NovaMind eliminates it.<br><br><strong style="color:var(--gl)">[1:30–3:00] Solution</strong><br>A fully autonomous AI agent trained on 2.3M real enterprise sales interactions. Researches leads, writes personalised outreach, handles objections, updates Salesforce, books meetings. No human in the loop. The data moat compounds with every customer.<br><br><strong style="color:var(--gl)">[3:00–4:00] Traction</strong><br>Six months in. Three paying enterprise customers at $40K ACV. Eight pilots at 75% conversion. 60% reduction in sales cycle length, verified in production.<br><br><strong style="color:var(--gl)">[4:00–5:00] Ask</strong><br>ex-Salesforce, ex-OpenAI, ex-Palantir. We\'ve done this before. Raising $2M seed. The window to own agentic sales is 18 months. We want to build it with you.','coach':'<strong>After "end of a job category"</strong> — pause 2 full seconds. In traction section say the number then stop talking for 1 second. Let the metric land.'},
+  '15min':{'badge':'15-min delivery','ctx':'Partner meeting','body':'<strong style="color:var(--gl)">Slide 1 [0:00–1:00] Opening hook</strong><br>In 2025, enterprise companies collectively spent $180 billion on sales headcount. Most of that is going to disappear — not because companies stop selling, but because they stop needing humans to do the parts AI does better.<br><br><strong style="color:var(--gl)">Slide 3 [2:00–4:00] The problem</strong><br>The average SDR spends less than 36% of their time selling. The 64% waste — research, admin, sequencing — is worth $112B/year. Every tool in the market helps manage that 64% better. Nobody eliminates it. We eliminate it.<br><br><strong style="color:var(--gl)">Slide 4 [4:00–6:30] Solution + demo</strong><br>A prospect visits your pricing page. Within 4 minutes our AI has researched them across 40 data sources, written a personalised email, sent it, logged it in Salesforce, scheduled a follow-up for day 3. No human involved.<br><br><strong style="color:var(--gl)">Slide 7 [8:30–9:30] Traction</strong><br>3 paying enterprise customers. $40K ACV. 8 pilots at 75% conversion. 60% reduction in sales cycle. Best customer: 90 days → 36 days.<br><br><strong style="color:var(--gl)">Slide 10 [12:30–15:00] The close</strong><br>We\'re raising $2M seed. Capital goes to: expand engineering team, close 8 pipeline pilots, achieve SOC2 certification. In 5 years every enterprise sales team runs on AI agents. We\'re building the first platform they\'ll trust. [PAUSE — wait for their question.]','coach':'<strong>Slides 1, 7, and 10 determine the outcome.</strong> After your close on slide 10 — stop talking completely. The next person to speak loses. Wait for their question however long it takes.'}
+};
+
+const PAGE_PITCH = `
+<div class="app-page" id="pg-pitch" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Pitch studio · 6 formats</div>
+    <div class="hero-h">From <em>tweet to 15-min</em><br>partner delivery</div>
+    <div class="hero-sub">Select any format below. Click "Generate with Claude" for a custom AI-written version of your pitch.</div>
+  </div>
+  <div class="content">
+    <div class="fmt-tabs">
+      <button class="fmt-tab on" data-fmt="50" onclick="switchPitch(this,'50')">50 words</button>
+      <button class="fmt-tab" data-fmt="100" onclick="switchPitch(this,'100')">100 words</button>
+      <button class="fmt-tab" data-fmt="250" onclick="switchPitch(this,'250')">250 words</button>
+      <button class="fmt-tab" data-fmt="500" onclick="switchPitch(this,'500')">500 words</button>
+      <button class="fmt-tab" data-fmt="5min" onclick="switchPitch(this,'5min')">5-min script</button>
+      <button class="fmt-tab" data-fmt="15min" onclick="switchPitch(this,'15min')">15-min delivery</button>
+    </div>
+    <div class="pitch-out">
+      <div class="pitch-meta">
+        <span class="tag to" id="pitch-badge">50-word hook</span>
+        <span class="tag tb" id="pitch-ctx">Tweet / intro</span>
+        <span class="tag ts">NovaMind AI</span>
+      </div>
+      <div class="pitch-body" id="pitch-body">NovaMind AI replaces entire enterprise SDR teams with a single AI agent — trained on a proprietary 2.3M-interaction dataset. Three paying customers. Sales cycles cut 60%. Built by ex-Salesforce VP and ex-OpenAI researcher. Raising $2M seed. <strong>The window to own agentic sales automation is now.</strong></div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">Delivery coach</span></div>
+      <div class="ai-body" id="pitch-coach"><strong>Timing:</strong> 18 seconds exactly. Pause 2 full seconds after "now" — let the investor feel the urgency before you continue.</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding:1rem;background:#fef3c7;border-radius:10px;border:1.5px solid #f0b429">
+      <div style="width:100%;font-size:11px;color:#78350f;font-weight:600;margin-bottom:4px">🤖 GENERATE A LIVE AI PITCH FOR YOUR COMPANY</div>
+      <button onclick="genPitch()" style="background:#080c14;border:none;border-radius:8px;padding:11px 22px;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:#f0b429;cursor:pointer">Generate with Claude →</button>
+      <button onclick="copyPitch()" style="background:#f0b429;border:none;border-radius:8px;padding:11px 18px;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;color:#080c14;cursor:pointer">Copy pitch</button>
+      <button onclick="navTo('neg',document.querySelector('[onclick*=neg]'))" style="background:transparent;border:1.5px solid rgba(8,12,20,.2);border-radius:8px;padding:11px 14px;font-family:'Geist',sans-serif;font-size:12px;color:#64748b;cursor:pointer">Practice negotiation →</button>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_MARKET = `
+<div class="app-page" id="pg-market" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Market intelligence</div>
+    <div class="hero-h"><em>Competitive landscape</em><br>for your VC slide</div>
+    <div class="hero-sub">Every competitor mapped by funding, penetration, and threat level. Your differentiation scored vs the full market.</div>
+  </div>
+  <div class="content">
+    <div class="g4" style="margin-bottom:10px">
+      <div class="met"><div class="met-n pos">$47B</div><div class="met-l">TAM 2025</div><div class="met-d pos">+38% CAGR</div></div>
+      <div class="met"><div class="met-n neu">6</div><div class="met-l">Competitors mapped</div><div class="met-d neu">all scored</div></div>
+      <div class="met"><div class="met-n pos">2</div><div class="met-l">White space vectors</div><div class="met-d pos">uncontested</div></div>
+      <div class="met"><div class="met-n pos">88%</div><div class="met-l">Differentiation</div><div class="met-d pos">vs direct comps</div></div>
+    </div>
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="ct">Competitive landscape</div>
+        ${[{ico:'SF',bg:'#dbeafe',col:'#1e3a8a',name:'Salesforce Einstein',sub:'Legacy arch · $8.5B+',type:'legacy',threat:'#e11d48',pct:92},
+           {ico:'OR',bg:'#ede9fe',col:'#4c1d95',name:'Outreach',sub:'No agentic · $489M',type:'direct',threat:'#e11d48',pct:55},
+           {ico:'GO',bg:'#d1fae5',col:'#064e3b',name:'Gong.io',sub:'Analytics only · $584M',type:'direct',threat:'#c9950c',pct:48},
+           {ico:'CL',bg:'#cffafe',col:'#164e63',name:'Clay',sub:'Enrichment only · $62M',type:'emerging',threat:'#c9950c',pct:22},
+           {ico:'NM',bg:'#fef3c7',col:'#78350f',name:'NovaMind AI',sub:'LLM-native + data moat',type:'you',threat:null,pct:12}
+        ].map(c=>`
+        <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:.5px solid rgba(8,12,20,.08);${c.type==='you'?'background:var(--gf);border-radius:6px;padding:6px 8px;':''}" >
+          <div style="width:28px;height:28px;border-radius:6px;background:${c.bg};color:${c.col};font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">${c.ico}</div>
+          <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;color:#0f172a">${c.name}</div><div style="font-size:10px;color:var(--sl)">${c.sub}</div></div>
+          <span class="tag ${c.type==='you'?'to':c.type==='direct'?'ts':'tb'}" style="${c.type==='direct'?'background:#ffe4e6;color:#881337':''}">${c.type==='you'?'YOU':c.type}</span>
+          <div style="width:70px;height:4px;background:var(--sf);border-radius:2px;overflow:hidden"><div style="width:${c.pct}%;height:100%;background:${c.col};border-radius:2px"></div></div>
+          ${c.threat?`<div style="width:8px;height:8px;border-radius:50%;background:${c.threat};flex-shrink:0"></div>`:'<div style="width:8px;flex-shrink:0"></div>'}
+        </div>`).join('')}
+      </div>
+      <div>
+        <div style="height:200px;position:relative;margin-bottom:10px"><canvas id="mktChart" role="img" aria-label="Market comparison radar"></canvas></div>
+        <div class="ai-box">
+          <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">VC positioning</span></div>
+          <div class="ai-body" id="mkt-ai"><strong>White space: no competitor owns end-to-end agentic sales automation with proprietary training data.</strong> Outreach sequences — not workflows. Gong analyses — not acts. Your positioning: "The first AI agent that replaces an SDR workflow entirely, trained on data legacy tools will never have."</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" onclick="runMktAI()">Generate live positioning →</button></div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_CRM = `
+<div class="app-page" id="pg-crm" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Outreach pipeline · CRM</div>
+    <div class="hero-h">Track every <em>conversation</em><br>to term sheet</div>
+    <div class="hero-sub">Persistent kanban from identified to closed. Click any deal card to add notes or move stage.</div>
+    <div class="hero-stats"><span class="hstat"><strong>24</strong> contacts</span><span class="hstat"><strong>8</strong> active</span><span class="hstat"><strong>3</strong> in DD</span><span class="hstat"><strong>$2.4M</strong> soft-circled</span></div>
+  </div>
+  <div class="content">
+    <div class="kanban">
+      <div class="kcol">
+        <div class="kcol-hd"><span class="kcol-t">Identified</span><span class="tag ts">2</span></div>
+        <div class="deal" onclick="toast('Bessemer VP — added note')"><div class="deal-n">Bessemer VP</div><div class="deal-f">Bessemer Capital</div><div class="deal-m"><span class="tag tb">Seed</span><span style="font-size:9px;color:var(--sl)">Today</span></div></div>
+        <div class="deal" onclick="toast('Benchmark — added note')"><div class="deal-n">Benchmark</div><div class="deal-f">Benchmark Capital</div><div class="deal-m"><span class="tag tb">Series A</span><span style="font-size:9px;color:var(--sl)">2d ago</span></div></div>
+      </div>
+      <div class="kcol">
+        <div class="kcol-hd"><span class="kcol-t">Contacted</span><span class="tag" style="background:#b5d4f4;color:#1e3a8a">2</span></div>
+        <div class="deal" onclick="toast('Marc Andreessen — deck viewed 3×')"><div class="deal-n">Marc Andreessen</div><div class="deal-f">a16z</div><div class="deal-m"><span class="tag tb">Series A</span><span style="font-size:9px;color:var(--sl)">1d ago</span></div></div>
+        <div class="deal" onclick="toast('Sequoia — follow-up sent')"><div class="deal-n">Sequoia Capital</div><div class="deal-f">Sequoia</div><div class="deal-m"><span class="tag tb">Growth</span><span style="font-size:9px;color:var(--sl)">3d ago</span></div></div>
+      </div>
+      <div class="kcol">
+        <div class="kcol-hd"><span class="kcol-t">Meeting / DD</span><span class="tag" style="background:#FAC775;color:#412402">2</span></div>
+        <div class="deal" onclick="toast('Khosla — meeting in 2 days, prep financials')"><div class="deal-n">Vinod Khosla</div><div class="deal-f">Khosla Ventures</div><div class="deal-m"><span class="tag to">Seed</span><span style="font-size:9px;color:var(--sl)">Meeting 2d</span></div></div>
+        <div class="deal" onclick="toast('Lightspeed — DD sent, awaiting response')"><div class="deal-n">Lightspeed VP</div><div class="deal-f">Lightspeed</div><div class="deal-m"><span class="tag to">Series A</span><span style="font-size:9px;color:var(--sl)">DD sent</span></div></div>
+      </div>
+      <div class="kcol">
+        <div class="kcol-hd"><span class="kcol-t">Term sheet</span><span class="tag" style="background:#C0DD97;color:#173404">2</span></div>
+        <div class="deal" onclick="toast('YC term sheet — $2.4M at $12M cap. Review now.')"><div class="deal-n">Y Combinator</div><div class="deal-f">YC</div><div class="deal-m"><span class="tag tg">LOI received</span><span style="font-size:9px;color:var(--sl)">Today</span></div></div>
+        <div class="deal" onclick="toast('Founders Fund — negotiation in progress')"><div class="deal-n">Founders Fund</div><div class="deal-f">FF</div><div class="deal-m"><span class="tag tg">Negotiating</span><span style="font-size:9px;color:var(--sl)">2d ago</span></div></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ct">Activity feed</div>
+        ${[['#059669','Term sheet from YC — $2.4M at $12M cap','10 min ago'],['#2563eb','Follow-up sent to Sequoia with deck','2 hr ago'],['#c9950c','Marc Andreessen viewed deck (3×)','Yesterday'],['#e11d48','Pass from Benchmark — stage mismatch','3 days ago']].map(([c,t,d])=>`<div style="display:flex;gap:8px;padding:5px 0;border-bottom:.5px solid rgba(8,12,20,.08)"><div style="width:6px;height:6px;border-radius:50%;background:${c};flex-shrink:0;margin-top:4px"></div><div><div style="font-size:11px;color:#0f172a;line-height:1.4">${t}</div><div style="font-size:9px;color:var(--sl);margin-top:1px">${d}</div></div></div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="ct">Tasks — click to complete</div>
+        ${[['Send financials to Khosla','Tomorrow',false],['Prep demo for Lightspeed','In 2 days',false],['Review YC term sheet','Today',false],['Follow up First Round','Done',true]].map(([t,d,done])=>`<div class="chk-row" onclick="toggleChk(this)"><div class="chk-box${done?' done':''}">${done?'<svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>':''}</div><span class="chk-lbl${done?' done':''}">${t}</span><span style="font-size:9px;color:var(--sl)">${d}</span></div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_DD = `
+<div class="app-page" id="pg-dd" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Founder due intelligence</div>
+    <div class="hero-h">Deep credibility scan<br>across <em>all platforms</em></div>
+    <div class="hero-sub">12-dimension credibility scoring from LinkedIn, GitHub, Crunchbase, Twitter, patents and press — synthesised by Claude into a VC-ready verdict.</div>
+  </div>
+  <div class="content">
+    <div class="card" style="display:flex;gap:14px;align-items:flex-start;margin-bottom:10px">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:22px;color:var(--gl);flex-shrink:0">AC</div>
+      <div style="flex:1">
+        <div style="font-family:'Instrument Serif',serif;font-size:19px;color:#0f172a;margin-bottom:2px">Alex Chen</div>
+        <div style="font-size:11px;color:var(--sl);margin-bottom:7px">CEO & Co-founder · NovaMind AI · San Francisco, CA</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <span class="tag tg">Prior exit verified</span><span class="tag tb">Domain 92/100</span><span class="tag to">Forbes 30U30</span><span class="tag tv">Patent pending</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-family:'Instrument Serif',serif;font-size:48px;color:var(--gl);line-height:1">84</div>
+        <div style="font-size:10px;color:var(--sl)">credibility score</div>
+        <span class="tag tg" style="margin-top:5px;display:inline-block">Tier A · Ready</span>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ct">12-dimension matrix</div>
+        ${[['Domain expertise',92,'bfg'],['Leadership track',88,'bfg'],['Network quality',89,'bfg'],['Integrity signals',91,'bfg'],['Commitment',95,'bfg'],['Technical depth',86,'bfg'],['Startup experience',78,'bfy'],['Market insight',88,'bfg'],['Recognition',72,'bfy'],['Marketing',76,'bfy'],['Success factors',74,'bfy'],['Coachability',79,'bfy']].map(([l,v,c])=>`<div class="br"><span class="bl">${l}</span><div class="bt"><div class="bf ${c}" style="width:${v}%"></div></div><span class="bv">${v}</span></div>`).join('')}
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:10px">
+          <div class="ct">Platform signals</div>
+          ${[['LI','#dbeafe','#1e3a8a','LinkedIn','VP Product Salesforce 2019–24 · 14.2K followers'],['GH','#f3f4f6','#374151','GitHub','847 ML commits · 2.2K stars · LangChain contributor'],['CB','#d1fae5','#064e3b','Crunchbase','DataFlow acquired by Zendesk $12M · 2021'],['PT','#fef3c7','#78350f','Patents','2 pending · autonomous agent memory architecture']].map(([ic,bg,col,nm,sig])=>`<div style="display:flex;gap:8px;padding:5px 0;border-bottom:.5px solid rgba(8,12,20,.08)"><div style="width:24px;height:24px;border-radius:5px;background:${bg};color:${col};font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">${ic}</div><div><div style="font-size:11px;font-weight:500;color:#0f172a">${nm}</div><div style="font-size:10px;color:var(--sl)">${sig}</div></div></div>`).join('')}
+        </div>
+        <div class="ai-box">
+          <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">VC verdict</span></div>
+          <div class="ai-body" id="dd-ai"><strong>Proceed to partner meeting.</strong> Top-quartile founder profile — verified exit, deep domain, elite network, zero red flags. <strong>Key diligence question:</strong> "How does your open-source GitHub work translate to a proprietary moat a well-funded competitor can't replicate in 12 months?"</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" onclick="runDDAI()">Run live founder analysis →</button></div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_PORTFOLIO = `
+<div class="app-page" id="pg-portfolio" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Portfolio health · VC view</div>
+    <div class="hero-h">Real-time <em>signal scoring</em></div>
+    <div class="hero-sub">Every company scored on growth, burn, team and market signals. Alerts before problems become crises.</div>
+    <div class="hero-stats"><span class="hstat"><strong>9</strong> active</span><span class="hstat"><strong>6</strong> on track</span><span class="hstat"><strong>2</strong> watch</span><span class="hstat"><strong>1</strong> at risk</span></div>
+  </div>
+  <div class="content">
+    <div class="card" style="margin-bottom:10px">
+      <div class="ct">Portfolio signal dashboard — click any company</div>
+      ${[{init:'NM',col:'#f0b429',name:'NovaMind AI',sig:'+34% MoM ARR',health:88,tag:'tg',tl:'On track',tc:'#059669'},
+         {init:'SN',col:'#f0b429',name:'SecureNet',sig:'$200K MRR milestone',health:94,tag:'tg',tl:'On track',tc:'#059669'},
+         {init:'PE',col:'#f0b429',name:'PayEdge',sig:'Exited $24M · MOIC 8.2×',health:100,tag:'tg',tl:'Exited',tc:'#059669'},
+         {init:'DV',col:'#f0b429',name:'DataVault',sig:'Churn spike: 12%',health:72,tag:'to',tl:'Watch',tc:'#c9950c'},
+         {init:'HO',col:'#f0b429',name:'HealthOS',sig:'ICP pivot announced',health:65,tag:'to',tl:'Watch',tc:'#c9950c'},
+         {init:'FA',col:'#f0b429',name:'FlowAI',sig:'Runway: 4 months',health:42,tag:'',tl:'At risk',tc:'#e11d48'}
+      ].map(c=>`
+      <div class="ph-row" onclick="toast('${c.name} — opening details...')">
+        <div class="ph-av" style="color:${c.col}">${c.init}</div>
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;color:#0f172a">${c.name}</div><div style="font-size:10px;color:var(--sl)">${c.sig}</div></div>
+        <div class="ph-bar"><div class="ph-fill" style="width:${c.health}%;background:${c.tc}"></div></div>
+        <span style="font-size:10px;font-family:'Geist Mono',monospace;color:${c.tc};min-width:24px;text-align:right">${c.health}</span>
+        <span class="tag ${c.tag||'ts'}" style="${!c.tag?'background:#ffe4e6;color:#881337':''};min-width:60px;text-align:center">${c.tl}</span>
+      </div>`).join('')}
+    </div>
+    <div class="ai-box">
+      <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">AI portfolio brief</span></div>
+      <div class="ai-body" id="port-ai"><strong>Immediate action: FlowAI has 4 months runway.</strong> Facilitate a bridge from existing investors now — do not wait for the next board meeting. <strong>DataVault's 12% churn spike</strong> needs a founder call this week to diagnose root cause. NovaMind AI and SecureNet are outperforming — <strong>consider exercising pro-rata rights in their next rounds.</strong></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" onclick="runPortAI()">Generate AI portfolio brief →</button></div>
+  </div>
+</div>`;
+
+const PAGE_ANALYTICS = `
+<div class="app-page" id="pg-analytics" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Fund analytics · VC view</div>
+    <div class="hero-h">Deployment velocity &amp;<br><em>fund performance</em></div>
+    <div class="hero-sub">AUM, IRR, MOIC, sector concentration — everything a GP needs for LP reporting and fund strategy.</div>
+  </div>
+  <div class="content">
+    <div class="g4" style="margin-bottom:10px">
+      <div class="met"><div class="met-n">$847M</div><div class="met-l">AUM deployed</div><div class="met-d pos">3 vintages</div></div>
+      <div class="met"><div class="met-n pos">4.2×</div><div class="met-l">Avg portfolio MOIC</div><div class="met-d pos">Top quartile</div></div>
+      <div class="met"><div class="met-n pos">28.4%</div><div class="met-l">Net IRR (2020)</div><div class="met-d pos">+14pp vs benchmark</div></div>
+      <div class="met"><div class="met-n neu">14d</div><div class="met-l">Avg to term sheet</div><div class="met-d neu">Industry avg 28d</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="ct">Deployment by sector</div>
+        <div style="position:relative;height:180px"><canvas id="sectorChart" role="img" aria-label="Sector deployment bar chart">AI/ML 38%, Fintech 22%, SaaS 18%, Deep Tech 12%, Climate 6%, Healthcare 4%</canvas></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:10px;color:var(--sl)">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#2563eb;display:inline-block"></span>AI/ML 38%</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#059669;display:inline-block"></span>Fintech 22%</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#c9950c;display:inline-block"></span>SaaS 18%</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct">Net IRR vs Cambridge benchmark</div>
+        <div style="position:relative;height:180px"><canvas id="irrChart" role="img" aria-label="IRR vs benchmark line chart">Fund IRR consistently above Cambridge benchmark</canvas></div>
+        <div style="display:flex;gap:16px;margin-top:8px;font-size:10px;color:var(--sl)">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:2px;background:#c9950c;display:inline-block"></span>Our fund</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:2px;background:#94a3b8;display:inline-block;border-top:1px dashed #94a3b8;height:0"></span>Benchmark</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_TERMSHEET = `
+<div class="app-page" id="pg-termsheet" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Term sheet AI</div>
+    <div class="hero-h">Every clause <em>explained</em><br>before you sign</div>
+    <div class="hero-sub">AI-drafted, plain-English explained, red-flagged and benchmarked against Seed-stage market standard.</div>
+  </div>
+  <div class="content">
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="ct">Term sheet — NovaMind AI · a16z</div>
+        ${[['Pre-money valuation','$8,000,000'],['Round size','$2,000,000'],['Post-money','$10,000,000'],['Investor ownership','~20%'],['Instrument','Series Seed Preferred'],['Liquidation','1× non-participating'],['Board','2 founder / 1 investor'],['Pro-rata','Yes — major investors']].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid rgba(8,12,20,.08);font-size:11px"><span style="color:var(--sl)">${l}</span><span style="font-weight:500;font-family:'Geist Mono',monospace;font-size:11px">${v}</span></div>`).join('')}
+        <div class="brow" style="margin-top:10px">
+          <button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" onclick="runTsAI()">Analyse with Claude →</button>
+          <button style="background:transparent;border:1px solid rgba(8,12,20,.2);border-radius:8px;padding:10px 14px;font-family:'Geist',sans-serif;font-size:11px;color:#64748b;cursor:pointer" onclick="toast('Exported as PDF')">Export PDF</button>
+        </div>
+      </div>
+      <div>
+        <div class="ct">Clause analysis</div>
+        <div class="clause cl-pos"><strong>Liquidation (1× non-participating):</strong> Founder-friendly — investors get their money back then you share equally. This is the best possible structure. Guard this in Series A.</div>
+        <div class="clause cl-pos"><strong>Board (2 founder / 1 investor):</strong> Founders retain board control. Excellent Seed position — protect this.</div>
+        <div class="clause cl-warn"><strong>Ownership (~20%):</strong> High end of Seed range. After Series A (~20%), founders at ~56% combined. Model your cap table through Series B before signing.</div>
+        <div class="clause cl-warn"><strong>Pro-rata rights:</strong> Standard provision. Not harmful — but note the future obligation on your cap table.</div>
+        <div class="ai-box" style="margin-top:10px">
+          <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">Negotiation leverage</span></div>
+          <div class="ai-body" id="ts-ai"><strong>Founder-friendly overall.</strong> 1× non-participating liquidation and founder board control are the two clauses that matter most — both are in your favour. <strong>If you have a competing term sheet, use it to push pre-money from $8M to $9M.</strong> That's worth $200K to your team at a $50M exit.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_MODEL = `
+<div class="app-page" id="pg-model" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Financial model builder</div>
+    <div class="hero-h">VC-grade <em>5-year model</em></div>
+    <div class="hero-sub">Unit economics, bear/base/bull scenarios, and VC return calculations built from your assumptions.</div>
+  </div>
+  <div class="content">
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="ct">Model assumptions</div>
+        ${[['Year 1 ARR target','$50K','Starting run-rate'],['Monthly growth rate','15%','MoM ARR growth'],['Gross margin','65%','Net of COGS'],['CAC','$8,000','Blended average'],['Customer LTV','$40,000','Gross lifetime value'],['Annual churn','8%','Logo churn']].map(([l,v,s])=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid rgba(8,12,20,.08)"><div><div style="font-size:11px;font-weight:500;color:#0f172a">${l}</div><div style="font-size:9px;color:var(--sl)">${s}</div></div><span style="font-size:12px;font-weight:500;font-family:'Geist Mono',monospace;color:var(--gl)">${v}</span></div>`).join('')}
+        <div style="margin-top:10px"><div class="ct">Unit economics</div>
+        ${[['LTV : CAC ratio','5.0×','#059669'],['CAC payback','7 months','#059669'],['Gross margin','65%','#059669'],['Magic number','0.82','#059669']].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid rgba(8,12,20,.08);font-size:11px"><span style="color:var(--sl)">${l}</span><span style="font-weight:500;font-family:'Geist Mono',monospace;color:${c}">${v}</span></div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="sc-grid">
+          <div class="sc" style="background:var(--rf)"><div class="sc-lbl" style="color:var(--rb)">Bear</div><div class="sc-n" style="color:var(--rb)">$1.8M</div><div class="sc-s" style="color:#be123c">Yr 3 ARR</div></div>
+          <div class="sc" style="background:var(--ef)"><div class="sc-lbl" style="color:var(--eb)">Base</div><div class="sc-n" style="color:var(--eb)">$6.2M</div><div class="sc-s" style="color:#065f46">Yr 3 ARR</div></div>
+          <div class="sc" style="background:var(--gf)"><div class="sc-lbl" style="color:#78350f">Bull</div><div class="sc-n" style="color:#78350f">$18.4M</div><div class="sc-s" style="color:#92400e">Yr 3 ARR</div></div>
+        </div>
+        <div style="height:180px;position:relative;margin-bottom:10px"><canvas id="projChart" role="img" aria-label="5-year projection chart">5-year ARR projections bear/base/bull</canvas></div>
+        <div class="card">
+          <div class="ct">VC return calculator</div>
+          ${[['Investment','$2M @ $8M pre'],['Ownership','~20%'],['3× return exit','$30M exit'],['10× return exit','$100M exit — needs $10M ARR']].map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid rgba(8,12,20,.08);font-size:11px"><span style="color:var(--sl)">${l}</span><span style="font-weight:500;font-family:'Geist Mono',monospace">${v}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_DATAROOM = `
+<div class="app-page" id="pg-dataroom" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Data room intelligence</div>
+    <div class="hero-h">Every document<br><em>investor-ready</em></div>
+    <div class="hero-sub">Auto-checklist of everything a VC needs. Click any document to cycle it through Missing → Partial → Ready.</div>
+    <div class="hero-stats"><span class="hstat"><strong>14/22</strong> ready</span><span class="hstat"><strong>72</strong> room score</span><span class="hstat"><strong>3</strong> critical gaps</span><span class="hstat"><strong>Target: 90+</strong></span></div>
+  </div>
+  <div class="content">
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="ct">Financials & legal</div>
+        ${[['FM','#ffe4e6','#881337','Financial model (5-yr)','Missing'],['CT','#ffe4e6','#881337','Cap table (diluted)','Missing'],['BS','#fef3c7','#78350f','Bank statements (3mo)','Partial'],['CI','#d1fae5','#064e3b','Certificate of incorp.','Ready'],['IP','#d1fae5','#064e3b','IP assignments','Ready'],['CC','#ffe4e6','#881337','Customer contracts','Missing']].map(([ic,bg,col,nm,st])=>`<div class="chk-row" onclick="cycleDR(this)"><div style="width:26px;height:26px;border-radius:6px;background:${bg};color:${col};font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">${ic}</div><span style="font-size:11px;flex:1;color:#0f172a">${nm}</span><span class="dr-status tag" style="background:${bg};color:${col}">${st}</span></div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="ct">Company documents</div>
+        ${[['PD','#d1fae5','#064e3b','Pitch deck','Ready'],['TB','#d1fae5','#064e3b','Team bios','Ready'],['TA','#ffe4e6','#881337','Technical architecture','Missing'],['PR','#fef3c7','#78350f','Product roadmap','Partial'],['RS','#d1fae5','#064e3b','Revenue schedule','Ready'],['RL','#d1fae5','#064e3b','Reference list','Ready']].map(([ic,bg,col,nm,st])=>`<div class="chk-row" onclick="cycleDR(this)"><div style="width:26px;height:26px;border-radius:6px;background:${bg};color:${col};font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">${ic}</div><span style="font-size:11px;flex:1;color:#0f172a">${nm}</span><span class="dr-status tag" style="background:${bg};color:${col}">${st}</span></div>`).join('')}
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">Data room coaching</span></div>
+      <div class="ai-body" id="dr-ai"><strong>Critical blockers: Financial model and cap table.</strong> VCs will not proceed to partner meeting without these two. <strong>Completion order:</strong> (1) Cap table, (2) Financial model, (3) Customer contracts, (4) Technical architecture. After these four your room score hits 90+ and is partner-meeting ready.</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" onclick="runDRAI()">Get AI data room coaching →</button><button style="background:transparent;border:1px solid rgba(8,12,20,.2);border-radius:8px;padding:10px 14px;font-family:'Geist',sans-serif;font-size:11px;color:#64748b;cursor:pointer" onclick="toast('Share link generated')">Generate share link</button></div>
+  </div>
+</div>`;
+
+const PAGE_NEG = `
+<div class="app-page" id="pg-neg" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Negotiation simulator</div>
+    <div class="hero-h">Practice the <em>hardest</em><br>VC conversations</div>
+    <div class="hero-sub">Claude plays a tough VC partner. Type your responses below the chat to continue the conversation.</div>
+  </div>
+  <div class="content">
+    <div class="card" style="margin-bottom:10px">
+      <div class="ct">Simulation setup — change scenario and click Start</div>
+      <div class="g2" style="margin-bottom:8px">
+        <div>
+          <div style="font-size:10px;color:var(--sl);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:4px">VC persona</div>
+          <select id="neg-vc" style="width:100%;border:.5px solid rgba(8,12,20,.15);border-radius:7px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:11px;background:#fff;color:#0f172a;outline:none">
+            <option>Marc Andreessen · a16z — tough GP, data-driven</option>
+            <option>Sequoia partner — probing on market size</option>
+            <option>First Round — founder-friendly, collaborative</option>
+            <option>Tiger Global — growth only, wants traction</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--sl);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:4px">Scenario</div>
+          <select id="neg-scene" style="width:100%;border:.5px solid rgba(8,12,20,.15);border-radius:7px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:11px;background:#fff;color:#0f172a;outline:none">
+            <option>Valuation — they want lower pre-money than $10M</option>
+            <option>Board seat battle — they want 2 seats, you want 1</option>
+            <option>Liquidation preference — they want 2× participating</option>
+            <option>Pro-rata — they want unlimited rights</option>
+            <option>Closing timeline pressure</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:10px;color:var(--sl);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:4px">Your opening position</div>
+        <input id="neg-pos" type="text" value="$10M pre-money, 1× non-participating, 1 board seat for investors" style="width:100%;border:.5px solid rgba(8,12,20,.15);border-radius:7px;padding:7px 9px;font-family:'Geist',sans-serif;font-size:11px;color:#0f172a;outline:none;background:#fff"/>
+      </div>
+      <button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" id="neg-start-btn" onclick="startNeg()">Start live simulation with Claude →</button>
+    </div>
+    <div class="chat-wrap" style="display:flex;flex-direction:column">
+      <div class="chat-hdr">
+        <div class="chat-side"><div class="chat-av" style="background:rgba(37,99,235,.35);color:#93c5fd">VC</div><span id="neg-vc-label">Marc Andreessen · a16z</span></div>
+        <div class="chat-side"><span>You (founder)</span><div class="chat-av" style="background:rgba(201,149,12,.3);color:var(--gl)">FD</div></div>
+      </div>
+      <div class="chat-body" id="neg-chat" style="min-height:160px;max-height:240px;overflow-y:auto">
+        <div class="msg msg-vc"><div class="msg-from mf-vc">Marc Andreessen</div>I like what you're building — the data moat thesis is compelling. But $10M pre-money for pre-revenue feels aggressive. Walk me through why you need that valuation.</div>
+        <div class="msg msg-fd"><div class="msg-from mf-fd">You (founder)</div>The $10M reflects the dataset (18 months, $400K to build), the team, and 3 enterprise contracts live in 60 days. At $6M we're selling 25% before those contracts prove what we already know.</div>
+        <div class="msg msg-ai"><div class="msg-from mf-ai">Claude coaching</div>Strong anchor. Dataset, window, contracts. Now wait — let him respond before you concede anything.</div>
+        <div class="msg msg-vc"><div class="msg-from mf-vc">Marc Andreessen</div>Fair on the dataset. What if we do $8M pre with a milestone: those 3 contracts sign within 90 days, we ratchet to $10M automatically?</div>
+      </div>
+      <div id="neg-reply-wrap" style="background:#fffbeb;border-top:2px solid #f0b429;padding:.85rem 1rem;margin-top:0">
+        <div style="font-size:12px;color:#78350f;font-weight:600;margin-bottom:8px">✍ YOUR REPLY — type below and click Send (or press Enter)</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="neg-reply" type="text" placeholder="Type your response to the VC here..." style="flex:1;border:2px solid #f0b429;border-radius:8px;padding:11px 14px;font-family:'Geist',sans-serif;font-size:13px;color:#0f172a;outline:none;background:#fff;display:block;min-height:44px" onkeydown="if(event.key==='Enter')sendNegReply()"/>
+          <button onclick="sendNegReply()" style="background:#f0b429;border:none;border-radius:8px;padding:11px 22px;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:#080c14;cursor:pointer;white-space:nowrap;min-height:44px">Send →</button>
+          <button onclick="getNegCoach()" style="background:transparent;border:1.5px solid rgba(8,12,20,.2);border-radius:8px;padding:11px 14px;font-family:'Geist',sans-serif;font-size:12px;color:#64748b;cursor:pointer;white-space:nowrap;min-height:44px">Coach me</button>
+        </div>
+        <div style="font-size:10px;color:#92400e;margin-top:6px;font-family:'Geist Mono',monospace">Press Enter or click Send → Claude responds as the VC within 3 seconds</div>
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">Live coaching</span></div>
+      <div class="ai-body" id="neg-coach"><strong>Counter-propose shorter than 90 days.</strong> Say: "Make it 60 days — we have line-of-sight on all three — and I'll accept $8M with the ratchet to $10M." Shows confidence, gets you the better valuation, closes faster.</div>
+    </div>
+  </div>
+</div>`;
+
+const PAGE_CLOSE = `
+<div class="app-page" id="pg-close" style="flex-direction:column">
+  <div class="hero">
+    <div class="hero-eye">Deal closing engine</div>
+    <div class="hero-h">From term sheet to<br><em>wired capital</em></div>
+    <div class="hero-sub">Owner-assigned tasks, AI critical path, and deadline tracking. The complete shared checklist for both sides.</div>
+    <div class="hero-stats"><span class="hstat"><strong>28</strong> tasks</span><span class="hstat"><strong>12</strong> complete</span><span class="hstat"><strong>5</strong> blocked</span><span class="hstat"><strong>19 days</strong> to close</span></div>
+  </div>
+  <div class="content">
+    <div class="g4" style="margin-bottom:10px">
+      <div class="met"><div class="met-n pos">43%</div><div class="met-l">Tasks complete</div></div>
+      <div class="met"><div class="met-n neu">19d</div><div class="met-l">Projected close</div></div>
+      <div class="met"><div class="met-n neg">5</div><div class="met-l">Blocked</div></div>
+      <div class="met"><div class="met-n pos">3wk</div><div class="met-l">Runway buffer</div></div>
+    </div>
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="ct">Closing checklist — click to toggle</div>
+        ${[['Term sheet signed',true,'Both'],['Data room access granted',true,'Founder'],['Legal counsel engaged',true,'Both'],['Cap table sent to investor',true,'Founder'],['Stock purchase agreement drafted',false,'VC'],['Investor rights agreement',false,'VC'],['409A valuation ordered',false,'Founder'],['Investor signature pages',false,'VC'],['Wire instructions verified',false,'Founder'],['Funds wired & confirmed',false,'VC']].map(([t,done,own])=>`<div class="chk-row" onclick="toggleChk(this)"><div class="chk-box${done?' done':''}">${done?'<svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>':''}</div><span class="chk-lbl${done?' done':''}">${t}</span><span class="tag ${own==='VC'?'tb':own==='Founder'?'to':'tv'}" style="flex-shrink:0">${own}</span></div>`).join('')}
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:10px">
+          <div class="ct">Closing timeline</div>
+          <div class="tl">
+            <div class="tl-item"><div class="tl-dot" style="background:var(--gl)"></div><div class="tl-time">Day 1–3</div><div class="tl-t">Legal kick-off</div><div class="tl-d">Both parties engage counsel. SPA and IRA drafts initiated.</div></div>
+            <div class="tl-item"><div class="tl-dot" style="background:#2563eb"></div><div class="tl-time">Day 4–10</div><div class="tl-t">Diligence & review</div><div class="tl-d">Investor reviews data room. 409A ordered. Background checks.</div></div>
+            <div class="tl-item"><div class="tl-dot" style="background:#7c3aed"></div><div class="tl-time">Day 10–16</div><div class="tl-t">Document finalization</div><div class="tl-d">SPA and IRA redlines. Board consent. Option pool approved.</div></div>
+            <div class="tl-item"><div class="tl-dot" style="background:#059669"></div><div class="tl-time">Day 17–19</div><div class="tl-t">Signing & closing</div><div class="tl-d">All signatures collected. Wire instructions verified. Capital wired.</div></div>
+          </div>
+        </div>
+        <div class="ai-box">
+          <div class="ai-top"><div class="ai-ic"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-lbl">Closing intelligence</span></div>
+          <div class="ai-body"><strong>Critical path: legal review is the bottleneck</strong> — 4 downstream tasks blocked. Pre-populate SPA with standard Seed terms to save 3–4 days. <strong>Risk:</strong> one investor hasn't returned signature page — follow up today. At current pace: <strong>wired capital in 19 days.</strong></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button style="background:#f0b429;border:none;border-radius:8px;padding:10px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;color:#080c14;cursor:pointer" onclick="toast('Status report sent to all parties')">Send status update →</button></div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+// ═══════════════════════════════════════════
+// INTERACTION HANDLERS
+// ═══════════════════════════════════════════
+function toggleChk(row) {
+  const box = row.querySelector('.chk-box');
+  const lbl = row.querySelector('.chk-lbl');
+  const done = box.classList.contains('done');
+  box.classList.toggle('done', !done);
+  box.innerHTML = done ? '' : '<svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  if (lbl) lbl.classList.toggle('done', !done);
+}
+
+function cycleDR(row) {
+  const st = row.querySelector('.dr-status');
+  if (!st) return;
+  const ico = row.querySelector('div:first-child');
+  const states = [['Missing','#ffe4e6','#881337'],['Partial','#fef3c7','#78350f'],['Ready','#d1fae5','#064e3b']];
+  const idx = states.findIndex(s => s[0] === st.textContent);
+  const next = states[(idx + 1) % 3];
+  st.textContent = next[0];
+  st.style.background = next[1]; st.style.color = next[2];
+  if (ico) { ico.style.background = next[1]; ico.style.color = next[2]; }
+  toast('Marked as ' + next[0]);
+}
+
+function switchPitch(btn, fmt) {
+  document.querySelectorAll('.fmt-tab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const p = PITCHES[fmt];
+  if (!p) return;
+  document.getElementById('pitch-badge').textContent = p.badge;
+  document.getElementById('pitch-ctx').textContent = p.ctx;
+  document.getElementById('pitch-body').innerHTML = p.body;
+  document.getElementById('pitch-coach').innerHTML = p.coach;
+}
+
+function copyPitch() {
+  const t = document.getElementById('pitch-body')?.innerText;
+  if (t) navigator.clipboard.writeText(t).then(() => toast('Pitch copied!')).catch(() => toast('Copy manually — Ctrl+A on pitch text'));
+}
+
+// ═══════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════
+function initFitChart() {
+  const el = document.getElementById('fitChart');
+  if (!el || charts.fit) return;
+  charts.fit = new Chart(el, {
+    type: 'radar',
+    data: { labels: ['Problem','Solution','Market','Timing','Traction','Team','Moat','Model','Compete','Vision'],
+      datasets: [{ label: 'Score', data: [9,8,7,9,5,8,7,6,6,8], backgroundColor: 'rgba(201,149,12,.12)', borderColor: '#c9950c', borderWidth: 2, pointBackgroundColor: '#c9950c', pointRadius: 3 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 9 }, color: '#94a3b8', backdropColor: 'transparent' }, grid: { color: 'rgba(0,0,0,.06)' }, pointLabels: { font: { size: 9 }, color: '#64748b' } } } }
+  });
+}
+
+function initMktChart() {
+  const el = document.getElementById('mktChart');
+  if (!el || charts.mkt) return;
+  charts.mkt = new Chart(el, {
+    type: 'radar',
+    data: { labels: ['Automation','AI-native','Enterprise','Integration','Analytics','Compliance'],
+      datasets: [
+        { label: 'NovaMind', data: [90,95,80,72,78,68], backgroundColor: 'rgba(201,149,12,.12)', borderColor: '#c9950c', borderWidth: 2, pointRadius: 2 },
+        { label: 'Outreach', data: [72,60,82,88,78,90], backgroundColor: 'rgba(37,99,235,.07)', borderColor: '#2563eb', borderWidth: 1.5, borderDash: [4,3], pointRadius: 2 },
+        { label: 'Gong', data: [55,78,85,82,95,94], backgroundColor: 'rgba(5,150,105,.07)', borderColor: '#059669', borderWidth: 1.5, borderDash: [4,3], pointRadius: 2 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { min: 0, max: 100, ticks: { stepSize: 25, font: { size: 8 }, color: '#94a3b8', backdropColor: 'transparent' }, grid: { color: 'rgba(0,0,0,.06)' }, pointLabels: { font: { size: 9 }, color: '#64748b' } } } }
+  });
+}
+
+function initAnalyticsCharts() {
+  const s = document.getElementById('sectorChart');
+  if (s && !charts.sector) {
+    charts.sector = new Chart(s, {
+      type: 'bar',
+      data: { labels: ['AI/ML','Fintech','SaaS','Deep Tech','Climate','Health'], datasets: [{ data: [38,22,18,12,6,4], backgroundColor: ['#2563eb','#059669','#c9950c','#7c3aed','#0891b2','#e11d48'], borderRadius: 4 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#64748b' } }, y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { size: 9 }, color: '#64748b', callback: v => v + '%' } } } }
+    });
+  }
+  const i = document.getElementById('irrChart');
+  if (i && !charts.irr) {
+    charts.irr = new Chart(i, {
+      type: 'line',
+      data: { labels: ['2018','2019','2020','2021','2022','2023','2024'],
+        datasets: [
+          { label: 'Our fund', data: [22.4,19.1,28.4,18.2,14.1,19.3,21.8], borderColor: '#c9950c', borderWidth: 2, pointBackgroundColor: '#c9950c', pointRadius: 3, fill: false, tension: 0.4 },
+          { label: 'Benchmark', data: [14.0,15.2,14.0,12.8,11.2,13.1,14.5], borderColor: '#94a3b8', borderWidth: 1.5, borderDash: [5,3], pointRadius: 2, fill: false, tension: 0.4 }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#64748b' } }, y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { size: 9 }, color: '#64748b', callback: v => v + '%' } } } }
+    });
+  }
+}
+
+function initModelChart() {
+  const el = document.getElementById('projChart');
+  if (!el || charts.proj) return;
+  charts.proj = new Chart(el, {
+    type: 'line',
+    data: { labels: ['M6','Y1','Y1.5','Y2','Y2.5','Y3','Y4','Y5'],
+      datasets: [
+        { label: 'Bear', data: [0.03,0.1,0.25,0.45,0.75,1.8,3.2,5.1], borderColor: '#e11d48', borderWidth: 1.5, borderDash: [5,3], fill: false, pointRadius: 2, tension: 0.4 },
+        { label: 'Base', data: [0.05,0.2,0.55,1.2,2.4,6.2,14,28], borderColor: '#059669', borderWidth: 2.5, fill: false, pointRadius: 3, tension: 0.4 },
+        { label: 'Bull', data: [0.08,0.35,1.1,2.8,6.5,18.4,42,80], borderColor: '#c9950c', borderWidth: 1.5, borderDash: [3,2], fill: false, pointRadius: 2, tension: 0.4 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#64748b' } }, y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { size: 9 }, color: '#64748b', callback: v => '$' + v + 'M' } } } }
+  });
+}
+
+// ═══════════════════════════════════════════
+// AI ACTIONS
+// ═══════════════════════════════════════════
+async function runMatchAI() {
+  aiLoad('match-ai');
+  const r = await claude('Analyse ' + STARTUP.company + ' (' + STARTUP.sector + ', ' + STARTUP.stage + ', ' + STARTUP.raise + ' raise, traction: ' + STARTUP.traction + ', team: ' + STARTUP.team + ') for fit against Marc Andreessen at a16z (AI/ML thesis, Series A, $5M–$100M checks). Give 3-sentence analysis: strongest fit signal, primary risk, one specific recommended action. Use **bold** for key terms.', null, 300);
+  aiSet('match-ai', r);
+}
+async function runFitAI() {
+  aiLoad('fit-ai');
+  const r = await claude('PMF scores: Problem 9, Solution 8, Market 7, Timing 9, Traction 5, Team 8, Defensibility 7, Business Model 6, Competition 6, Vision 8. Overall 82/100. Give 3 specific actions: (1) most critical gap to fix, (2) 2 strongest dimensions to lead with, (3) one thing to do this week. Use **bold** for key terms.', null, 250);
+  aiSet('fit-ai', r);
+}
+async function genPitch() {
+  const fmt = document.querySelector('.fmt-tab.on')?.getAttribute('data-fmt') || '50';
+  const fmtMap = {'50':'50-word Twitter hook','100':'100-word cold email','250':'250-word warm intro','500':'500-word investor one-pager','5min':'5-minute verbal pitch script with time markers','15min':'15-minute partner meeting delivery script with slide cues'};
+  document.getElementById('pitch-body').innerHTML = '<em style="color:rgba(255,255,255,.4)">Claude is writing your pitch...</em>';
+  const r = await claude(`Write a ${fmtMap[fmt]} for ${STARTUP.company}: ${STARTUP.sector}, ${STARTUP.traction}, ${STARTUP.team} team, ${STARTUP.raise} raise, ${STARTUP.stage} stage. Write ONLY the pitch, no preamble. Make it compelling and investor-ready.`, 'You are a world-class startup pitch writer who has helped founders raise from a16z, Sequoia and YC.', 700);
+  if (r) { document.getElementById('pitch-body').innerHTML = r; }
+  const coach = await claude(`Give a 2-sentence delivery coaching tip for a ${fmtMap[fmt]}. Be specific about timing, emphasis, or delivery. Use **bold** for the key action.`, null, 120);
+  if (coach) document.getElementById('pitch-coach').innerHTML = coach;
+}
+async function runMktAI() {
+  aiLoad('mkt-ai');
+  const r = await claude('Write a 3-sentence VC-ready competitive positioning statement for NovaMind AI vs Salesforce Einstein, Outreach, Gong.io, and Clay in the enterprise AI sales automation market. (1) frame the white space, (2) why incumbents can\'t copy the data moat, (3) urgency case for investing now. Use **bold** for key terms.', null, 200);
+  aiSet('mkt-ai', r);
+}
+async function runTsAI() {
+  aiLoad('ts-ai');
+  const r = await claude('Analyse this Seed term sheet: $8M pre, $2M round, 20% ownership, 1× non-participating liquidation, 2 founder / 1 investor board, pro-rata for major investors. Give: (1) plain English summary, (2) any founder risks, (3) specific negotiation leverage. Use **bold** for key terms.', 'You are a senior startup lawyer protecting founder interests. Be direct.', 400);
+  aiSet('ts-ai', r);
+}
+async function runPortAI() {
+  aiLoad('port-ai');
+  const r = await claude('Portfolio health brief: NovaMind AI (88/100, +34% MoM ARR), SecureNet (94/100, $200K MRR), PayEdge (exited $24M), DataVault (72/100, 12% churn spike), HealthOS (65/100, ICP pivot), FlowAI (42/100, 4 months runway). Write a 3-sentence GP-level brief: overall health, key risks, 2 specific actions this week. Use **bold** for key terms.', null, 280);
+  aiSet('port-ai', r);
+}
+async function runDDAI() {
+  aiLoad('dd-ai');
+  const r = await claude('VC verdict on Alex Chen, CEO NovaMind AI: VP Product Salesforce 2019-24, ex-OpenAI researcher, prior exit $12M, 14.2K LinkedIn followers, 847 GitHub ML commits, 2.2K stars, LangChain contributor, 2 patents pending, Forbes 30U30. Credibility score 84/100. Give: (1) overall verdict and recommendation, (2) single strongest signal, (3) most important diligence question to ask. Use **bold** for key terms.', null, 200);
+  aiSet('dd-ai', r);
+}
+async function runDRAI() {
+  aiLoad('dr-ai');
+  const r = await claude('VC data room coaching for Seed AI startup: Missing = Financial model, Cap table, Customer contracts, Technical architecture. Partial = Bank statements, Product roadmap. Ready = Pitch deck, Team bios, Certificate of incorp, IP assignments, Revenue schedule. Room score 72/100 target 90+. Give: (1) exact completion order with reasoning, (2) one quality tip for pitch deck, (3) what a VC looks at first. Use **bold** for key terms.', null, 300);
+  aiSet('dr-ai', r);
+}
+
+// ═══════════════════════════════════════════
+// NEGOTIATION
+// ═══════════════════════════════════════════
+let negVCName = 'Marc Andreessen';
+
+async function startNeg() {
+  negHistory = [];
+  const vcSel = document.getElementById('neg-vc')?.value || '';
+  const scene = document.getElementById('neg-scene')?.value || '';
+  const pos = document.getElementById('neg-pos')?.value || '';
+  negVCName = vcSel.split('·')[0].trim();
+  const btn = document.getElementById('neg-start-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Starting...'; }
+  const r = await claude(`You are ${vcSel}. Open a VC negotiation in character. Scenario: ${scene}. Founder's position: "${pos}". Give your opening challenge in 2-3 sentences, staying fully in character.`, 'You are roleplaying as a VC in a negotiation simulation to help founders practice. Stay fully in character.', 180);
+  if (r) {
+    negHistory.push({ role: 'vc', content: r });
+    renderNeg();
+  }
+  if (btn) { btn.disabled = false; btn.textContent = 'Restart simulation'; }
+  const vcLabel = document.getElementById('neg-vc-label');
+  if (vcLabel) vcLabel.textContent = vcSel.split('—')[0].trim();
+}
+
+async function sendNegReply() {
+  const input = document.getElementById('neg-reply');
+  if (!input?.value.trim()) return;
+  const reply = input.value.trim();
+  input.value = '';
+  negHistory.push({ role: 'founder', content: reply });
+  renderNeg();
+  const vcSel = document.getElementById('neg-vc')?.value || '';
+  const vcReply = await claude(`Continue the negotiation as ${vcSel}. History: ${negHistory.map(m=>m.role+': '+m.content).join(' | ')}. Your next response in 2-3 sentences, staying in character.`, 'You are roleplaying as a VC. Stay fully in character.', 180);
+  const coach = await claude(`In this VC negotiation, the founder just said: "${reply}". Give a 1-sentence tactical coaching tip for their next move. Use **bold** for the key action.`, null, 100);
+  if (coach) negHistory.push({ role: 'coach', content: coach });
+  if (vcReply) negHistory.push({ role: 'vc', content: vcReply });
+  renderNeg();
+  if (coach) document.getElementById('neg-coach').innerHTML = coach;
+}
+
+async function getNegCoach() {
+  const last = negHistory.filter(m => m.role === 'vc').pop()?.content || 'no exchange yet';
+  const r = await claude(`VC just said in a negotiation: "${last}". Give a founder a 2-sentence tactical coaching tip for their response. Use **bold** for the key action.`, null, 120);
+  if (r) document.getElementById('neg-coach').innerHTML = r;
+}
+
+function renderNeg() {
+  const area = document.getElementById('neg-chat');
+  if (!area) return;
+  area.innerHTML = negHistory.map(m => {
+    if (m.role === 'vc') return `<div class="msg msg-vc"><div class="msg-from mf-vc">${negVCName}</div>${m.content}</div>`;
+    if (m.role === 'founder') return `<div class="msg msg-fd"><div class="msg-from mf-fd">You (founder)</div>${m.content}</div>`;
+    if (m.role === 'coach') return `<div class="msg msg-ai"><div class="msg-from mf-ai">Claude coaching</div>${m.content}</div>`;
+    return '';
+  }).join('');
+  area.scrollTop = area.scrollHeight;
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+window.addEventListener('load', () => {
+  const session = localStorage.getItem('dfos_session');
+  if (session) {
+    try { USER = JSON.parse(session); launchApp(); return; } catch(e) {}
+  }
+  show('s-land');
+});
+</script>
+</body>
+</html>
