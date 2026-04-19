@@ -25,10 +25,11 @@ html,body{height:100%;font-family:'Geist',sans-serif;background:var(--ink);color
 /* ═══ SCREENS ═══ */
 .screen{position:fixed;inset:0;display:none;flex-direction:column}
 .screen.show{display:flex}
+#s-land.show{overflow-y:auto}
 
 /* ═══ LANDING ═══ */
-#s-land{background:var(--ink);overflow-y:auto}
-.land-nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+#s-land{background:var(--ink);overflow-y:auto;display:flex;flex-direction:column;justify-content:space-between}
+.land-nav{display:flex;align-items:center;justify-content:space-between;padding:.65rem 2rem;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-mark{width:30px;height:30px;background:var(--gl);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:16px;height:16px}
@@ -41,32 +42,32 @@ html,body{height:100%;font-family:'Geist',sans-serif;background:var(--ink);color
 .btn-gold{background:var(--gl);border:none;color:var(--ink);border-radius:8px;padding:8px 18px;font-family:'Geist',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:background .18s}
 .btn-gold:hover{background:#f5c435}
 
-.land-hero{padding:5.5rem 2.5rem 3rem;max-width:1000px;margin:0 auto;text-align:center}
+.land-hero{padding:1.8rem 2.5rem 1.2rem;max-width:1000px;margin:0 auto;text-align:center}
 .hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.2);border-radius:20px;padding:6px 16px;font-size:10px;font-family:'Geist Mono',monospace;color:var(--gl);margin-bottom:1.6rem;letter-spacing:.5px}
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--gl);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.hero-h{font-family:'Instrument Serif',serif;font-size:58px;color:#fff;line-height:1.04;margin-bottom:1.2rem;letter-spacing:-.5px}
+.hero-h{font-family:'Instrument Serif',serif;font-size:42px;color:#fff;line-height:1.04;margin-bottom:.7rem;letter-spacing:-.5px}
 .hero-h em{color:var(--gl);font-style:italic}
-.hero-sub{font-size:16px;color:rgba(255,255,255,.45);line-height:1.65;max-width:580px;margin:0 auto 3rem}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.45);line-height:1.55;max-width:560px;margin:0 auto .8rem}
 
 /* TWO PORTAL CARDS */
-.portals{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:820px;margin:0 auto 3.5rem;padding:0 2.5rem}
-.portal{border-radius:16px;padding:2rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.portals{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:900px;margin:0 auto .9rem;padding:0 2rem}
+.portal{border-radius:14px;padding:1.2rem 1.4rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
 .portal-f{background:linear-gradient(135deg,#0f172a 0%,#1a2740 100%);border:1px solid rgba(240,180,41,.2)}
 .portal-v{background:linear-gradient(135deg,#0f172a 0%,#1a1f35 100%);border:1px solid rgba(37,99,235,.25)}
 .portal:hover{transform:translateY(-3px)}
 .portal-f:hover{border-color:rgba(240,180,41,.5);box-shadow:0 8px 32px rgba(240,180,41,.12)}
 .portal-v:hover{border-color:rgba(37,99,235,.5);box-shadow:0 8px 32px rgba(37,99,235,.15)}
-.portal-icon{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;font-size:24px}
+.portal-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:.65rem;font-size:18px}
 .pi-f{background:rgba(240,180,41,.15)}
 .pi-v{background:rgba(37,99,235,.15)}
-.portal-label{font-size:10px;font-family:'Geist Mono',monospace;letter-spacing:.8px;text-transform:uppercase;margin-bottom:.5rem}
+.portal-label{font-size:9px;font-family:'Geist Mono',monospace;letter-spacing:.8px;text-transform:uppercase;margin-bottom:.3rem}
 .pl-f{color:var(--gl)}
 .pl-v{color:#60a5fa}
-.portal-title{font-family:'Instrument Serif',serif;font-size:26px;color:#fff;margin-bottom:.6rem;line-height:1.1}
-.portal-desc{font-size:12px;color:rgba(255,255,255,.45);line-height:1.65;margin-bottom:1.4rem}
-.portal-features{display:flex;flex-direction:column;gap:7px;margin-bottom:1.6rem}
-.pf-item{display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,.6)}
+.portal-title{font-family:'Instrument Serif',serif;font-size:21px;color:#fff;margin-bottom:.4rem;line-height:1.1}
+.portal-desc{font-size:11px;color:rgba(255,255,255,.45);line-height:1.5;margin-bottom:.8rem}
+.portal-features{display:flex;flex-direction:column;gap:4px;margin-bottom:.8rem}
+.pf-item{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.6)}
 .pf-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .portal-cta{width:100%;padding:11px;border-radius:9px;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .18s;border:none}
 .pc-f{background:var(--gl);color:var(--ink)}
@@ -77,13 +78,13 @@ html,body{height:100%;font-family:'Geist',sans-serif;background:var(--ink);color
 .pg-f{background:var(--gl);top:-50px;right:-50px}
 .pg-v{background:#3b82f6;top:-50px;right:-50px}
 
-.land-modules{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:1000px;margin:0 auto;padding:0 2.5rem 1rem}
-.lmod{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:.75rem .9rem}
+.land-modules{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:1000px;margin:0 auto;padding:0 2rem .6rem}
+.lmod{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.5rem .65rem}
 .lmod-ico{width:24px;height:24px;border-radius:5px;font-size:8px;font-weight:500;font-family:'Geist Mono',monospace;display:flex;align-items:center;justify-content:center;margin-bottom:.5rem}
-.lmod-t{font-size:11px;font-weight:500;color:#fff;margin-bottom:2px}
-.lmod-s{font-size:9px;color:rgba(255,255,255,.3);line-height:1.35}
-.land-stats{display:flex;justify-content:center;gap:3rem;padding:2rem 2.5rem 2.5rem;border-top:1px solid rgba(255,255,255,.06);margin-top:1rem}
-.lstat-n{font-family:'Instrument Serif',serif;font-size:28px;color:var(--gl);text-align:center;margin-bottom:3px}
+.lmod-t{font-size:10px;font-weight:500;color:#fff;margin-bottom:1px}
+.lmod-s{font-size:8.5px;color:rgba(255,255,255,.3);line-height:1.3}
+.land-stats{display:flex;justify-content:center;gap:2.5rem;padding:1rem 2rem 1.2rem;border-top:1px solid rgba(255,255,255,.06);margin-top:.4rem}
+.lstat-n{font-family:'Instrument Serif',serif;font-size:22px;color:var(--gl);text-align:center;margin-bottom:2px}
 .lstat-l{font-size:10px;color:rgba(255,255,255,.28);text-align:center;font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
 
 /* ═══ AUTH SCREEN ═══ */
@@ -375,9 +376,8 @@ input[type=text],input[type=email],input[type=password],input[type=number],selec
   </nav>
 
   <div class="land-hero">
-    <div class="hero-badge"><span class="pulse"></span>&nbsp;15 AI modules · Claude claude-sonnet-4-20250514 · Live now</div>
     <div class="hero-h">The intelligence platform for<br><em>founders</em> &amp; <em>VCs</em></div>
-    <div class="hero-sub">From investor discovery to wired capital — AI-powered matching, pitch coaching, term sheet analysis, negotiation practice and real-time portfolio monitoring. Both sides of every deal.</div>
+    <div class="hero-sub">AI-powered investor matching, pitch coaching, term sheet analysis, negotiation practice and portfolio monitoring — for both sides of every deal.</div>
   </div>
 
   <!-- TWO PORTALS -->
@@ -429,8 +429,6 @@ input[type=text],input[type=email],input[type=password],input[type=number],selec
 
   <div class="land-stats">
     <div><div class="lstat-n">8,412</div><div class="lstat-l">Investors in DB</div></div>
-    <div><div class="lstat-n">15</div><div class="lstat-l">AI modules</div></div>
-    <div><div class="lstat-n">$2.1T</div><div class="lstat-l">Total AUM</div></div>
     <div><div class="lstat-n">Free</div><div class="lstat-l">To get started</div></div>
   </div>
 </div>
@@ -602,17 +600,42 @@ function switchAuthTab(tab) {
   document.getElementById('tab-signup').classList.toggle('on', tab === 'signup');
   document.getElementById('tab-login').classList.toggle('on', tab === 'login');
   const isF = authRole === 'founder';
-  const accentColor = isF ? 'var(--gl)' : 'var(--bl)';
   const submitClass = isF ? 'fs-f' : 'fs-v';
+
+  const oauthBtns = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.9rem">
+      <button onclick="oauthGoogle()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google
+      </button>
+      <button onclick="oauthLinkedIn()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </button>
+      <button onclick="oauthMicrosoft()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>
+        Microsoft
+      </button>
+      <button onclick="oauthApple()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:11px 8px;font-family:'Geist',sans-serif;font-size:12px;color:#fff;cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701z"/></svg>
+        Apple
+      </button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:.85rem">
+      <div style="flex:1;height:.5px;background:rgba(255,255,255,.1)"></div>
+      <span style="font-size:11px;color:rgba(255,255,255,.3)">or with email</span>
+      <div style="flex:1;height:.5px;background:rgba(255,255,255,.1)"></div>
+    </div>`;
 
   if (tab === 'signup') {
     document.getElementById('auth-form-content').innerHTML = `
       <div class="auth-form-title">Create your account</div>
-      <div class="auth-form-sub">Free to start. No credit card required.</div>
-      <div class="role-row">
+      <div class="auth-form-sub">Free to start · No credit card required</div>
+      <div class="role-row" style="margin-bottom:.9rem">
         <div class="role-opt ${authRole==='founder'?'on':''}" onclick="setRole('founder')"><div class="role-opt-icon">🚀</div><div class="role-opt-label">Founder</div></div>
         <div class="role-opt ${authRole==='vc'?'on':''}" onclick="setRole('vc')"><div class="role-opt-icon">💼</div><div class="role-opt-label">VC / Investor</div></div>
       </div>
+      ${oauthBtns}
       <label class="f-label">Full name</label>
       <input class="f-input" id="reg-name" type="text" placeholder="Alex Chen" autocomplete="name"/>
       <label class="f-label">Email</label>
@@ -620,31 +643,24 @@ function switchAuthTab(tab) {
       <label class="f-label">Password</label>
       <input class="f-input" id="reg-pass" type="password" placeholder="8+ characters" onkeydown="if(event.key==='Enter')doSignup()"/>
       <div class="f-err" id="reg-err"></div>
-      <button class="f-submit ${submitClass}" onclick="doSignup()">Create account &amp; enter →</button>
-      <div class="f-divider">or</div>
-      <button class="oauth-btn" onclick="oauthDemo()">
-        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-      <div class="f-alt">Already have an account? <button onclick="switchAuthTab('login')">Sign in</button></div>`;
+      <button class="f-submit ${submitClass}" onclick="doSignup()">Create account →</button>
+      <div class="f-alt">Already have an account? <button onclick="switchAuthTab('login')">Sign in</button></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.2);text-align:center;margin-top:.6rem;line-height:1.5">By continuing you agree to our terms of service.</div>`;
   } else {
     document.getElementById('auth-form-content').innerHTML = `
       <div class="auth-form-title">Welcome back</div>
-      <div class="auth-form-sub">Sign in to your DealFlow OS account.</div>
+      <div class="auth-form-sub">Sign in to your DealFlow OS account</div>
+      ${oauthBtns}
       <label class="f-label">Email</label>
       <input class="f-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email"/>
       <label class="f-label">Password</label>
       <input class="f-input" id="login-pass" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/>
       <div class="f-err" id="login-err"></div>
       <button class="f-submit ${submitClass}" onclick="doLogin()">Sign in →</button>
-      <div class="f-divider">or</div>
-      <button class="oauth-btn" onclick="oauthDemo()">
-        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-      <div class="f-alt">No account? <button onclick="switchAuthTab('signup')">Sign up free</button></div>`;
+      <div class="f-alt">No account yet? <button onclick="switchAuthTab('signup')">Sign up free</button></div>`;
   }
 }
+
 
 function setRole(role) {
   authRole = role;
@@ -652,7 +668,77 @@ function setRole(role) {
   switchAuthTab(authTab);
 }
 
-function oauthDemo() { toast('Google OAuth requires backend — using demo login'); setTimeout(() => doDemo(), 600); }
+function oauthGoogle() {
+  showOAuthModal('Google', 'google', '#4285F4',
+    '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>');
+}
+function oauthLinkedIn() {
+  showOAuthModal('LinkedIn', 'linkedin', '#0A66C2',
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>');
+}
+function oauthMicrosoft() {
+  showOAuthModal('Microsoft', 'microsoft', '#00A4EF',
+    '<svg width="24" height="24" viewBox="0 0 24 24"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>');
+}
+function oauthApple() {
+  showOAuthModal('Apple', 'apple', '#000',
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701z"/></svg>');
+}
+function oauthDemo() { oauthGoogle(); }
+
+function showOAuthModal(provider, key, color, iconSvg) {
+  // Create a modal overlay for OAuth name entry
+  const existing = document.getElementById('oauth-modal');
+  if (existing) existing.remove();
+  
+  const modal = document.createElement('div');
+  modal.id = 'oauth-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(8,12,20,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML = `
+    <div style="background:#0f172a;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:2rem;max-width:380px;width:100%;font-family:'Geist',sans-serif">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center">${iconSvg}</div>
+        <div>
+          <div style="font-family:'Instrument Serif',serif;font-size:18px;color:#fff">Continue with ${provider}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px">DealFlow OS · ${authRole === 'vc' ? 'VC / Investor' : 'Founder'} account</div>
+        </div>
+      </div>
+      <div style="background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.2);border-radius:8px;padding:.7rem .9rem;font-size:11px;color:rgba(240,180,41,.9);margin-bottom:1.2rem;line-height:1.55">
+        <strong>Demo mode:</strong> Real ${provider} OAuth requires a backend server. Enter your name and email below to continue with a demo account that works identically.
+      </div>
+      <div style="margin-bottom:.75rem">
+        <label style="font-size:10px;color:rgba(255,255,255,.4);font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Your name</label>
+        <input id="oauth-name" type="text" placeholder="Alex Chen" style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;font-family:'Geist',sans-serif;font-size:13px;color:#fff;outline:none" onfocus="this.style.borderColor='#f0b429'" onblur="this.style.borderColor='rgba(255,255,255,.12)'"/>
+      </div>
+      <div style="margin-bottom:1.2rem">
+        <label style="font-size:10px;color:rgba(255,255,255,.4);font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Email address</label>
+        <input id="oauth-email" type="email" placeholder="you@example.com" style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;font-family:'Geist',sans-serif;font-size:13px;color:#fff;outline:none" onfocus="this.style.borderColor='#f0b429'" onblur="this.style.borderColor='rgba(255,255,255,.12)'" onkeydown="if(event.key==='Enter')completeOAuth('${provider}')"/>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="document.getElementById('oauth-modal').remove()" style="flex:1;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:11px;font-family:'Geist',sans-serif;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer">Cancel</button>
+        <button onclick="completeOAuth('${provider}')" style="flex:2;background:#f0b429;border:none;border-radius:8px;padding:11px;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:#080c14;cursor:pointer">Continue with ${provider} →</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  setTimeout(() => document.getElementById('oauth-name')?.focus(), 100);
+}
+
+function completeOAuth(provider) {
+  const name = document.getElementById('oauth-name')?.value?.trim();
+  const email = document.getElementById('oauth-email')?.value?.trim();
+  if (!name) { toast('Please enter your name'); return; }
+  if (!email || !email.includes('@')) { toast('Please enter a valid email'); return; }
+  document.getElementById('oauth-modal')?.remove();
+  const users = JSON.parse(localStorage.getItem('dfos_users') || '[]');
+  if (!users.find(u => u.email === email)) {
+    users.push({ name, email, pw: btoa('oauth_' + provider), role: authRole, provider });
+    localStorage.setItem('dfos_users', JSON.stringify(users));
+  }
+  USER = { name, email, role: authRole, provider };
+  localStorage.setItem('dfos_session', JSON.stringify(USER));
+  toast('Welcome, ' + name.split(' ')[0] + '! Signed in with ' + provider);
+  launchApp();
+}
 
 function doDemo() {
   USER = { name: 'Demo User', email: 'demo@dealflowos.com', role: authRole };
@@ -759,14 +845,14 @@ function buildSidebar() {
       </div>
     </div>
     <div class="key-bar" id="key-bar" onclick="showKeyModal()">
-      <div class="key-dot" id="key-dot" style="background:#e11d48"></div>
+      <div class="key-dot" id="key-dot" style="background:#64748b"></div>
       <div style="flex:1;min-width:0">
-        <div class="key-label" id="key-label" style="color:rgba(255,255,255,.5)">No API key</div>
-        <div class="key-sub" id="key-sub" style="color:rgba(255,255,255,.25)">Click to add</div>
+        <div class="key-label" id="key-label" style="color:rgba(255,255,255,.35)">AI features</div>
+        <div class="key-sub" id="key-sub" style="color:rgba(255,255,255,.2)">Add key to activate</div>
       </div>
-      <svg viewBox="0 0 12 12" fill="none" width="10" height="10" style="opacity:.3"><path d="M4.5 3L7.5 6L4.5 9" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 12 12" fill="none" width="10" height="10" style="opacity:.2"><path d="M4.5 3L7.5 6L4.5 9" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
     </div>
-    <div style="font-size:8px;color:rgba(255,255,255,.18);font-family:'Geist Mono',monospace;margin-top:5px">15 modules · Claude claude-sonnet-4-20250514</div>`;
+`;
   updateKeyStatus();
 }
 
@@ -814,9 +900,9 @@ function updateKeyStatus() {
     sub.textContent = API_KEY.slice(0,12) + '••••' + API_KEY.slice(-4); sub.style.color = 'rgba(255,255,255,.3)';
     if (bar) { bar.style.borderColor = 'rgba(5,150,105,.3)'; bar.style.background = 'rgba(5,150,105,.08)'; }
   } else {
-    dot.style.background = '#e11d48'; dot.style.boxShadow = 'none';
-    lbl.textContent = 'No API key'; lbl.style.color = 'rgba(255,255,255,.5)';
-    sub.textContent = 'Click to add key'; sub.style.color = 'rgba(255,255,255,.25)';
+    dot.style.background = '#64748b'; dot.style.boxShadow = 'none';
+    lbl.textContent = 'AI features'; lbl.style.color = 'rgba(255,255,255,.35)';
+    sub.textContent = 'Add key to activate'; sub.style.color = 'rgba(255,255,255,.2)';
     if (bar) { bar.style.borderColor = 'rgba(255,255,255,.07)'; bar.style.background = 'rgba(255,255,255,.04)'; }
   }
 }
@@ -866,7 +952,7 @@ const PAGE_SEARCH = `
     <div class="hero-eye">Investor discovery</div>
     <div class="hero-h">Find the <em>right investors</em></div>
     <div class="hero-sub">8,400+ verified VCs, angels & family offices — scored and ranked against your startup profile.</div>
-    <div class="hero-stats"><span class="hstat"><strong>8,412</strong> investors</span><span class="hstat"><strong>$2.1T</strong> AUM</span><span class="hstat"><strong>342</strong> SV-based</span><span class="hstat"><strong>94%</strong> response rate</span></div>
+    <div class="hero-stats"><span class="hstat"><strong>8,412</strong> investors</span><span class="hstat"><strong>342</strong> SV-based</span><span class="hstat"><strong>94%</strong> response rate</span></div>
   </div>
   <div class="content">
     <div class="g4" style="margin-bottom:10px">
