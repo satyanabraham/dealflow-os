@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealFlow OS — Complete Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#080c14;--ink2:#0f172a;--ink3:#1a2740;
+  --gold:#c9950c;--gl:#f0b429;--gb:#fef3c7;--gf:#fffbeb;
+  --blue:#2563eb;--bf:#dbeafe;--bb:#1e3a8a;
+  --em:#059669;--ef:#d1fae5;--eb:#064e3b;
+  --rose:#e11d48;--rf:#ffe4e6;--rb:#881337;
+  --vio:#7c3aed;--vf:#ede9fe;--vb:#4c1d95;
+  --teal:#0891b2;--tf:#cffafe;--tb:#164e63;
+  --sl:#64748b;--sf:#f1f5f9;
+  --bd:rgba(8,12,20,.09);--bd2:rgba(8,12,20,.16);
+  --wh:#ffffff;
+}
+html,body{height:100%;font-family:'Geist',sans-serif;background:#f8f9fb;color:#0f172a}
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:210px;flex-shrink:0;background:var(--ink);display:flex;flex-direction:column;overflow-y:auto}
+.logo-area{padding:1rem 1.1rem .85rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.logo-icon{width:24px;height:24px;background:var(--gl);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:13px;height:13px}
+.logo-name{font-family:'Instrument Serif',serif;font-size:16px;color:#fff}
+.logo-name em{color:var(--gl);font-style:normal}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.3);font-family:'Geist Mono',monospace;letter-spacing:.5px;display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--em);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.nav-section{padding:.45rem 0}
+.nav-group-label{font-size:9px;font-weight:500;color:rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:.8px;padding:.3rem 1.1rem .35rem;font-family:'Geist Mono',monospace}
+.nav-item{display:flex;align-items:center;gap:9px;padding:.45rem 1.1rem;cursor:pointer;transition:all .15s;border-left:2px solid transparent;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.05)}
+.nav-item.active{background:rgba(201,149,12,.13);border-left-color:var(--gl)}
+.nav-icon{width:15px;height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:8px;font-weight:500;font-family:'Geist Mono',monospace}
+.nav-label{font-size:11px;color:rgba(255,255,255,.48)}
+.nav-item.active .nav-label{color:var(--gl)}
+.nav-item:hover .nav-label{color:rgba(255,255,255,.82)}
+.nav-divider{height:.5px;background:rgba(255,255,255,.06);margin:.3rem 0}
+.sidebar-footer{margin-top:auto;padding:.75rem 1.1rem;border-top:1px solid rgba(255,255,255,.06)}
+.sf-line{font-size:8px;color:rgba(255,255,255,.22);font-family:'Geist Mono',monospace;margin-bottom:2px}
+
+/* MAIN */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.page{display:none;flex-direction:column;height:100%;overflow-y:auto}
+.page.active{display:flex}
+
+/* PAGE HERO */
+.hero{background:var(--ink);padding:1.3rem 1.6rem 1.5rem;flex-shrink:0}
+.hero-eye{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:1.3px;color:var(--gl);margin-bottom:.45rem;text-transform:uppercase}
+.hero-h{font-family:'Instrument Serif',serif;font-size:27px;color:#fff;line-height:1.1;margin-bottom:.35rem}
+.hero-h em{color:var(--gl);font-style:italic}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.35);line-height:1.55;max-width:500px}
+.hero-stats{display:flex;gap:1.3rem;margin-top:.8rem;flex-wrap:wrap}
+.hstat{font-size:11px;color:rgba(255,255,255,.4)}
+.hstat strong{color:var(--gl);font-weight:500;font-family:'Geist Mono',monospace}
+
+/* CONTENT AREA */
+.content{padding:1.1rem 1.6rem;flex:1}
+
+/* CARDS */
+.card{background:var(--wh);border:.5px solid var(--bd);border-radius:11px;padding:.9rem 1.1rem;margin-bottom:10px}
+.card-title{font-size:9px;font-weight:500;color:var(--sl);text-transform:uppercase;letter-spacing:.7px;margin-bottom:.75rem}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+
+/* METRIC TILES */
+.metric{background:var(--sf);border-radius:8px;padding:.7rem .85rem}
+.metric-n{font-family:'Instrument Serif',serif;font-size:22px;line-height:1}
+.metric-l{font-size:10px;color:var(--sl);margin-top:2px}
+.metric-d{font-size:10px;font-family:'Geist Mono',monospace;margin-top:3px}
+.pos{color:#059669}.neg{color:#e11d48}.neu{color:#c9950c}
+
+/* SCORE BARS */
+.bar-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.bar-label{font-size:10px;color:var(--sl);width:95px;flex-shrink:0}
+.bar-track{flex:1;height:4px;background:var(--sf);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px}
+.bf-g{background:var(--em)}.bf-y{background:var(--gl)}.bf-r{background:var(--rose)}.bf-b{background:var(--blue)}
+.bar-val{font-size:10px;font-family:'Geist Mono',monospace;width:24px;text-align:right;color:#0f172a}
+
+/* INVESTOR CARDS */
+.inv-card{background:var(--wh);border:.5px solid var(--bd);border-radius:11px;padding:.85rem 1rem;margin-bottom:8px;display:flex;gap:11px;cursor:pointer;transition:border-color .15s}
+.inv-card:hover{border-color:var(--gl)}
+.inv-av{width:42px;height:42px;border-radius:9px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:15px;flex-shrink:0}
+.inv-name{font-size:13px;font-weight:500;color:#0f172a}
+.inv-sub{font-size:11px;color:var(--sl);margin-top:1px}
+.inv-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;display:inline-block}
+.t-b{background:var(--bf);color:var(--bb)}
+.t-g{background:var(--ef);color:var(--eb)}
+.t-o{background:var(--gb);color:#78350f}
+.t-v{background:var(--vf);color:var(--vb)}
+.t-s{background:var(--sf);color:var(--sl)}
+.t-r{background:var(--rf);color:var(--rb)}
+.inv-score{font-family:'Instrument Serif',serif;font-size:22px;text-align:right;line-height:1}
+.inv-score-l{font-size:9px;color:var(--sl);text-align:right}
+
+/* AI BOX */
+.ai-box{background:var(--ink2);border-radius:10px;padding:.9rem 1.1rem;border:1px solid rgba(201,149,12,.18);margin-bottom:10px}
+.ai-header{display:flex;align-items:center;gap:7px;margin-bottom:.6rem}
+.ai-icon{width:18px;height:18px;background:var(--gl);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-icon svg{width:10px;height:10px}
+.ai-title{font-size:9px;font-weight:500;color:var(--gl);text-transform:uppercase;letter-spacing:.6px}
+.ai-model{font-size:9px;color:rgba(255,255,255,.28);font-family:'Geist Mono',monospace;margin-left:auto}
+.ai-body{font-size:12px;color:rgba(255,255,255,.84);line-height:1.72}
+.ai-body strong{color:var(--gl);font-weight:500}
+
+/* BUTTONS */
+.btn{border:none;border-radius:7px;padding:7px 14px;font-family:'Geist',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .18s}
+.btn-dark{background:var(--ink);color:#fff}.btn-dark:hover{background:var(--ink3)}
+.btn-gold{background:var(--gl);color:var(--ink)}.btn-gold:hover{background:#f5c435}
+.btn-outline{background:transparent;border:.5px solid var(--bd2);color:var(--sl)}.btn-outline:hover{border-color:var(--gl);color:#0f172a}
+.btn-sm{padding:4px 9px;font-size:10px}
+.btn-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+
+/* TAGS / STATUS PILLS */
+.pill{font-size:9px;padding:2px 8px;border-radius:20px;font-family:'Geist Mono',monospace}
+.pill-g{background:var(--ef);color:var(--eb)}
+.pill-y{background:var(--gb);color:#78350f}
+.pill-r{background:var(--rf);color:var(--rb)}
+.pill-b{background:var(--bf);color:var(--bb)}
+
+/* KANBAN */
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:10px}
+.kcol{background:var(--sf);border-radius:9px;padding:.7rem}
+.kcol-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.kcol-title{font-size:9px;font-weight:500;color:var(--sl);text-transform:uppercase;letter-spacing:.6px}
+.deal{background:var(--wh);border:.5px solid var(--bd);border-radius:7px;padding:.6rem .75rem;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.deal:hover{border-color:var(--gl)}
+.deal-name{font-size:11px;font-weight:500;color:#0f172a}
+.deal-firm{font-size:10px;color:var(--sl)}
+.deal-meta{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.deal-days{font-size:9px;color:var(--sl)}
+
+/* CHECKLIST */
+.check-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:.5px solid var(--bd);cursor:pointer}
+.check-row:last-child{border:none}
+.chk-box{width:15px;height:15px;border:.5px solid var(--bd2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.chk-box.done{background:var(--em);border-color:var(--em)}
+.chk-label{font-size:11px;color:#0f172a;flex:1}
+.chk-label.done{text-decoration:line-through;color:var(--sl)}
+.chk-owner{font-size:9px;padding:1px 6px;border-radius:20px}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:26px}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:1px;background:var(--bd)}
+.tl-item{position:relative;padding:.6rem 0 .6rem 16px;border-bottom:.5px solid var(--bd)}
+.tl-item:last-child{border:none}
+.tl-dot{position:absolute;left:-18px;top:14px;width:10px;height:10px;border-radius:50%;border:2px solid var(--wh)}
+.tl-time{font-size:9px;font-family:'Geist Mono',monospace;color:var(--gl);margin-bottom:2px}
+.tl-title{font-size:12px;font-weight:500;color:#0f172a;margin-bottom:2px}
+.tl-desc{font-size:11px;color:var(--sl);line-height:1.4}
+
+/* PITCH FORMATS */
+.fmt-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.fmt-tab{background:var(--sf);border:.5px solid var(--bd);border-radius:6px;padding:5px 11px;font-size:10px;color:var(--sl);cursor:pointer;transition:all .15s;font-family:'Geist Mono',monospace;border:none;font-family:'Geist',sans-serif}
+.fmt-tab:hover{border-color:var(--gl);color:#0f172a}
+.fmt-tab.active{background:var(--gb);border:.5px solid var(--gl);color:#78350f;font-weight:500}
+.pitch-out{background:var(--ink2);border-radius:10px;padding:1rem 1.2rem;border:1px solid rgba(201,149,12,.18);margin-bottom:10px}
+.pitch-meta{display:flex;gap:6px;margin-bottom:.7rem;flex-wrap:wrap}
+.pitch-text{font-size:12px;color:rgba(255,255,255,.86);line-height:1.75}
+.pitch-text strong{color:var(--gl);font-weight:500}
+.pitch-text .section{font-size:9px;font-weight:500;color:rgba(201,149,12,.7);text-transform:uppercase;letter-spacing:.8px;display:block;margin:12px 0 4px}
+
+/* MARKET COMP ROW */
+.comp-row{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:.5px solid var(--bd)}
+.comp-row:last-child{border:none}
+.comp-av{width:28px;height:28px;border-radius:6px;font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace}
+.comp-name{font-size:12px;font-weight:500;color:#0f172a;flex:1}
+.comp-sub{font-size:10px;color:var(--sl)}
+.comp-bar-wrap{width:80px;height:4px;background:var(--sf);border-radius:2px;overflow:hidden}
+.comp-bar{height:100%;border-radius:2px}
+.threat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* DIM MATRIX */
+.dim-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:.5px solid var(--bd)}
+.dim-row:last-child{border:none}
+.dim-name{font-size:11px;font-weight:500;color:#0f172a;min-width:130px}
+.dim-bar-wrap{flex:1;height:4px;background:var(--sf);border-radius:2px;overflow:hidden}
+.dim-bar{height:100%;border-radius:2px}
+.dim-score{font-size:10px;font-family:'Geist Mono',monospace;min-width:26px;text-align:right}
+.sig-b{font-size:9px;padding:1px 6px;border-radius:20px}
+
+/* TERM SHEET CLAUSES */
+.clause{border-radius:7px;padding:.6rem .85rem;margin-bottom:6px;font-size:11px;line-height:1.5}
+.clause-pos{background:var(--ef);color:var(--eb)}
+.clause-warn{background:var(--gb);color:#78350f}
+.clause-neg{background:var(--rf);color:var(--rb)}
+
+/* PORTFOLIO HEALTH ROW */
+.ph-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:.5px solid var(--bd)}
+.ph-row:last-child{border:none}
+.ph-av{width:32px;height:32px;border-radius:7px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:12px;flex-shrink:0}
+.ph-name{font-size:12px;font-weight:500;color:#0f172a;flex:1}
+.ph-signal{font-size:10px;color:var(--sl)}
+.ph-bar{width:65px;height:4px;background:var(--sf);border-radius:2px;overflow:hidden}
+.ph-fill{height:100%;border-radius:2px}
+.ph-score{font-size:10px;font-family:'Geist Mono',monospace;min-width:24px;text-align:right}
+
+/* SCENARIOS */
+.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}
+.scenario{border-radius:9px;padding:.8rem .9rem}
+.sc-label{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;font-family:'Geist Mono',monospace}
+.sc-n{font-family:'Instrument Serif',serif;font-size:22px;line-height:1}
+.sc-sub{font-size:10px;margin-top:2px}
+
+/* NEGOTIATION CHAT */
+.chat-wrap{background:var(--wh);border:.5px solid var(--bd);border-radius:11px;overflow:hidden;margin-bottom:10px}
+.chat-header{background:var(--ink2);padding:.65rem 1rem;display:flex;justify-content:space-between;align-items:center}
+.chat-side{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.5)}
+.chat-av{width:20px;height:20px;border-radius:50%;font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace}
+.chat-body{padding:.9rem 1rem;display:flex;flex-direction:column;gap:9px}
+.msg{max-width:80%;padding:.65rem .9rem;border-radius:10px;font-size:12px;line-height:1.52}
+.msg-vc{background:var(--bf);color:var(--bb);align-self:flex-start;border-radius:10px 10px 10px 3px}
+.msg-fd{background:var(--gb);color:#78350f;align-self:flex-end;border-radius:10px 10px 3px 10px}
+.msg-ai{background:var(--ink2);color:rgba(255,255,255,.78);align-self:center;font-size:11px;font-style:italic;border:1px solid rgba(201,149,12,.2);border-radius:10px;text-align:center;max-width:88%}
+.msg-from{font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.mf-vc{color:var(--bb)}.mf-fd{color:#92400e}.mf-ai{color:var(--gl)}
+
+/* ACTIVITY FEED */
+.act-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:.5px solid var(--bd)}
+.act-row:last-child{border:none}
+.act-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.act-text{font-size:11px;color:#0f172a;line-height:1.4}
+.act-time{font-size:9px;color:var(--sl);margin-top:1px}
+
+/* DATA ROOM ITEM */
+.dr-item{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:.5px solid var(--bd);cursor:pointer;transition:background .12s}
+.dr-item:last-child{border:none}
+.dr-item:hover{background:var(--sf);border-radius:6px;padding:6px 6px}
+.dr-icon{width:28px;height:28px;border-radius:6px;font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace}
+
+/* FUND ANALYTICS */
+.sector-bar-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:.5px solid var(--bd)}
+.sector-bar-row:last-child{border:none}
+.sector-name{font-size:11px;color:var(--sl);width:75px}
+.sector-bar-wrap{flex:1;height:6px;background:var(--sf);border-radius:3px;overflow:hidden}
+.sector-bar{height:100%;border-radius:3px}
+.sector-pct{font-size:10px;font-family:'Geist Mono',monospace;min-width:30px;text-align:right}
+
+/* CLOSING TASKS TABLE */
+.close-table{width:100%}
+.close-table th{font-size:9px;font-weight:500;color:var(--sl);text-transform:uppercase;letter-spacing:.5px;padding:.5rem .6rem;border-bottom:.5px solid var(--bd);text-align:left;background:var(--sf)}
+.close-table td{padding:.55rem .6rem;border-bottom:.5px solid var(--bd);font-size:11px;color:#0f172a}
+.close-table tr:last-child td{border:none}
+.close-table tr.done-row td{color:var(--sl);text-decoration:line-through;opacity:.6}
+
+/* TOAST */
+.toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:12px;padding:9px 18px;border-radius:8px;z-index:9999;border:1px solid rgba(201,149,12,.4);white-space:nowrap;font-family:'Geist',sans-serif}
+.toast.show{display:block}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<div class="sidebar">
+  <div class="logo-area">
+    <div class="logo-row">
+      <div class="logo-icon"><svg viewBox="0 0 13 13" fill="none"><polygon points="6.5,1 12,4 12,9 6.5,12 1,9 1,4" stroke="#0a0e18" stroke-width="1.5"/><circle cx="6.5" cy="6.5" r="2.2" fill="#0a0e18"/></svg></div>
+      <span class="logo-name">DealFlow <em>OS</em></span>
+    </div>
+    <div class="logo-sub"><span class="live-dot"></span>LIVE · BETA</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-group-label">Founder tools</div>
+    <div class="nav-item active" onclick="nav('search',this)" data-page="search">
+      <div class="nav-icon" style="background:#dbeafe;color:#1e3a8a">DI</div>
+      <span class="nav-label">Investor search</span>
+    </div>
+    <div class="nav-item" onclick="nav('match',this)" data-page="match">
+      <div class="nav-icon" style="background:#d1fae5;color:#064e3b">AI</div>
+      <span class="nav-label">AI match engine</span>
+    </div>
+    <div class="nav-item" onclick="nav('fit',this)" data-page="fit">
+      <div class="nav-icon" style="background:#fef3c7;color:#78350f">FM</div>
+      <span class="nav-label">Fit matrix</span>
+    </div>
+    <div class="nav-item" onclick="nav('pitch',this)" data-page="pitch">
+      <div class="nav-icon" style="background:#ede9fe;color:#4c1d95">PS</div>
+      <span class="nav-label">Pitch studio</span>
+    </div>
+    <div class="nav-item" onclick="nav('market',this)" data-page="market">
+      <div class="nav-icon" style="background:#cffafe;color:#164e63">MI</div>
+      <span class="nav-label">Market intel</span>
+    </div>
+  </div>
+
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <div class="nav-group-label">VC tools</div>
+    <div class="nav-item" onclick="nav('crm',this)" data-page="crm">
+      <div class="nav-icon" style="background:#fef3c7;color:#78350f">CR</div>
+      <span class="nav-label">CRM pipeline</span>
+    </div>
+    <div class="nav-item" onclick="nav('dd',this)" data-page="dd">
+      <div class="nav-icon" style="background:#ede9fe;color:#4c1d95">DD</div>
+      <span class="nav-label">Due intelligence</span>
+    </div>
+    <div class="nav-item" onclick="nav('portfolio',this)" data-page="portfolio">
+      <div class="nav-icon" style="background:#d1fae5;color:#064e3b">PH</div>
+      <span class="nav-label">Portfolio health</span>
+    </div>
+    <div class="nav-item" onclick="nav('analytics',this)" data-page="analytics">
+      <div class="nav-icon" style="background:#dbeafe;color:#1e3a8a">FA</div>
+      <span class="nav-label">Fund analytics</span>
+    </div>
+  </div>
+
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <div class="nav-group-label">Deal tools</div>
+    <div class="nav-item" onclick="nav('termsheet',this)" data-page="termsheet">
+      <div class="nav-icon" style="background:#d1fae5;color:#064e3b">TS</div>
+      <span class="nav-label">Term sheet AI</span>
+    </div>
+    <div class="nav-item" onclick="nav('model',this)" data-page="model">
+      <div class="nav-icon" style="background:#fef3c7;color:#78350f">MO</div>
+      <span class="nav-label">Financial model</span>
+    </div>
+    <div class="nav-item" onclick="nav('dataroom',this)" data-page="dataroom">
+      <div class="nav-icon" style="background:#ede9fe;color:#4c1d95">DR</div>
+      <span class="nav-label">Data room</span>
+    </div>
+    <div class="nav-item" onclick="nav('negotiation',this)" data-page="negotiation">
+      <div class="nav-icon" style="background:#ffe4e6;color:#881337">NS</div>
+      <span class="nav-label">Negotiation sim</span>
+    </div>
+    <div class="nav-item" onclick="nav('closing',this)" data-page="closing">
+      <div class="nav-icon" style="background:#dbeafe;color:#1e3a8a">DC</div>
+      <span class="nav-label">Deal close</span>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sf-line">15 modules live</div>
+    <div class="sf-line">Claude-powered · v0.1</div>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN AREA ═══════════ -->
+<div class="main">
+
+<!-- ───── INVESTOR SEARCH ───── -->
+<div class="page active" id="page-search">
+  <div class="hero">
+    <div class="hero-eye">Investor discovery</div>
+    <div class="hero-h">Find the <em>right investors</em></div>
+    <div class="hero-sub">8,400+ verified VCs, angels &amp; family offices — scored and ranked against your startup profile.</div>
+    <div class="hero-stats">
+      <span class="hstat"><strong>8,412</strong> investors</span>
+      <span class="hstat"><strong>$2.1T</strong> total AUM</span>
+      <span class="hstat"><strong>342</strong> SV-based</span>
+      <span class="hstat"><strong>94%</strong> response rate</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="grid4" style="margin-bottom:12px">
+      <div class="metric"><div class="metric-n pos">98%</div><div class="metric-l">Top match score</div><div class="metric-d pos">a16z</div></div>
+      <div class="metric"><div class="metric-n neu">5</div><div class="metric-l">Tier-1 matches</div><div class="metric-d neu">AI-scored</div></div>
+      <div class="metric"><div class="metric-n pos">14</div><div class="metric-l">Mutual connections</div><div class="metric-d pos">warm paths</div></div>
+      <div class="metric"><div class="metric-n neu">3</div><div class="metric-l">Active raises</div><div class="metric-d neu">in sector</div></div>
+    </div>
+
+    <div class="inv-card">
+      <div class="inv-av" style="color:var(--gl)">MA</div>
+      <div style="flex:1;min-width:0">
+        <div class="inv-name">Marc Andreessen</div>
+        <div class="inv-sub">GP &amp; Co-founder · Andreessen Horowitz (a16z) · Menlo Park</div>
+        <div class="inv-tags">
+          <span class="tag t-b">AI/ML</span><span class="tag t-b">Series A–C</span><span class="tag t-b">$5M–$100M</span><span class="tag t-b">Silicon Valley</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="inv-score" style="color:var(--gl)">98</div>
+        <div class="inv-score-l">% match</div>
+        <div style="display:flex;gap:5px;margin-top:6px">
+          <button class="btn btn-gold btn-sm" onclick="toast('Intro request sent to Marc Andreessen')">Intro</button>
+          <button class="btn btn-outline btn-sm" onclick="toast('Marc Andreessen added to CRM')">+ CRM</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-card">
+      <div class="inv-av" style="color:#2563eb">SC</div>
+      <div style="flex:1;min-width:0">
+        <div class="inv-name">Sequoia Capital</div>
+        <div class="inv-sub">Global VC · Menlo Park, CA · Est. 1972</div>
+        <div class="inv-tags">
+          <span class="tag t-b">AI/ML</span><span class="tag t-b">Seed–Growth</span><span class="tag t-b">$100K–$250M</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="inv-score" style="color:#2563eb">95</div>
+        <div class="inv-score-l">% match</div>
+        <div style="display:flex;gap:5px;margin-top:6px">
+          <button class="btn btn-gold btn-sm" onclick="toast('Intro request sent to Sequoia')">Intro</button>
+          <button class="btn btn-outline btn-sm" onclick="toast('Sequoia added to CRM')">+ CRM</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-card">
+      <div class="inv-av" style="color:#7c3aed">VK</div>
+      <div style="flex:1;min-width:0">
+        <div class="inv-name">Vinod Khosla</div>
+        <div class="inv-sub">Founder &amp; Managing Partner · Khosla Ventures · Menlo Park</div>
+        <div class="inv-tags">
+          <span class="tag t-v">Deep Tech</span><span class="tag t-v">AI/ML</span><span class="tag t-v">Seed–B</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="inv-score" style="color:#7c3aed">92</div>
+        <div class="inv-score-l">% match</div>
+        <div style="display:flex;gap:5px;margin-top:6px">
+          <button class="btn btn-gold btn-sm" onclick="toast('Intro request sent to Vinod Khosla')">Intro</button>
+          <button class="btn btn-outline btn-sm" onclick="toast('Khosla added to CRM')">+ CRM</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-card">
+      <div class="inv-av" style="color:#059669">EG</div>
+      <div style="flex:1;min-width:0">
+        <div class="inv-name">Elad Gil</div>
+        <div class="inv-sub">Angel Investor &amp; Author · San Francisco, CA</div>
+        <div class="inv-tags">
+          <span class="tag t-g">AI/ML</span><span class="tag t-g">Seed</span><span class="tag t-g">$250K–$2M</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="inv-score" style="color:#059669">89</div>
+        <div class="inv-score-l">% match</div>
+        <div style="display:flex;gap:5px;margin-top:6px">
+          <button class="btn btn-gold btn-sm" onclick="toast('Intro request sent to Elad Gil')">Intro</button>
+          <button class="btn btn-outline btn-sm" onclick="toast('Elad Gil added to CRM')">+ CRM</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-card">
+      <div class="inv-av" style="color:#0891b2">FR</div>
+      <div style="flex:1;min-width:0">
+        <div class="inv-name">First Round Capital</div>
+        <div class="inv-sub">Seed-stage VC · San Francisco, CA</div>
+        <div class="inv-tags">
+          <span class="tag t-b">B2B SaaS</span><span class="tag t-b">Pre-Seed</span><span class="tag t-b">$500K–$5M</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="inv-score" style="color:#0891b2">87</div>
+        <div class="inv-score-l">% match</div>
+        <div style="display:flex;gap:5px;margin-top:6px">
+          <button class="btn btn-gold btn-sm" onclick="toast('Intro request sent to First Round')">Intro</button>
+          <button class="btn btn-outline btn-sm" onclick="toast('First Round added to CRM')">+ CRM</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── AI MATCH ENGINE ───── -->
+<div class="page" id="page-match">
+  <div class="hero">
+    <div class="hero-eye">AI matching engine</div>
+    <div class="hero-h"><em>12-dimension</em> investor scoring</div>
+    <div class="hero-sub">Claude analyses every investor across sector fit, stage, check size, thesis alignment, portfolio overlap, and 7 more signals.</div>
+  </div>
+  <div class="content">
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Your startup profile</div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Company</span><span style="font-weight:500">NovaMind AI</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Sector</span><span style="font-weight:500">AI / ML</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Stage</span><span style="font-weight:500">Seed</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Target raise</span><span style="font-weight:500">$1M–$3M</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Traction</span><span style="font-weight:500">3 paying customers</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:11px"><span style="color:var(--sl)">Team</span><span style="font-weight:500">ex-Salesforce + ex-OpenAI</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Dimension scores — Marc Andreessen / a16z</div>
+        <div class="bar-row"><span class="bar-label">Sector fit</span><div class="bar-track"><div class="bar-fill bf-g" style="width:96%"></div></div><span class="bar-val">96</span></div>
+        <div class="bar-row"><span class="bar-label">Stage align</span><div class="bar-track"><div class="bar-fill bf-g" style="width:92%"></div></div><span class="bar-val">92</span></div>
+        <div class="bar-row"><span class="bar-label">Check size</span><div class="bar-track"><div class="bar-fill bf-g" style="width:88%"></div></div><span class="bar-val">88</span></div>
+        <div class="bar-row"><span class="bar-label">Geography</span><div class="bar-track"><div class="bar-fill bf-g" style="width:100%"></div></div><span class="bar-val">100</span></div>
+        <div class="bar-row"><span class="bar-label">Thesis fit</span><div class="bar-track"><div class="bar-fill bf-g" style="width:94%"></div></div><span class="bar-val">94</span></div>
+        <div class="bar-row"><span class="bar-label">Activity signal</span><div class="bar-track"><div class="bar-fill bf-y" style="width:82%"></div></div><span class="bar-val">82</span></div>
+        <div class="bar-row"><span class="bar-label">Portfolio overlap</span><div class="bar-track"><div class="bar-fill bf-y" style="width:78%"></div></div><span class="bar-val">78</span></div>
+        <div class="bar-row"><span class="bar-label">Founder fit</span><div class="bar-track"><div class="bar-fill bf-g" style="width:90%"></div></div><span class="bar-val">90</span></div>
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">Claude analysis · live</span><span class="ai-model">claude-sonnet-4</span></div>
+      <div class="ai-body"><strong>Marc Andreessen at a16z is your highest-probability match at 96/100.</strong> His thesis explicitly covers enterprise AI automation — his last 3 investments include AI infrastructure plays, and a16z has 14 portfolio companies in adjacent verticals. <strong>Primary risk:</strong> a16z sees 1,000+ pitches per month. Your traction (3 customers) is on the edge — one more enterprise logo with a quantified outcome would clear their bar comfortably. <strong>Recommended action:</strong> Request a warm intro through your YC network — you have 3 mutual connections.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="nav('pitch', document.querySelector('[data-page=pitch]'))">Generate personalised pitch →</button>
+      <button class="btn btn-outline" onclick="toast('Exported top 5 matches to CRM')">Export to CRM</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───── FIT MATRIX ───── -->
+<div class="page" id="page-fit">
+  <div class="hero">
+    <div class="hero-eye">Product-market fit matrix</div>
+    <div class="hero-h">Your <em>10-dimension</em> PMF score</div>
+    <div class="hero-sub">Self-assess across the dimensions VCs weight most. Generates your investor-readiness score and flags gaps before you pitch.</div>
+  </div>
+  <div class="content">
+    <div class="grid4" style="margin-bottom:10px">
+      <div class="metric"><div class="metric-n pos">82</div><div class="metric-l">Overall fit score</div><div class="metric-d pos">Top quartile</div></div>
+      <div class="metric"><div class="metric-n pos">91</div><div class="metric-l">Market thesis</div><div class="metric-d pos">Excellent timing</div></div>
+      <div class="metric"><div class="metric-n neu">74</div><div class="metric-l">Execution proof</div><div class="metric-d neu">Traction gaps</div></div>
+      <div class="metric"><div class="metric-n pos">78</div><div class="metric-l">Team credibility</div><div class="metric-d pos">Strong domain</div></div>
+    </div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Dimension scores — slide each to update</div>
+        <div class="bar-row"><span class="bar-label">Problem severity</span><div class="bar-track"><div class="bar-fill bf-g" style="width:90%"></div></div><span class="bar-val">9/10</span></div>
+        <div class="bar-row"><span class="bar-label">Solution uniqueness</span><div class="bar-track"><div class="bar-fill bf-g" style="width:80%"></div></div><span class="bar-val">8/10</span></div>
+        <div class="bar-row"><span class="bar-label">Market size (TAM)</span><div class="bar-track"><div class="bar-fill bf-y" style="width:70%"></div></div><span class="bar-val">7/10</span></div>
+        <div class="bar-row"><span class="bar-label">Market timing</span><div class="bar-track"><div class="bar-fill bf-g" style="width:90%"></div></div><span class="bar-val">9/10</span></div>
+        <div class="bar-row"><span class="bar-label">Early traction</span><div class="bar-track"><div class="bar-fill bf-r" style="width:50%"></div></div><span class="bar-val">5/10</span></div>
+        <div class="bar-row"><span class="bar-label">Team strength</span><div class="bar-track"><div class="bar-fill bf-g" style="width:80%"></div></div><span class="bar-val">8/10</span></div>
+        <div class="bar-row"><span class="bar-label">Defensibility</span><div class="bar-track"><div class="bar-fill bf-y" style="width:70%"></div></div><span class="bar-val">7/10</span></div>
+        <div class="bar-row"><span class="bar-label">Business model</span><div class="bar-track"><div class="bar-fill bf-y" style="width:60%"></div></div><span class="bar-val">6/10</span></div>
+        <div class="bar-row"><span class="bar-label">Competitive pos.</span><div class="bar-track"><div class="bar-fill bf-y" style="width:60%"></div></div><span class="bar-val">6/10</span></div>
+        <div class="bar-row"><span class="bar-label">Founder vision</span><div class="bar-track"><div class="bar-fill bf-g" style="width:80%"></div></div><span class="bar-val">8/10</span></div>
+      </div>
+      <div>
+        <div style="height:200px;position:relative;margin-bottom:10px">
+          <canvas id="fitRadar" role="img" aria-label="Radar chart showing 10 PMF dimensions"></canvas>
+        </div>
+        <div class="ai-box">
+          <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">Gap analysis</span></div>
+          <div class="ai-body"><strong>Critical gap: Traction (5/10)</strong> is the most VC-weighted dimension at Seed stage. One more paying enterprise customer with a quantified outcome will shift your overall score from 82 to ~88. Business model (6/10) needs clearer unit economics narrative — know your CAC, LTV, and payback period cold.</div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="nav('pitch', document.querySelector('[data-page=pitch]'))">Build pitch from matrix →</button>
+      <button class="btn btn-outline" onclick="nav('match', document.querySelector('[data-page=match]'))">See VC matches</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───── PITCH STUDIO ───── -->
+<div class="page" id="page-pitch">
+  <div class="hero">
+    <div class="hero-eye">Pitch studio · 6 formats</div>
+    <div class="hero-h">From <em>tweet to 15-min</em><br>partner delivery</div>
+    <div class="hero-sub">Click any format to preview the full script. Each is calibrated exactly for its context.</div>
+  </div>
+  <div class="content">
+    <div class="fmt-tabs">
+      <button class="fmt-tab active" onclick="switchPitch(this,'50')">50 words</button>
+      <button class="fmt-tab" onclick="switchPitch(this,'100')">100 words</button>
+      <button class="fmt-tab" onclick="switchPitch(this,'250')">250 words</button>
+      <button class="fmt-tab" onclick="switchPitch(this,'500')">500 words</button>
+      <button class="fmt-tab" onclick="switchPitch(this,'5min')">5-min script</button>
+      <button class="fmt-tab" onclick="switchPitch(this,'15min')">15-min delivery</button>
+    </div>
+    <div class="pitch-out">
+      <div class="pitch-meta">
+        <span class="pill pill-y" id="pitch-badge">50-word hook</span>
+        <span class="pill pill-b" id="pitch-ctx">Tweet / intro</span>
+        <span class="pill" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.4)">NovaMind AI</span>
+      </div>
+      <div class="pitch-text" id="pitch-body">NovaMind AI replaces entire enterprise SDR teams with a single AI agent — trained on a proprietary 2.3M-interaction dataset. Three paying customers. Sales cycles cut 60%. Built by ex-Salesforce VP and ex-OpenAI researcher. Raising $2M seed. <strong>The window to own agentic sales automation is now.</strong></div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">Delivery coach</span></div>
+      <div class="ai-body" id="pitch-coach"><strong>For the 50-word hook:</strong> Read it aloud — it should take exactly 18 seconds. The strongest line is the last. Pause 2 full seconds after "now" before continuing. That silence is intentional — let the investor feel the urgency.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="copyPitch()">Copy pitch</button>
+      <button class="btn btn-outline" onclick="nav('negotiation', document.querySelector('[data-page=negotiation]'))">Practice negotiation →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───── MARKET INTEL ───── -->
+<div class="page" id="page-market">
+  <div class="hero">
+    <div class="hero-eye">Market intelligence</div>
+    <div class="hero-h"><em>Competitive landscape</em><br>for your VC slide</div>
+    <div class="hero-sub">Every competitor mapped by funding, penetration, and threat level. Your differentiation scored vs the full market.</div>
+  </div>
+  <div class="content">
+    <div class="grid4" style="margin-bottom:10px">
+      <div class="metric"><div class="metric-n pos">$47B</div><div class="metric-l">TAM 2025</div><div class="metric-d pos">+38% CAGR</div></div>
+      <div class="metric"><div class="metric-n neu">6</div><div class="metric-l">Competitors mapped</div><div class="metric-d neu">all scored</div></div>
+      <div class="metric"><div class="metric-n pos">2</div><div class="metric-l">White space vectors</div><div class="metric-d pos">uncontested</div></div>
+      <div class="metric"><div class="metric-n pos">88%</div><div class="metric-l">Differentiation</div><div class="metric-d pos">vs direct comps</div></div>
+    </div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Competitive landscape</div>
+        <div class="comp-row">
+          <div class="comp-av" style="background:#dbeafe;color:#1e3a8a">SF</div>
+          <div style="flex:1;min-width:0"><div class="comp-name">Salesforce Einstein</div><div class="comp-sub">Legacy arch, not AI-native · $8.5B+ raised</div></div>
+          <span class="tag t-s">legacy</span>
+          <div class="comp-bar-wrap"><div class="comp-bar" style="width:92%;background:#2563eb"></div></div>
+          <span style="font-size:9px;color:var(--sl);min-width:35px">92% pen.</span>
+          <div class="threat-dot" style="background:#e11d48"></div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-av" style="background:#ede9fe;color:#4c1d95">OR</div>
+          <div style="flex:1;min-width:0"><div class="comp-name">Outreach</div><div class="comp-sub">Sequences not workflows · $489M raised</div></div>
+          <span class="tag t-r">direct</span>
+          <div class="comp-bar-wrap"><div class="comp-bar" style="width:55%;background:#7c3aed"></div></div>
+          <span style="font-size:9px;color:var(--sl);min-width:35px">55% pen.</span>
+          <div class="threat-dot" style="background:#e11d48"></div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-av" style="background:#d1fae5;color:#064e3b">GO</div>
+          <div style="flex:1;min-width:0"><div class="comp-name">Gong.io</div><div class="comp-sub">Analytics only, no workflow · $584M raised</div></div>
+          <span class="tag t-r">direct</span>
+          <div class="comp-bar-wrap"><div class="comp-bar" style="width:48%;background:#059669"></div></div>
+          <span style="font-size:9px;color:var(--sl);min-width:35px">48% pen.</span>
+          <div class="threat-dot" style="background:#c9950c"></div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-av" style="background:#cffafe;color:#164e63">CL</div>
+          <div style="flex:1;min-width:0"><div class="comp-name">Clay</div><div class="comp-sub">Enrichment not agentic · $62M raised</div></div>
+          <span class="tag t-b">emerging</span>
+          <div class="comp-bar-wrap"><div class="comp-bar" style="width:22%;background:#0891b2"></div></div>
+          <span style="font-size:9px;color:var(--sl);min-width:35px">22% pen.</span>
+          <div class="threat-dot" style="background:#c9950c"></div>
+        </div>
+        <div class="comp-row" style="background:var(--gf);border-radius:7px;padding:6px 8px;margin-top:4px">
+          <div class="comp-av" style="background:#fef3c7;color:#78350f">NM</div>
+          <div style="flex:1;min-width:0"><div class="comp-name">NovaMind AI</div><div class="comp-sub">LLM-native + proprietary data moat · Raising $2M</div></div>
+          <span class="tag t-o">YOU</span>
+          <div class="comp-bar-wrap"><div class="comp-bar" style="width:12%;background:#c9950c"></div></div>
+          <span style="font-size:9px;color:var(--sl);min-width:35px">12% pen.</span>
+          <div style="width:8px;height:8px;flex-shrink:0"></div>
+        </div>
+      </div>
+      <div>
+        <div style="height:200px;position:relative;margin-bottom:10px">
+          <canvas id="mktRadar" role="img" aria-label="Radar chart comparing NovaMind vs competitors across key dimensions"></canvas>
+        </div>
+        <div class="ai-box">
+          <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">VC positioning statement</span></div>
+          <div class="ai-body"><strong>White space: no competitor owns end-to-end agentic sales automation with proprietary training data.</strong> Outreach sequences — not workflows. Gong analyses — not acts. Clay enriches — not decides. Your positioning: "The first AI agent that replaces an SDR workflow entirely, trained on data legacy tools will never have."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── CRM PIPELINE ───── -->
+<div class="page" id="page-crm">
+  <div class="hero">
+    <div class="hero-eye">Outreach pipeline · CRM</div>
+    <div class="hero-h">Track every <em>conversation</em><br>to term sheet</div>
+    <div class="hero-sub">Persistent kanban from identified to closed. Click cards to update, add notes, or move stages.</div>
+    <div class="hero-stats">
+      <span class="hstat"><strong>24</strong> contacts</span>
+      <span class="hstat"><strong>8</strong> active intros</span>
+      <span class="hstat"><strong>3</strong> in DD</span>
+      <span class="hstat"><strong>$2.4M</strong> soft-circled</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="kanban">
+      <div class="kcol">
+        <div class="kcol-head"><span class="kcol-title">Identified</span><span class="pill pill-s">2</span></div>
+        <div class="deal" onclick="toast('Bessemer — added note')"><div class="deal-name">Bessemer VP</div><div class="deal-firm">Bessemer Capital</div><div class="deal-meta"><span class="pill pill-b">Seed</span><span class="deal-days">Added today</span></div></div>
+        <div class="deal" onclick="toast('Benchmark — added note')"><div class="deal-name">Benchmark</div><div class="deal-firm">Benchmark Capital</div><div class="deal-meta"><span class="pill pill-b">Series A</span><span class="deal-days">2d ago</span></div></div>
+        <button style="width:100%;background:transparent;border:.5px dashed var(--bd2);border-radius:7px;padding:6px;font-size:10px;color:var(--sl);cursor:pointer;font-family:'Geist',sans-serif;margin-top:4px" onclick="toast('Add investor to Identified')">+ Add investor</button>
+      </div>
+      <div class="kcol">
+        <div class="kcol-head"><span class="kcol-title">Contacted</span><span class="pill" style="background:#b5d4f4;color:#1e3a8a">2</span></div>
+        <div class="deal" onclick="toast('Marc Andreessen — deck viewed 3×')"><div class="deal-name">Marc Andreessen</div><div class="deal-firm">a16z</div><div class="deal-meta"><span class="pill pill-b">Series A</span><span class="deal-days">1d ago</span></div></div>
+        <div class="deal" onclick="toast('Sequoia — follow-up sent')"><div class="deal-name">Sequoia Capital</div><div class="deal-firm">Sequoia</div><div class="deal-meta"><span class="pill pill-b">Seed–B</span><span class="deal-days">3d ago</span></div></div>
+        <button style="width:100%;background:transparent;border:.5px dashed var(--bd2);border-radius:7px;padding:6px;font-size:10px;color:var(--sl);cursor:pointer;font-family:'Geist',sans-serif;margin-top:4px" onclick="toast('Add investor to Contacted')">+ Add investor</button>
+      </div>
+      <div class="kcol">
+        <div class="kcol-head"><span class="kcol-title">Meeting / DD</span><span class="pill" style="background:#FAC775;color:#412402">2</span></div>
+        <div class="deal" onclick="toast('Khosla — meeting in 2 days. Prep financials.')"><div class="deal-name">Vinod Khosla</div><div class="deal-firm">Khosla Ventures</div><div class="deal-meta"><span class="pill pill-y">Seed</span><span class="deal-days">Meeting in 2d</span></div></div>
+        <div class="deal" onclick="toast('Lightspeed — DD sent, awaiting feedback')"><div class="deal-name">Lightspeed VP</div><div class="deal-firm">Lightspeed</div><div class="deal-meta"><span class="pill pill-y">Series A</span><span class="deal-days">DD sent</span></div></div>
+      </div>
+      <div class="kcol">
+        <div class="kcol-head"><span class="kcol-title">Term sheet</span><span class="pill" style="background:#C0DD97;color:#173404">2</span></div>
+        <div class="deal" onclick="toast('YC term sheet — $2.4M at $12M cap. Review now.')"><div class="deal-name">Y Combinator</div><div class="deal-firm">YC</div><div class="deal-meta"><span class="pill pill-g">LOI received</span><span class="deal-days">Today</span></div></div>
+        <div class="deal" onclick="toast('Founders Fund — negotiation in progress')"><div class="deal-name">Founders Fund</div><div class="deal-firm">FF</div><div class="deal-meta"><span class="pill pill-g">Negotiating</span><span class="deal-days">2d ago</span></div></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Activity feed</div>
+        <div class="act-row"><div class="act-dot" style="background:#059669"></div><div><div class="act-text">Term sheet received from YC — $2.4M at $12M cap</div><div class="act-time">10 min ago</div></div></div>
+        <div class="act-row"><div class="act-dot" style="background:#2563eb"></div><div><div class="act-text">Follow-up sent to Sequoia with deck + demo link</div><div class="act-time">2 hours ago</div></div></div>
+        <div class="act-row"><div class="act-dot" style="background:#c9950c"></div><div><div class="act-text">Marc Andreessen viewed deck (3×)</div><div class="act-time">Yesterday 4:12 PM</div></div></div>
+        <div class="act-row"><div class="act-dot" style="background:#e11d48"></div><div><div class="act-text">Pass from Benchmark — stage mismatch</div><div class="act-time">3 days ago</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tasks — click to complete</div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Send financials to Khosla Ventures</span>
+          <span class="chk-owner" style="background:var(--gb);color:#78350f">Tomorrow</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Prep demo for Lightspeed meeting</span>
+          <span class="chk-owner" style="background:var(--gb);color:#78350f">In 2 days</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Review YC term sheet with lawyer</span>
+          <span class="chk-owner" style="background:var(--rf);color:var(--rb)">Today</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box done"><svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="chk-label done">Follow up with First Round on deck</span>
+          <span class="chk-owner" style="background:var(--ef);color:var(--eb)">Done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── DUE INTELLIGENCE ───── -->
+<div class="page" id="page-dd">
+  <div class="hero">
+    <div class="hero-eye">Founder due intelligence</div>
+    <div class="hero-h">Deep credibility scan<br>across <em>all platforms</em></div>
+    <div class="hero-sub">12-dimension credibility scoring from LinkedIn, GitHub, Crunchbase, Twitter, patents, and press — synthesised by Claude into a VC-ready verdict.</div>
+  </div>
+  <div class="content">
+    <div class="card" style="display:flex;gap:14px;align-items:flex-start">
+      <div style="width:58px;height:58px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:22px;color:var(--gl);flex-shrink:0">AC</div>
+      <div style="flex:1">
+        <div style="font-family:'Instrument Serif',serif;font-size:20px;color:#0f172a;margin-bottom:2px">Alex Chen</div>
+        <div style="font-size:11px;color:var(--sl);margin-bottom:7px">CEO &amp; Co-founder · NovaMind AI · San Francisco, CA</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <span class="tag t-g">Prior exit verified</span>
+          <span class="tag t-b">Domain expertise 92/100</span>
+          <span class="tag t-o">Forbes 30U30</span>
+          <span class="tag t-v">Patent pending</span>
+          <span class="tag t-b">YC alumnus</span>
+        </div>
+        <div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap">
+          <div style="background:var(--sf);border-radius:6px;padding:4px 10px;font-size:10px;color:var(--sl);display:flex;align-items:center;gap:4px"><div style="width:5px;height:5px;border-radius:50%;background:#059669"></div>LinkedIn verified</div>
+          <div style="background:var(--sf);border-radius:6px;padding:4px 10px;font-size:10px;color:var(--sl);display:flex;align-items:center;gap:4px"><div style="width:5px;height:5px;border-radius:50%;background:#059669"></div>GitHub scanned</div>
+          <div style="background:var(--sf);border-radius:6px;padding:4px 10px;font-size:10px;color:var(--sl);display:flex;align-items:center;gap:4px"><div style="width:5px;height:5px;border-radius:50%;background:#059669"></div>Crunchbase verified</div>
+          <div style="background:var(--sf);border-radius:6px;padding:4px 10px;font-size:10px;color:var(--sl);display:flex;align-items:center;gap:4px"><div style="width:5px;height:5px;border-radius:50%;background:#c9950c"></div>Twitter rate-limited</div>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-family:'Instrument Serif',serif;font-size:48px;color:var(--gl);line-height:1">84</div>
+        <div style="font-size:10px;color:var(--sl)">credibility score</div>
+        <span class="tag t-g" style="margin-top:6px;display:inline-block">Tier A · Investor-ready</span>
+      </div>
+    </div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">12-dimension credibility matrix</div>
+        <div class="dim-row"><span class="dim-name">Domain expertise</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:92%;background:#059669"></div></div><span class="dim-score pos">92</span><span class="sig-b" style="background:var(--ef);color:var(--eb)">STRONG</span></div>
+        <div class="dim-row"><span class="dim-name">Leadership track</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:88%;background:#059669"></div></div><span class="dim-score pos">88</span><span class="sig-b" style="background:var(--ef);color:var(--eb)">STRONG</span></div>
+        <div class="dim-row"><span class="dim-name">Network quality</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:89%;background:#059669"></div></div><span class="dim-score pos">89</span><span class="sig-b" style="background:var(--ef);color:var(--eb)">STRONG</span></div>
+        <div class="dim-row"><span class="dim-name">Integrity signals</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:91%;background:#059669"></div></div><span class="dim-score pos">91</span><span class="sig-b" style="background:var(--ef);color:var(--eb)">STRONG</span></div>
+        <div class="dim-row"><span class="dim-name">Commitment</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:95%;background:#059669"></div></div><span class="dim-score pos">95</span><span class="sig-b" style="background:var(--ef);color:var(--eb)">STRONG</span></div>
+        <div class="dim-row"><span class="dim-name">Technical depth</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:86%;background:#059669"></div></div><span class="dim-score pos">86</span><span class="sig-b" style="background:var(--ef);color:var(--eb)">STRONG</span></div>
+        <div class="dim-row"><span class="dim-name">Startup experience</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:78%;background:#f0b429"></div></div><span class="dim-score neu">78</span><span class="sig-b" style="background:var(--gb);color:#78350f">GOOD</span></div>
+        <div class="dim-row"><span class="dim-name">Market insight</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:88%;background:#059669"></div></div><span class="dim-score pos">88</span><span class="sig-b" style="background:var(--ef);color:var(--eb)">STRONG</span></div>
+        <div class="dim-row"><span class="dim-name">Industry recognition</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:72%;background:#f0b429"></div></div><span class="dim-score neu">72</span><span class="sig-b" style="background:var(--gb);color:#78350f">GOOD</span></div>
+        <div class="dim-row"><span class="dim-name">Marketing visibility</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:76%;background:#f0b429"></div></div><span class="dim-score neu">76</span><span class="sig-b" style="background:var(--gb);color:#78350f">GOOD</span></div>
+        <div class="dim-row"><span class="dim-name">Success factors</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:74%;background:#f0b429"></div></div><span class="dim-score neu">74</span><span class="sig-b" style="background:var(--gb);color:#78350f">GOOD</span></div>
+        <div class="dim-row"><span class="dim-name">Coachability</span><div class="dim-bar-wrap"><div class="dim-bar" style="width:79%;background:#f0b429"></div></div><span class="dim-score neu">79</span><span class="sig-b" style="background:var(--gb);color:#78350f">GOOD</span></div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:10px">
+          <div class="card-title">Platform signal summary</div>
+          <div style="display:flex;gap:8px;padding:5px 0;border-bottom:.5px solid var(--bd)"><div style="width:24px;height:24px;border-radius:5px;background:#dbeafe;color:#1e3a8a;font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">LI</div><div><div style="font-size:11px;font-weight:500">LinkedIn</div><div style="font-size:10px;color:var(--sl)">VP Product at Salesforce 2019–24 · 14.2K followers · 12 C-suite endorsements</div></div></div>
+          <div style="display:flex;gap:8px;padding:5px 0;border-bottom:.5px solid var(--bd)"><div style="width:24px;height:24px;border-radius:5px;background:#f3f4f6;color:#374151;font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">GH</div><div><div style="font-size:11px;font-weight:500">GitHub</div><div style="font-size:10px;color:var(--sl)">847 ML commits · 2,200 repo stars · Active LangChain contributor</div></div></div>
+          <div style="display:flex;gap:8px;padding:5px 0;border-bottom:.5px solid var(--bd)"><div style="width:24px;height:24px;border-radius:5px;background:#d1fae5;color:#064e3b;font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">CB</div><div><div style="font-size:11px;font-weight:500">Crunchbase</div><div style="font-size:10px;color:var(--sl)">DataFlow acquisition $12M by Zendesk in 2021 · verified exit</div></div></div>
+          <div style="display:flex;gap:8px;padding:5px 0"><div style="width:24px;height:24px;border-radius:5px;background:#fef3c7;color:#78350f;font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace">PT</div><div><div style="font-size:11px;font-weight:500">USPTO Patents</div><div style="font-size:10px;color:var(--sl)">2 pending — autonomous agent memory architecture</div></div></div>
+        </div>
+        <div class="ai-box">
+          <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">VC verdict</span></div>
+          <div class="ai-body"><strong>Recommendation: Proceed to partner meeting.</strong> Top-quartile Seed founder profile. Verified exit, deep domain, elite network quality, zero integrity red flags. <strong>Key diligence question:</strong> "How does your open-source GitHub work translate to a proprietary moat a well-funded competitor can't replicate in 12 months?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── PORTFOLIO HEALTH ───── -->
+<div class="page" id="page-portfolio">
+  <div class="hero">
+    <div class="hero-eye">Portfolio health · VC view</div>
+    <div class="hero-h">Real-time <em>signal scoring</em><br>across every company</div>
+    <div class="hero-sub">Every portfolio company scored on growth, burn, team, and market signals. Alerts surface before problems become crises.</div>
+    <div class="hero-stats">
+      <span class="hstat"><strong>9</strong> active cos</span>
+      <span class="hstat"><strong>6</strong> on track</span>
+      <span class="hstat"><strong>2</strong> watch</span>
+      <span class="hstat"><strong>1</strong> at risk</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="grid4" style="margin-bottom:10px">
+      <div class="metric"><div class="metric-n pos">74</div><div class="metric-l">Avg health score</div><div class="metric-d pos">Above benchmark</div></div>
+      <div class="metric"><div class="metric-n pos">$24M</div><div class="metric-l">Exits YTD</div><div class="metric-d pos">PayEdge exited</div></div>
+      <div class="metric"><div class="metric-n neg">4mo</div><div class="metric-l">Lowest runway</div><div class="metric-d neg">FlowAI — urgent</div></div>
+      <div class="metric"><div class="metric-n neu">3</div><div class="metric-l">Active alerts</div><div class="metric-d neu">action needed</div></div>
+    </div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">Portfolio signal dashboard — click any company</div>
+      <div class="ph-row" onclick="toast('NovaMind AI — board deck, data room, and metrics')">
+        <div class="ph-av" style="color:var(--gl)">NM</div>
+        <div style="flex:1;min-width:0"><div class="ph-name">NovaMind AI</div><div class="ph-signal">+34% MoM ARR · 3 enterprise customers · recruiting</div></div>
+        <div class="ph-bar"><div class="ph-fill" style="width:88%;background:#059669"></div></div>
+        <span class="ph-score pos">88</span>
+        <span class="tag t-g" style="min-width:60px;text-align:center">On track</span>
+      </div>
+      <div class="ph-row" onclick="toast('SecureNet — strong quarter, $200K MRR milestone hit')">
+        <div class="ph-av" style="color:var(--gl)">SN</div>
+        <div style="flex:1;min-width:0"><div class="ph-name">SecureNet</div><div class="ph-signal">$200K MRR milestone · enterprise pipeline strong</div></div>
+        <div class="ph-bar"><div class="ph-fill" style="width:94%;background:#059669"></div></div>
+        <span class="ph-score pos">94</span>
+        <span class="tag t-g" style="min-width:60px;text-align:center">On track</span>
+      </div>
+      <div class="ph-row" onclick="toast('PayEdge — exited for $24M to Stripe')">
+        <div class="ph-av" style="color:var(--gl)">PE</div>
+        <div style="flex:1;min-width:0"><div class="ph-name">PayEdge</div><div class="ph-signal">Acquired by Stripe · $24M exit · MOIC 8.2×</div></div>
+        <div class="ph-bar"><div class="ph-fill" style="width:100%;background:#059669"></div></div>
+        <span class="ph-score pos">100</span>
+        <span class="tag t-g" style="min-width:60px;text-align:center">Exited</span>
+      </div>
+      <div class="ph-row" onclick="toast('DataVault — schedule founder call this week re: churn')">
+        <div class="ph-av" style="color:var(--gl)">DV</div>
+        <div style="flex:1;min-width:0"><div class="ph-name">DataVault</div><div class="ph-signal">Churn spike: 12% · ICP mismatch suspected</div></div>
+        <div class="ph-bar"><div class="ph-fill" style="width:72%;background:#f0b429"></div></div>
+        <span class="ph-score neu">72</span>
+        <span class="tag t-o" style="min-width:60px;text-align:center">Watch</span>
+      </div>
+      <div class="ph-row" onclick="toast('HealthOS — validate new ICP strategy before board')">
+        <div class="ph-av" style="color:var(--gl)">HO</div>
+        <div style="flex:1;min-width:0"><div class="ph-name">HealthOS</div><div class="ph-signal">ICP pivot announced · new strategy unvalidated</div></div>
+        <div class="ph-bar"><div class="ph-fill" style="width:65%;background:#f0b429"></div></div>
+        <span class="ph-score neu">65</span>
+        <span class="tag t-o" style="min-width:60px;text-align:center">Watch</span>
+      </div>
+      <div class="ph-row" onclick="toast('URGENT: FlowAI — 4 months runway. Schedule call today.')">
+        <div class="ph-av" style="color:var(--gl)">FA</div>
+        <div style="flex:1;min-width:0"><div class="ph-name">FlowAI</div><div class="ph-signal">Runway: 4 months · bridge or extension needed now</div></div>
+        <div class="ph-bar"><div class="ph-fill" style="width:42%;background:#e11d48"></div></div>
+        <span class="ph-score neg">42</span>
+        <span class="tag t-r" style="min-width:60px;text-align:center">At risk</span>
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">AI portfolio brief</span></div>
+      <div class="ai-body"><strong>Immediate action: FlowAI has 4 months runway.</strong> Facilitate a bridge from existing investors or begin a structured process now — do not wait for the next board meeting. <strong>DataVault's 12% churn spike</strong> needs a founder call this week to diagnose root cause before it compounds. NovaMind AI and SecureNet are outperforming — <strong>consider exercising pro-rata rights in their next rounds.</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── FUND ANALYTICS ───── -->
+<div class="page" id="page-analytics">
+  <div class="hero">
+    <div class="hero-eye">Fund analytics · VC view</div>
+    <div class="hero-h">Deployment velocity &amp;<br><em>fund performance</em></div>
+    <div class="hero-sub">AUM, IRR, MOIC, sector concentration, and vintage benchmarks — everything a GP needs for LP reporting.</div>
+  </div>
+  <div class="content">
+    <div class="grid4" style="margin-bottom:10px">
+      <div class="metric"><div class="metric-n">$847M</div><div class="metric-l">Total AUM deployed</div><div class="metric-d pos">3 vintages</div></div>
+      <div class="metric"><div class="metric-n pos">4.2×</div><div class="metric-l">Avg portfolio MOIC</div><div class="metric-d pos">Top quartile</div></div>
+      <div class="metric"><div class="metric-n pos">28.4%</div><div class="metric-l">Net IRR (2020 vintage)</div><div class="metric-d pos">+14pp vs benchmark</div></div>
+      <div class="metric"><div class="metric-n neu">14d</div><div class="metric-l">Avg time to term sheet</div><div class="metric-d neu">Industry avg: 28d</div></div>
+    </div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Capital deployed by sector</div>
+        <div style="position:relative;height:180px"><canvas id="sectorChart" role="img" aria-label="Bar chart showing capital deployed by sector, AI/ML leads at 38%">Sector breakdown: AI/ML 38%, Fintech 22%, B2B SaaS 18%, Deep Tech 12%, Climate 6%, Healthcare 4%</canvas></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:10px;color:var(--sl)">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#2563eb;display:inline-block"></span>AI/ML 38%</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#059669;display:inline-block"></span>Fintech 22%</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#c9950c;display:inline-block"></span>SaaS 18%</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#7c3aed;display:inline-block"></span>Deep Tech 12%</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Net IRR vs Cambridge Associates benchmark</div>
+        <div style="position:relative;height:180px"><canvas id="irrChart" role="img" aria-label="Line chart comparing fund IRR against benchmark across vintages 2018 to 2024">Fund IRR consistently above Cambridge benchmark across all vintages 2018-2024</canvas></div>
+        <div style="display:flex;gap:16px;margin-top:8px;font-size:10px;color:var(--sl)">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:2px;background:#c9950c;display:inline-block"></span>Our fund</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:2px;background:#94a3b8;display:inline-block;border-top:1px dashed #94a3b8;height:0"></span>Cambridge benchmark</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── TERM SHEET AI ───── -->
+<div class="page" id="page-termsheet">
+  <div class="hero">
+    <div class="hero-eye">Term sheet AI</div>
+    <div class="hero-h">Every clause<br><em>explained before you sign</em></div>
+    <div class="hero-sub">AI-drafted, plain-English explained, red-flagged, and benchmarked against Seed-stage market standards.</div>
+  </div>
+  <div class="content">
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Term sheet summary — NovaMind AI · a16z</div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Pre-money valuation</span><span style="font-weight:500;font-family:'Geist Mono',monospace">$8,000,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Round size</span><span style="font-weight:500;font-family:'Geist Mono',monospace">$2,000,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Post-money valuation</span><span style="font-weight:500;font-family:'Geist Mono',monospace">$10,000,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Investor ownership</span><span style="font-weight:500;font-family:'Geist Mono',monospace">~20%</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Instrument</span><span style="font-weight:500">Series Seed Preferred</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Liquidation preference</span><span style="font-weight:500">1× non-participating</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Board composition</span><span style="font-weight:500">2 founder / 1 investor</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:11px"><span style="color:var(--sl)">Pro-rata rights</span><span style="font-weight:500">Yes — major investors</span></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn btn-gold" onclick="toast('Term sheet PDF exported')">Export PDF</button>
+          <button class="btn btn-outline" onclick="toast('Shared with legal counsel')">Share with lawyer</button>
+        </div>
+      </div>
+      <div>
+        <div class="card-title">Clause analysis — VC weight + founder impact</div>
+        <div class="clause clause-pos"><strong>Liquidation (1× non-participating):</strong> Founder-friendly — investors get their money back, then everyone shares equally in remaining proceeds. This is the best possible structure. Market standard. Guard this in Series A.</div>
+        <div class="clause clause-pos"><strong>Board (2 founder / 1 investor):</strong> Founders retain board control. Excellent Seed position — most founders lose this at Series A. Use it as negotiating leverage: "We're protecting this structure."</div>
+        <div class="clause clause-warn"><strong>Ownership (~20%):</strong> High end of Seed range (15–25%). After a typical Series A (20% dilution), founders could be at ~56% combined. Model your cap table through Series B before signing.</div>
+        <div class="clause clause-warn"><strong>Pro-rata rights:</strong> Standard provision. Allows a16z to maintain 20% ownership in future rounds. Not harmful — signals investor confidence — but creates an obligation on your future cap table.</div>
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">Negotiation leverage analysis</span></div>
+      <div class="ai-body"><strong>This is a founder-friendly term sheet overall.</strong> 1× non-participating liquidation and founder board control are the two clauses that matter most — both are in your favour. <strong>If you have a competing term sheet, use it to push pre-money from $8M to $9M.</strong> That single move is worth $200K to your team at a $50M exit. Do not negotiate on liquidation preference — you already have the best possible structure for Seed.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── FINANCIAL MODEL ───── -->
+<div class="page" id="page-model">
+  <div class="hero">
+    <div class="hero-eye">Financial model builder</div>
+    <div class="hero-h">VC-grade <em>5-year model</em><br>with live scenarios</div>
+    <div class="hero-sub">Unit economics, bear/base/bull scenarios, and VC return calculations. All built from your assumptions.</div>
+  </div>
+  <div class="content">
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Model assumptions</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--bd)"><div><div style="font-size:11px;font-weight:500">Year 1 ARR target</div><div style="font-size:9px;color:var(--sl)">Starting run-rate</div></div><span style="font-size:12px;font-weight:500;font-family:'Geist Mono',monospace;color:var(--gl)">$50K</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--bd)"><div><div style="font-size:11px;font-weight:500">Monthly growth rate (MoM)</div><div style="font-size:9px;color:var(--sl)">ARR growth</div></div><span style="font-size:12px;font-weight:500;font-family:'Geist Mono',monospace;color:var(--gl)">15%</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--bd)"><div><div style="font-size:11px;font-weight:500">Gross margin</div><div style="font-size:9px;color:var(--sl)">Net of COGS</div></div><span style="font-size:12px;font-weight:500;font-family:'Geist Mono',monospace;color:var(--gl)">65%</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--bd)"><div><div style="font-size:11px;font-weight:500">Customer acquisition cost (CAC)</div><div style="font-size:9px;color:var(--sl)">Blended average</div></div><span style="font-size:12px;font-weight:500;font-family:'Geist Mono',monospace;color:var(--gl)">$8,000</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--bd)"><div><div style="font-size:11px;font-weight:500">Customer LTV</div><div style="font-size:9px;color:var(--sl)">Gross lifetime value</div></div><span style="font-size:12px;font-weight:500;font-family:'Geist Mono',monospace;color:var(--gl)">$40,000</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div><div style="font-size:11px;font-weight:500">Annual churn rate</div><div style="font-size:9px;color:var(--sl)">Logo churn</div></div><span style="font-size:12px;font-weight:500;font-family:'Geist Mono',monospace;color:var(--gl)">8%</span></div>
+        <div style="margin-top:12px">
+          <div class="card-title">Unit economics</div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">LTV : CAC ratio</span><span style="font-weight:500;font-family:'Geist Mono',monospace" class="pos">5.0×</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">CAC payback period</span><span style="font-weight:500;font-family:'Geist Mono',monospace" class="pos">7 months</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Gross margin</span><span style="font-weight:500;font-family:'Geist Mono',monospace" class="pos">65%</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:11px"><span style="color:var(--sl)">Magic number</span><span style="font-weight:500;font-family:'Geist Mono',monospace" class="pos">0.82</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="scenario-grid">
+          <div class="scenario" style="background:var(--rf)"><div class="sc-label" style="color:var(--rb)">Bear</div><div class="sc-n" style="color:var(--rb)">$1.8M</div><div class="sc-sub" style="color:#be123c">Yr 3 ARR · 9% MoM</div></div>
+          <div class="scenario" style="background:var(--ef)"><div class="sc-label" style="color:var(--eb)">Base</div><div class="sc-n" style="color:var(--eb)">$6.2M</div><div class="sc-sub" style="color:#065f46">Yr 3 ARR · 15% MoM</div></div>
+          <div class="scenario" style="background:var(--gf)"><div class="sc-label" style="color:#78350f">Bull</div><div class="sc-n" style="color:#78350f">$18.4M</div><div class="sc-sub" style="color:#92400e">Yr 3 ARR · 22% MoM</div></div>
+        </div>
+        <div style="height:185px;position:relative;margin-bottom:10px">
+          <canvas id="projChart" role="img" aria-label="Line chart showing 5-year ARR projections across bear base and bull scenarios">5-year ARR projections: Bear $1.8M, Base $6.2M, Bull $18.4M by year 3</canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">VC return calculator</div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Investment</span><span style="font-weight:500;font-family:'Geist Mono',monospace">$2M @ $8M pre</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">Ownership</span><span style="font-weight:500;font-family:'Geist Mono',monospace">~20%</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid var(--bd);font-size:11px"><span style="color:var(--sl)">3× return exit</span><span style="font-weight:500;font-family:'Geist Mono',monospace">$30M exit</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:11px"><span style="color:var(--sl)">10× return exit</span><span style="font-weight:500;font-family:'Geist Mono',monospace;color:#059669">$100M exit</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── DATA ROOM ───── -->
+<div class="page" id="page-dataroom">
+  <div class="hero">
+    <div class="hero-eye">Data room intelligence</div>
+    <div class="hero-h">Every document<br><em>investor-ready</em></div>
+    <div class="hero-sub">Auto-checklist of everything a VC needs. Document quality scoring and gap detection before you share the link.</div>
+    <div class="hero-stats">
+      <span class="hstat"><strong>14 / 22</strong> ready</span>
+      <span class="hstat"><strong>72</strong> room score</span>
+      <span class="hstat"><strong>3</strong> critical gaps</span>
+      <span class="hstat"><strong>Target 90+</strong></span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Financials &amp; legal — click to mark ready</div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#ffe4e6;color:#881337">FM</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Financial model (5-year)</div><div style="font-size:10px;color:var(--sl)">ARR, P&L, cash flow, scenarios</div></div><span class="pill pill-r dr-status">Missing</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#ffe4e6;color:#881337">CT</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Cap table (fully diluted)</div><div style="font-size:10px;color:var(--sl)">All shareholders + options pool</div></div><span class="pill pill-r dr-status">Missing</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#fef3c7;color:#78350f">BS</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Bank statements (3 months)</div><div style="font-size:10px;color:var(--sl)">Shows burn rate and runway</div></div><span class="pill pill-y dr-status">Partial</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#d1fae5;color:#064e3b">CI</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Certificate of incorporation</div><div style="font-size:10px;color:var(--sl)">Delaware C-Corp</div></div><span class="pill pill-g dr-status">Ready</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#d1fae5;color:#064e3b">IP</div><div style="flex:1"><div style="font-size:11px;font-weight:500">IP assignment agreements</div><div style="font-size:10px;color:var(--sl)">All founders and employees</div></div><span class="pill pill-g dr-status">Ready</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#ffe4e6;color:#881337">CC</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Customer contracts (redacted)</div><div style="font-size:10px;color:var(--sl)">2–3 key enterprise contracts</div></div><span class="pill pill-r dr-status">Missing</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Company documents</div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#d1fae5;color:#064e3b">PD</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Pitch deck</div><div style="font-size:10px;color:var(--sl)">Current investor version</div></div><span class="pill pill-g dr-status">Ready</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#d1fae5;color:#064e3b">TB</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Team bios</div><div style="font-size:10px;color:var(--sl)">All founders + key hires</div></div><span class="pill pill-g dr-status">Ready</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#ffe4e6;color:#881337">TA</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Technical architecture</div><div style="font-size:10px;color:var(--sl)">System design overview</div></div><span class="pill pill-r dr-status">Missing</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#fef3c7;color:#78350f">PR</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Product roadmap (12 months)</div><div style="font-size:10px;color:var(--sl)">Milestone-based</div></div><span class="pill pill-y dr-status">Partial</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#d1fae5;color:#064e3b">RS</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Revenue schedule</div><div style="font-size:10px;color:var(--sl)">By customer, MRR detail</div></div><span class="pill pill-g dr-status">Ready</span></div>
+        <div class="dr-item" onclick="toggleDR(this)"><div class="dr-icon" style="background:#d1fae5;color:#064e3b">RL</div><div style="flex:1"><div style="font-size:11px;font-weight:500">Reference list</div><div style="font-size:10px;color:var(--sl)">Customers + advisors</div></div><span class="pill pill-g dr-status">Ready</span></div>
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">Data room coaching</span></div>
+      <div class="ai-body"><strong>Critical blockers: Financial model and cap table.</strong> VCs will not proceed to partner meeting without these two documents — full stop. <strong>Recommended completion order:</strong> (1) Cap table, (2) Financial model, (3) Customer contracts redacted, (4) Technical architecture. After these four, your room score hits 90+ and you're partner-meeting ready. Pitch deck and team bios are already strong — do not touch them.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="toast('Share link generated — expires in 30 days')">Generate share link</button>
+      <button class="btn btn-outline" onclick="toast('Data room report exported')">Export gap report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───── NEGOTIATION SIM ───── -->
+<div class="page" id="page-negotiation">
+  <div class="hero">
+    <div class="hero-eye">Negotiation simulator</div>
+    <div class="hero-h">Practice the <em>hardest</em><br>VC conversations</div>
+    <div class="hero-sub">Claude plays a tough VC partner. Practice valuation negotiation, board seat battles, and term pushback before the real meeting.</div>
+  </div>
+  <div class="content">
+    <div class="chat-wrap">
+      <div class="chat-header">
+        <div class="chat-side"><div class="chat-av" style="background:rgba(37,99,235,.35);color:#93c5fd">VC</div>Marc Andreessen · a16z — tough GP mode</div>
+        <div class="chat-side"><span>You (founder)</span><div class="chat-av" style="background:rgba(201,149,12,.3);color:var(--gl)">FD</div></div>
+      </div>
+      <div class="chat-body">
+        <div class="msg msg-vc"><div class="msg-from mf-vc">Marc Andreessen</div>I like what you're building — the data moat thesis is compelling. But $10M pre-money for pre-revenue feels aggressive. We've been doing $6–7M for comparable Seed rounds. Walk me through why you need $10M valuation.</div>
+        <div class="msg msg-fd"><div class="msg-from mf-fd">You (founder)</div>The $10M reflects three things: the dataset took 18 months and $400K to build — competitors can't shortcut that. We have a team that's done this before at Salesforce and OpenAI. And we have 3 enterprise contracts going live in 60 days. At $6M pre, we're selling 25% before those contracts prove what we already know.</div>
+        <div class="msg msg-ai"><div class="msg-from mf-ai">Claude coaching</div>Strong anchor. You referenced the dataset moat, team credibility, and near-term traction. Now let him respond before conceding anything — silence is a power move here.</div>
+        <div class="msg msg-vc"><div class="msg-from mf-vc">Marc Andreessen</div>Fair on the dataset. What if we do $8M pre with a milestone: if those 3 contracts sign within 90 days, we ratchet to $10M automatically? That protects both sides.</div>
+      </div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">Live coaching hint</span></div>
+      <div class="ai-body"><strong>The ratchet offer is actually good — but counter-propose a shorter milestone window.</strong> Say: "I like the structure. Make it 60 days — we have line-of-sight on all three contracts by then — and I'll accept $8M pre with the ratchet to $10M." This shows confidence, gets you the better valuation, and closes the round faster for both parties. Never be the first to accept a counter without modifying at least one term.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="toast('New simulation started — Claude is loading your VC persona')">Start new simulation →</button>
+      <button class="btn btn-outline" onclick="toast('Simulation session saved to coaching file')">Save session</button>
+      <button class="btn btn-outline" onclick="toast('Coaching report exported')">Export coaching report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───── DEAL CLOSING ───── -->
+<div class="page" id="page-closing">
+  <div class="hero">
+    <div class="hero-eye">Deal closing engine</div>
+    <div class="hero-h">From term sheet<br>to <em>wired capital</em></div>
+    <div class="hero-sub">Owner-assigned tasks, AI critical path, and deadline tracking. The complete shared checklist for both sides of the deal.</div>
+    <div class="hero-stats">
+      <span class="hstat"><strong>28</strong> total tasks</span>
+      <span class="hstat"><strong>12</strong> complete</span>
+      <span class="hstat"><strong>5</strong> blocked</span>
+      <span class="hstat"><strong>19 days</strong> to close</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="grid4" style="margin-bottom:10px">
+      <div class="metric"><div class="metric-n pos">43%</div><div class="metric-l">Tasks complete</div><div class="metric-d pos">12 of 28</div></div>
+      <div class="metric"><div class="metric-n neu">19d</div><div class="metric-l">Projected close</div><div class="metric-d neu">At current pace</div></div>
+      <div class="metric"><div class="metric-n neg">5</div><div class="metric-l">Blocked tasks</div><div class="metric-d neg">Needs action</div></div>
+      <div class="metric"><div class="metric-n pos">3wk</div><div class="metric-l">Runway buffer</div><div class="metric-d pos">Safe window</div></div>
+    </div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="card">
+        <div class="card-title">Closing checklist — click to toggle complete</div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box done"><svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="chk-label done">Term sheet signed by all parties</span>
+          <span class="chk-owner" style="background:var(--vf);color:var(--vb)">Both</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box done"><svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="chk-label done">Data room access granted to investor</span>
+          <span class="chk-owner" style="background:var(--gb);color:#78350f">Founder</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box done"><svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="chk-label done">Legal counsel engaged (both sides)</span>
+          <span class="chk-owner" style="background:var(--vf);color:var(--vb)">Both</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box done"><svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="chk-label done">Cap table model sent to investor</span>
+          <span class="chk-owner" style="background:var(--gb);color:#78350f">Founder</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Stock purchase agreement (SPA) drafted</span>
+          <span class="chk-owner" style="background:var(--bf);color:var(--bb)">VC</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Investor rights agreement drafted</span>
+          <span class="chk-owner" style="background:var(--bf);color:var(--bb)">VC</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">409A valuation ordered</span>
+          <span class="chk-owner" style="background:var(--gb);color:#78350f">Founder</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Investor signature pages collected</span>
+          <span class="chk-owner" style="background:var(--bf);color:var(--bb)">VC</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Wire instructions verified (secure channel)</span>
+          <span class="chk-owner" style="background:var(--gb);color:#78350f">Founder</span>
+        </div>
+        <div class="check-row" onclick="toggleCheck(this)">
+          <div class="chk-box"></div>
+          <span class="chk-label">Funds wired and confirmed</span>
+          <span class="chk-owner" style="background:var(--bf);color:var(--bb)">VC</span>
+        </div>
+      </div>
+      <div>
+        <div class="tl" style="margin-bottom:10px">
+          <div class="tl-item">
+            <div class="tl-dot" style="background:var(--gl)"></div>
+            <div class="tl-time">Day 1–3</div>
+            <div class="tl-title">Legal review kick-off</div>
+            <div class="tl-desc">Both parties engage counsel. SPA and IRA drafts initiated by investor's lawyers.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#2563eb"></div>
+            <div class="tl-time">Day 4–10</div>
+            <div class="tl-title">Due diligence &amp; document review</div>
+            <div class="tl-desc">Investor reviews data room. 409A valuation ordered. Background checks completed.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#7c3aed"></div>
+            <div class="tl-time">Day 10–16</div>
+            <div class="tl-title">Document finalization</div>
+            <div class="tl-desc">SPA and IRA redlines exchanged. Board consent resolutions prepared. Option pool approved.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#059669"></div>
+            <div class="tl-time">Day 17–19</div>
+            <div class="tl-title">Signing &amp; closing</div>
+            <div class="tl-desc">All signature pages collected. Wire instructions verified. Capital wired and confirmed.</div>
+          </div>
+        </div>
+        <div class="ai-box">
+          <div class="ai-header"><div class="ai-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#0a0e18" stroke-width="1.2"/><circle cx="5" cy="5" r="1.4" fill="#0a0e18"/></svg></div><span class="ai-title">Closing intelligence</span></div>
+          <div class="ai-body"><strong>Critical path: legal review is the bottleneck</strong> — 4 downstream tasks blocked on it. Pre-populate the SPA with standard Series Seed terms to save 3–4 days. <strong>Risk flag:</strong> One investor hasn't returned their signature page — follow up today. At current pace: <strong>wired capital in 19 days.</strong></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-gold" onclick="toast('Status report sent to all parties')">Send status to all parties →</button>
+          <button class="btn btn-outline" onclick="toast('Closing timeline recalculated')">Recalculate timeline</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── NAVIGATION ──
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  if (el) el.classList.add('active');
+  // Init charts when needed
+  if (id === 'fit') initFitRadar();
+  if (id === 'market') initMktRadar();
+  if (id === 'analytics') initAnalyticsCharts();
+  if (id === 'model') initModelChart();
+}
+
+// ── TOAST ──
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── TOGGLE CHECK ──
+function toggleCheck(row) {
+  const box = row.querySelector('.chk-box');
+  const label = row.querySelector('.chk-label');
+  const isDone = box.classList.contains('done');
+  if (isDone) {
+    box.classList.remove('done');
+    box.innerHTML = '';
+    if (label) { label.classList.remove('done'); }
+  } else {
+    box.classList.add('done');
+    box.innerHTML = '<svg viewBox="0 0 10 10" fill="none" width="10" height="10"><polyline points="2,5.5 4.5,8 8,3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if (label) { label.classList.add('done'); }
+  }
+}
+
+// ── TOGGLE DATA ROOM ──
+function toggleDR(item) {
+  const pill = item.querySelector('.dr-status');
+  if (!pill) return;
+  if (pill.classList.contains('pill-r')) {
+    pill.classList.remove('pill-r'); pill.classList.add('pill-y');
+    pill.textContent = 'Partial';
+    item.querySelector('.dr-icon').style.background = '#fef3c7';
+    item.querySelector('.dr-icon').style.color = '#78350f';
+  } else if (pill.classList.contains('pill-y')) {
+    pill.classList.remove('pill-y'); pill.classList.add('pill-g');
+    pill.textContent = 'Ready';
+    item.querySelector('.dr-icon').style.background = '#d1fae5';
+    item.querySelector('.dr-icon').style.color = '#064e3b';
+    toast('Document marked as ready');
+  } else {
+    pill.classList.remove('pill-g'); pill.classList.add('pill-r');
+    pill.textContent = 'Missing';
+    item.querySelector('.dr-icon').style.background = '#ffe4e6';
+    item.querySelector('.dr-icon').style.color = '#881337';
+  }
+}
+
+// ── PITCH FORMATS ──
+const PITCHES = {
+  '50': {
+    badge: '50-word hook', ctx: 'Tweet / intro',
+    body: 'NovaMind AI replaces entire enterprise SDR teams with a single AI agent — trained on a proprietary 2.3M-interaction dataset. Three paying customers. Sales cycles cut 60%. Built by ex-Salesforce VP and ex-OpenAI researcher. Raising $2M seed. <strong>The window to own agentic sales automation is now.</strong>',
+    coach: '<strong>For the 50-word hook:</strong> Read it aloud — 18 seconds exactly. The strongest line is the last. Pause 2 full seconds after "now" before continuing. That silence is intentional — let the investor feel the urgency before you say another word.'
+  },
+  '100': {
+    badge: '100-word pitch', ctx: 'Cold email / DM',
+    body: 'Most enterprise sales teams waste 40% of their time on tasks an AI can do better, faster, and cheaper. NovaMind AI is the first fully autonomous agent that replaces — not assists — the entire SDR workflow.<br><br>In 6 months: 3 paying enterprise customers, 60% sales cycle reduction, 8 active pilots. Built by ex-Salesforce VP Product and ex-OpenAI research engineer.<br><br>We\'re raising $2M seed and would value 20 minutes. Happy to share the data.',
+    coach: '<strong>For the 100-word cold email:</strong> Subject line matters most — try "AI that replaced our SDR team (3 customers, 60% cycle reduction)". Never attach a deck to a cold email. Send the body only — provide the deck when they ask. That ask is the first conversion.'
+  },
+  '250': {
+    badge: '250-word warm intro', ctx: 'Investor email',
+    body: 'NovaMind AI is building what enterprise sales will look like in five years — and deploying it today.<br><br><strong>The problem:</strong> Enterprise sales teams waste 40% of their time on tasks an AI should own. Average SDR costs $120K/year and closes 18% of pipeline. Every tool today assists this waste. Nobody eliminates it.<br><br><strong>Our solution:</strong> A fully autonomous AI agent trained on a proprietary 2.3M enterprise sales interaction dataset. Every customer adds data. Every data point improves accuracy. This is a compounding moat.<br><br><strong>Traction:</strong> 3 paying enterprise customers at $40K ACV, 8 active pilots, 60% sales cycle reduction proven in production.<br><br><strong>Team:</strong> Alex Chen (ex-Salesforce VP Product, AI features used by 200K reps) + Sarah Raj (ex-OpenAI researcher) + Marcus Kim (ex-Palantir GTM).<br><br>We\'re raising $2M seed. Given your conviction in enterprise AI, we believe this is the right conversation to have right now.',
+    coach: '<strong>For the 250-word warm intro:</strong> This email gets forwarded inside the firm. Every GP who reads it should be able to pitch it internally in 90 seconds. Lead with traction, not the product. Bold the headers so partners can skim in 30 seconds.'
+  },
+  '500': {
+    badge: '500-word one-pager', ctx: 'Investor memo',
+    body: '<strong>The opportunity</strong><br>The AI sales automation market is a $47B TAM growing at 38% CAGR. Enterprise buyers are actively cutting headcount and piloting AI. Incumbents (Salesforce, Outreach) are constrained by legacy architecture. The window to own this category is the next 18 months.<br><br><strong>The problem</strong><br>Enterprise sales teams waste 40% of their time on tasks that aren\'t selling — lead research, CRM updates, follow-up sequencing. The average SDR costs $120K/year and closes 18% of pipeline. Every tool on the market today assists this work. Nobody eliminates it.<br><br><strong>Our solution</strong><br>NovaMind AI is the first fully autonomous AI agent trained on a proprietary 2.3M enterprise sales interaction dataset. It researches leads, writes personalised outreach, handles objections, updates CRM, and schedules meetings — without a human in the loop. Every customer adds training data. The moat compounds with scale.<br><br><strong>Why we win</strong><br>Outreach ($489M raised) automates email sequences — not workflows. Gong ($584M raised) analyses calls — not actions. Clay enriches data — not decisions. No competitor combines LLM-native architecture with proprietary training data at enterprise grade.<br><br><strong>Traction</strong><br>6 months old. 3 paying enterprise customers at $40K ACV. 8 pilots converting at 75%. 60% reduction in sales cycle length, verified in production. Best customer: 90-day cycles reduced to 36 days.<br><br><strong>Team</strong><br>Alex Chen (ex-Salesforce VP Product, built AI features used by 200K reps) + Sarah Raj (ex-OpenAI research engineer) + Marcus Kim (ex-Palantir GTM lead). Prior exit: DataFlow acquired by Zendesk for $12M in 2021.<br><br><strong>The ask</strong><br>$2M seed round. Capital deployed to: expand the engineering team, close 8 pilots already in pipeline, achieve SOC2 certification for enterprise contracts over $100K ACV. We\'re seeking a lead investor with conviction in the AI-native enterprise stack.',
+    coach: '<strong>For the 500-word one-pager:</strong> This document gets forwarded to GP partners you\'ve never met. The "Why we win" section is the most critical — be specific about competitor weaknesses, not just your strengths. Every GP should be able to pitch it internally from memory after one read.'
+  },
+  '5min': {
+    badge: '5-min script', ctx: 'Partner call',
+    body: '<span class="section">[0:00–0:30] Hook</span>Every year, enterprise companies pay $120,000 for a human SDR who closes 18% of pipeline. We built an AI that closes more — for $15,000 a year. That\'s not an improvement. That\'s the end of a job category.<br><br><span class="section">[0:30–1:30] The problem</span>Enterprise sales teams spend less than 36% of their time actually selling. The other 64% — research, CRM updates, follow-up sequences — is $112 billion a year in wasted payroll. Every tool in the market helps reps manage that 64% better. NovaMind AI eliminates it.<br><br><span class="section">[1:30–3:00] The solution</span>A fully autonomous AI agent trained on 2.3 million real enterprise sales interactions. It researches leads, writes personalised outreach, handles objections, updates Salesforce, and schedules meetings — without a human in the loop. Our data moat: every customer adds interactions, every interaction improves accuracy. The flywheel compounds.<br><br><span class="section">[3:00–4:00] Traction</span>Six months in. Three paying enterprise customers at $40K ACV. Eight pilots converting at 75%. And the number that matters: 60% reduction in sales cycle length, verified in production. Our best customer went from 90-day cycles to 36 days.<br><br><span class="section">[4:00–5:00] The ask</span>Our team: ex-Salesforce VP Product who built AI features for 200K reps, ex-OpenAI researcher, ex-Palantir GTM. We\'ve done this before — just not for ourselves. We\'re raising $2M seed. The window to own agentic sales is the next 18 months. We want to build it with you.',
+    coach: '<strong>For the 5-min partner call:</strong> The first 30 seconds determine whether they lean in or check their phone. After "That\'s the end of a job category" — pause for 2 full seconds. In the traction section, say the number, then stop talking for 1 second. Let the metric breathe. Never rush the ask.'
+  },
+  '15min': {
+    badge: '15-min delivery', ctx: 'Partner meeting',
+    body: '<span class="section">Slide 1 [0:00–1:00] Opening hook</span>In 2025, enterprise companies collectively spent $180 billion on sales headcount. Most of that is going to disappear — not because companies stop selling, but because they stop needing humans to do the parts AI does better. NovaMind AI is building the platform they\'ll run instead.<br><br><span class="section">Slide 2 [1:00–2:00] Company overview</span>NovaMind AI is the first fully autonomous AI agent for enterprise sales — not AI-assisted, not AI-augmented. Autonomous. We replace the SDR workflow entirely, trained on a proprietary 2.3M enterprise interaction dataset that compounds with every customer we add.<br><br><span class="section">Slide 3 [2:00–4:00] The problem</span>The average enterprise SDR spends less than 36% of their time actually selling. The other 64% — research, admin, sequencing — is worth $112 billion a year in wasted payroll. Every tool in the market today helps reps manage that 64% better. Nobody has eliminated it. We eliminate it.<br><br><span class="section">Slide 4 [4:00–6:30] The solution [SHOW DEMO]</span>A prospect visits your pricing page. Within 4 minutes, our AI has researched them across 40 data sources, written a personalised email referencing their recent funding round and the decision-maker\'s specific pain point, sent it, logged it in Salesforce, and scheduled a follow-up for day 3. No human involved. 4 minutes, not 4 hours.<br><br><span class="section">Slide 5 [6:30–7:30] Market size</span>$47B TAM in AI sales automation, growing at 38% CAGR. Late-stage AI companies command a 100% premium over non-AI peers at Series C. The window to capture this category is the next 18 months before consolidation.<br><br><span class="section">Slide 7 [8:30–9:30] Traction</span>Three paying enterprise customers. $40K average ACV. Eight pilots at 75% conversion rate. 60% reduction in sales cycle length, verified in production. Best customer: 90-day cycles reduced to 36 days in the first 90 days of deployment.<br><br><span class="section">Slide 8 [9:30–11:00] Competition</span>Outreach ($489M) sequences emails — not workflows. Gong ($584M) analyses calls — not actions. Clay ($62M) enriches data — not decisions. No competitor combines LLM-native architecture with proprietary training data at enterprise grade. This is the white space.<br><br><span class="section">Slide 10 [12:30–15:00] The ask and close</span>We are raising $2M seed. Capital goes to three things: expand the engineering team to accelerate the dataset, close the 8 pilots we have in pipeline, and achieve SOC2 certification to unlock enterprise contracts above $100K ACV. [PAUSE] In 5 years, every enterprise sales team runs on AI agents. We\'re building the first platform they\'ll trust. This is the moment to be in. Build it with us.',
+    coach: '<strong>For the 15-min partner meeting:</strong> Slides 1, 7, and 10 determine the outcome. Hook lands the meeting. Traction closes it. Vision keeps them up at night. After your close on Slide 10 — stop talking completely. The next person to speak loses. Wait for their question, however long it takes.'
+  }
+};
+
+function switchPitch(btn, fmt) {
+  document.querySelectorAll('.fmt-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const p = PITCHES[fmt];
+  document.getElementById('pitch-badge').textContent = p.badge;
+  document.getElementById('pitch-ctx').textContent = p.ctx;
+  document.getElementById('pitch-body').innerHTML = p.body;
+  document.getElementById('pitch-coach').innerHTML = p.coach;
+}
+
+function copyPitch() {
+  const text = document.getElementById('pitch-body').innerText;
+  navigator.clipboard.writeText(text).then(() => toast('Pitch copied to clipboard!')).catch(() => toast('Select and copy text manually'));
+}
+
+// ── CHARTS ──
+let fitRadarChart, mktRadarChart, sectorChartInst, irrChartInst, projChartInst;
+
+function initFitRadar() {
+  const el = document.getElementById('fitRadar');
+  if (!el || fitRadarChart) return;
+  fitRadarChart = new Chart(el, {
+    type: 'radar',
+    data: {
+      labels: ['Problem','Solution','Market','Timing','Traction','Team','Moat','Model','Compete','Vision'],
+      datasets: [{
+        label: 'Your score',
+        data: [9,8,7,9,5,8,7,6,6,8],
+        backgroundColor: 'rgba(201,149,12,.12)',
+        borderColor: '#c9950c',
+        borderWidth: 2,
+        pointBackgroundColor: '#c9950c',
+        pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { r: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 9 }, color: '#94a3b8', backdropColor: 'transparent' }, grid: { color: 'rgba(0,0,0,.06)' }, pointLabels: { font: { size: 9 }, color: '#64748b' } } }
+    }
+  });
+}
+
+function initMktRadar() {
+  const el = document.getElementById('mktRadar');
+  if (!el || mktRadarChart) return;
+  mktRadarChart = new Chart(el, {
+    type: 'radar',
+    data: {
+      labels: ['Automation','AI-native','Enterprise','Integration','Analytics','Compliance'],
+      datasets: [
+        { label: 'NovaMind AI', data: [90, 95, 80, 72, 78, 68], backgroundColor: 'rgba(201,149,12,.12)', borderColor: '#c9950c', borderWidth: 2, pointRadius: 2 },
+        { label: 'Outreach', data: [72, 60, 82, 88, 78, 90], backgroundColor: 'rgba(37,99,235,.07)', borderColor: '#2563eb', borderWidth: 1.5, borderDash: [4, 3], pointRadius: 2 },
+        { label: 'Gong', data: [55, 78, 85, 82, 95, 94], backgroundColor: 'rgba(5,150,105,.07)', borderColor: '#059669', borderWidth: 1.5, borderDash: [4, 3], pointRadius: 2 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { r: { min: 0, max: 100, ticks: { stepSize: 25, font: { size: 8 }, color: '#94a3b8', backdropColor: 'transparent' }, grid: { color: 'rgba(0,0,0,.06)' }, pointLabels: { font: { size: 9 }, color: '#64748b' } } }
+    }
+  });
+}
+
+function initAnalyticsCharts() {
+  const s = document.getElementById('sectorChart');
+  if (s && !sectorChartInst) {
+    sectorChartInst = new Chart(s, {
+      type: 'bar',
+      data: {
+        labels: ['AI/ML', 'Fintech', 'B2B SaaS', 'Deep Tech', 'Climate', 'Health'],
+        datasets: [{ data: [38, 22, 18, 12, 6, 4], backgroundColor: ['#2563eb','#059669','#c9950c','#7c3aed','#0891b2','#e11d48'], borderRadius: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#64748b' } },
+          y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { size: 9 }, color: '#64748b', callback: v => v + '%' } }
+        }
+      }
+    });
+  }
+  const i = document.getElementById('irrChart');
+  if (i && !irrChartInst) {
+    irrChartInst = new Chart(i, {
+      type: 'line',
+      data: {
+        labels: ['2018','2019','2020','2021','2022','2023','2024'],
+        datasets: [
+          { label: 'Our fund', data: [22.4, 19.1, 28.4, 18.2, 14.1, 19.3, 21.8], borderColor: '#c9950c', borderWidth: 2, pointBackgroundColor: '#c9950c', pointRadius: 3, fill: false, tension: 0.4 },
+          { label: 'Cambridge benchmark', data: [14.0, 15.2, 14.0, 12.8, 11.2, 13.1, 14.5], borderColor: '#94a3b8', borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, fill: false, tension: 0.4 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#64748b' } },
+          y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { size: 9 }, color: '#64748b', callback: v => v + '%' } }
+        }
+      }
+    });
+  }
+}
+
+function initModelChart() {
+  const el = document.getElementById('projChart');
+  if (!el || projChartInst) return;
+  const labels = ['M6','Y1','Y1.5','Y2','Y2.5','Y3','Y4','Y5'];
+  projChartInst = new Chart(el, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Bear', data: [0.03, 0.1, 0.25, 0.45, 0.75, 1.8, 3.2, 5.1], borderColor: '#e11d48', borderWidth: 1.5, borderDash: [5,3], fill: false, pointRadius: 2, tension: 0.4 },
+        { label: 'Base', data: [0.05, 0.2, 0.55, 1.2, 2.4, 6.2, 14, 28], borderColor: '#059669', borderWidth: 2.5, fill: false, pointRadius: 3, tension: 0.4 },
+        { label: 'Bull', data: [0.08, 0.35, 1.1, 2.8, 6.5, 18.4, 42, 80], borderColor: '#c9950c', borderWidth: 1.5, borderDash: [3,2], fill: false, pointRadius: 2, tension: 0.4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#64748b' } },
+        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { size: 9 }, color: '#64748b', callback: v => '$' + v + 'M' } }
+      }
+    }
+  });
+}
+
+// Init fit radar on first load
+setTimeout(initFitRadar, 200);
+</script>
+</body>
+</html>
